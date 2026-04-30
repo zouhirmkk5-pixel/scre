@@ -20,18 +20,19 @@
         .input-error { border: 1px solid #ff3b30 !important; }
         .privacy-card { background: #000; border: 1px solid #1c1c1e; border-radius: 14px; padding: 16px; margin-bottom: 12px; text-align: left; }
         
-        /* Hada l-juz' li khass b tsawer li ghadi t-jib nta */
         .preview-img-container {
             width: 100%;
-            border-radius: 20px;
+            border-radius: 14px;
             overflow: hidden;
             margin-bottom: 20px;
             background: #111;
+            max-height: 200px;
         }
         #action-preview-img {
             width: 100%;
             height: auto;
-            display: none; /* Ghadi it-fth mli t-khtar khidma */
+            display: block;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -93,19 +94,6 @@
         </div>
     </div>
 
-    <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
-        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[90vh] overflow-y-auto flex flex-col">
-            <div class="flex justify-between items-center px-6 py-5 sticky top-0 bg-[var(--card)] z-10 border-b border-white/5">
-                <h2 class="text-[18px] font-bold">SnapSpying Privacy Policy</h2>
-                <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="px-6 py-6 text-sm">
-                 <p class="text-white leading-relaxed mb-6 italic">Simulation for entertainment purposes only.</p>
-            </div>
-        </div>
-    </div>
-
     <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
         <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-10 sheet text-center">
@@ -116,9 +104,7 @@
             </div>
 
             <h3 id="r-count" class="text-3xl font-bold mb-1">0</h3>
-            <p class="text-[10px] text-gray-500 uppercase font-black mb-10">Viewed 100+ times</p>
-            
-            <div class="flex justify-center -space-x-5 mb-10" id="avatar-stack"></div>
+            <p class="text-[10px] text-gray-500 uppercase font-black mb-6">Viewed 100+ times</p>
             
             <h4 id="r-title" class="text-[17px] font-bold mb-10 px-6"></h4>
             <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg">Reveal</button>
@@ -185,17 +171,9 @@
         }
 
         function openAction(title, count, desc, type) {
-            // L-avatars kima l-owl
-            const stack = document.getElementById('avatar-stack');
-            stack.innerHTML = '';
-            for(let i=1; i<=3; i++) {
-                stack.innerHTML += `<img src="https://i.pravatar.cc/150?u=${type}${i}" class="w-16 h-16 rounded-full border-[6px] border-[var(--card)] shadow-xl">`;
-            }
-
-            // Tsawer li ghadi t-jib nta
+            // Smiyat dyal l-photos b .jpg kima f l-upload dyalk
             const previewImg = document.getElementById('action-preview-img');
-            previewImg.src = type + '.png'; // typing.png, friends.png, etc.
-            previewImg.style.display = 'block';
+            previewImg.src = type + '.jpg'; 
 
             document.getElementById('r-title').innerText = desc;
             document.getElementById('r-count').innerText = count;
