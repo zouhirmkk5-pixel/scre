@@ -3,154 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Screen Video Mockup</title>
-    <style>
-        :root {
-            --bg-color: #000;
-            --ios-blue: #007aff;
-        }
-
-        body {
-            background-color: #1a1a1a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: -apple-system, system-ui, sans-serif;
-        }
-
-        /* Container dial l-iPhone */
-        .iphone-frame {
-            width: 280px;
-            height: 580px;
-            background: #000;
-            border-radius: 45px;
-            padding: 10px;
-            position: relative;
-            border: 4px solid #333;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        }
-
-        /* Screen wast l-iPhone */
-        .iphone-screen {
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            border-radius: 35px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Video styling */
-        #display-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: filter 0.3s ease;
-        }
-
-        /* Privacy Layer (Over the video) */
-        .privacy-layer {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); /* Kidir dik l-dlam dial l-privacy */
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 12px;
-            text-align: center;
-            z-index: 5;
-        }
-
-        /* Settings UI (Glassmorphism) */
-        .ui-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 20px;
-            z-index: 10;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Toggle Switch */
-        .switch {
-            width: 44px; height: 24px;
-            background: #ccc;
-            border-radius: 20px;
-            position: relative;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .switch::before {
-            content: '';
-            position: absolute;
-            width: 20px; height: 20px;
-            background: #fff;
-            border-radius: 50%;
-            top: 2px; left: 2px;
-            transition: 0.3s;
-        }
-
-        .active-switch { background: #34c759 ! loosened; }
-        .active-switch::before { transform: translateX(20px); }
-
-    </style>
+    <title>Premium Video Script</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="iphone-frame">
-    <div class="iphone-screen">
-        <video id="display-video" autoplay muted loop playsinline>
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-        </video>
-
-        <div id="privacy-overlay" class="privacy-layer">
-            <span style="padding: 20px;">Screen Protected from Side View</span>
-        </div>
-
-        <div class="ui-controls">
-            <div class="row">
-                <span style="font-weight: 600; font-size: 14px;">Privacy Screen</span>
-                <div id="toggle-btn" class="switch"></div>
+    <div class="container">
+        <div class="glass-card">
+            <div class="badge">LIVE UPDATES</div>
+            <h1>Next-Gen Content</h1>
+            <p>Unlock the latest strategies and AI tools for your brand.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="number">4K</span>
+                    <span class="label">Resolution</span>
+                </div>
+                <div class="stat-item">
+                    <span class="number">AI</span>
+                    <span class="label">Powered</span>
+                </div>
             </div>
+
+            <button class="cta-button">Get Started Now</button>
         </div>
     </div>
-</div>
-
-<script>
-    const btn = document.getElementById('toggle-btn');
-    const overlay = document.getElementById('privacy-overlay');
-    const video = document.getElementById('display-video');
-
-    btn.addEventListener('click', () => {
-        btn.classList.toggle('active-switch');
-        
-        // Ila kant l-privacy khdama, l-opacity kat-itla3
-        if (btn.classList.contains('active-switch')) {
-            overlay.style.opacity = '1';
-            video.style.filter = 'brightness(0.2) blur(2px)';
-        } else {
-            overlay.style.opacity = '0';
-            video.style.filter = 'brightness(1) blur(0)';
-        }
-    });
-</script>
-
 </body>
 </html>
