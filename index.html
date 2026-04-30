@@ -3,176 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Screen Demo</title>
+    <title>Privacy Screen Video Mockup</title>
     <style>
         :root {
-            --bg-color: #f5f5f7;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --accent-color: #007aff;
+            --bg-color: #000;
+            --ios-blue: #007aff;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
+            background-color: #1a1a1a;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            font-family: -apple-system, system-ui, sans-serif;
         }
 
-        /* Phone Mockup Container */
-        .phone-container {
-            width: 300px;
-            height: 600px;
-            background: #111;
-            border-radius: 40px;
-            padding: 12px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        /* Container dial l-iPhone */
+        .iphone-frame {
+            width: 280px;
+            height: 580px;
+            background: #000;
+            border-radius: 45px;
+            padding: 10px;
             position: relative;
             border: 4px solid #333;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
-        /* Screen Content */
-        .screen {
+        /* Screen wast l-iPhone */
+        .iphone-screen {
             width: 100%;
             height: 100%;
             background: #fff;
-            border-radius: 30px;
+            border-radius: 35px;
             overflow: hidden;
             position: relative;
+        }
+
+        /* Video styling */
+        #display-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.3s ease;
+        }
+
+        /* Privacy Layer (Over the video) */
+        .privacy-layer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); /* Kidir dik l-dlam dial l-privacy */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+            z-index: 5;
         }
 
-        /* Header Settings Style */
-        .header {
-            padding: 40px 20px 10px;
-            font-weight: 600;
-            font-size: 18px;
-            border-bottom: 1px solid #eee;
+        /* Settings UI (Glassmorphism) */
+        .ui-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 20px;
+            z-index: 10;
         }
 
-        .settings-item {
-            padding: 15px 20px;
+        .row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #f0f0f0;
         }
 
         /* Toggle Switch */
         .switch {
+            width: 44px; height: 24px;
+            background: #ccc;
+            border-radius: 20px;
             position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 28px;
-        }
-
-        .switch input { opacity: 0; width: 0; height: 0; }
-
-        .slider {
-            position: absolute;
             cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
+            transition: 0.3s;
         }
 
-        .slider:before {
+        .switch::before {
+            content: '';
             position: absolute;
-            content: "";
-            height: 22px; width: 22px;
-            left: 3px; bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider { background-color: #34c759; }
-        input:checked + .slider:before { transform: translateX(22px); }
-
-        /* The Privacy Overlay Effect */
-        .privacy-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                90deg,
-                rgba(0,0,0,0.9) 0px,
-                rgba(0,0,0,0.9) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 10;
-        }
-
-        #privacy-toggle:checked ~ .privacy-overlay {
-            opacity: 1;
-        }
-
-        /* Visual Preview (The iPhone Image in video) */
-        .preview-box {
-            margin: 20px;
-            height: 200px;
-            background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .phone-inner-preview {
-            width: 80px;
-            height: 160px;
+            width: 20px; height: 20px;
             background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 50%;
+            top: 2px; left: 2px;
+            transition: 0.3s;
         }
+
+        .active-switch { background: #34c759 ! loosened; }
+        .active-switch::before { transform: translateX(20px); }
 
     </style>
 </head>
 <body>
 
-<div class="phone-container">
-    <div class="screen">
-        <div class="header">Display & Brightness</div>
-        
-        <div class="preview-box">
-            <div class="phone-inner-preview"></div>
-            <div class="privacy-overlay" id="overlay-effect"></div>
+<div class="iphone-frame">
+    <div class="iphone-screen">
+        <video id="display-video" autoplay muted loop playsinline>
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        </video>
+
+        <div id="privacy-overlay" class="privacy-layer">
+            <span style="padding: 20px;">Screen Protected from Side View</span>
         </div>
 
-        <div class="settings-item">
-            <span>Privacy Screen <small style="color:gray; font-size: 10px;">BETA</small></span>
-            <label class="switch">
-                <input type="checkbox" id="privacy-toggle">
-                <span class="slider"></span>
-            </label>
-        </div>
-
-        <div style="padding: 10px 20px; font-size: 12px; color: #666;">
-            Keep your screen private by limiting the side visibility. Content is clear from the front.
+        <div class="ui-controls">
+            <div class="row">
+                <span style="font-weight: 600; font-size: 14px;">Privacy Screen</span>
+                <div id="toggle-btn" class="switch"></div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    const toggle = document.getElementById('privacy-toggle');
-    const overlay = document.getElementById('overlay-effect');
+    const btn = document.getElementById('toggle-btn');
+    const overlay = document.getElementById('privacy-overlay');
+    const video = document.getElementById('display-video');
 
-    toggle.addEventListener('change', function() {
-        if(this.checked) {
+    btn.addEventListener('click', () => {
+        btn.classList.toggle('active-switch');
+        
+        // Ila kant l-privacy khdama, l-opacity kat-itla3
+        if (btn.classList.contains('active-switch')) {
             overlay.style.opacity = '1';
+            video.style.filter = 'brightness(0.2) blur(2px)';
         } else {
             overlay.style.opacity = '0';
+            video.style.filter = 'brightness(1) blur(0)';
         }
     });
 </script>
