@@ -3,170 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Profile Verification Tool</title>
+    <title>TikTok Verification Simulator</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background: #000; color: white; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
 
-        /* --- 1. Background TikTok Profile --- */
-        .tiktok-profile {
+        /* --- 1. SETUP FORM (Initial Screen) --- */
+        #setup-form {
+            background: #111;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            width: 350px;
+            z-index: 100;
+            text-align: center;
+        }
+        #setup-form h2 { margin-bottom: 20px; font-size: 18px; color: #fe2c55; }
+        input {
             width: 100%;
-            max-width: 450px;
-            height: 90vh;
-            background: #000;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 50px;
-            filter: blur(0px);
-            transition: filter 0.5s;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #222;
+            color: white;
+            outline: none;
+        }
+        .btn-start {
+            width: 100%;
+            padding: 12px;
+            background: #fe2c55;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
-        .profile-pic {
+        /* --- 2. TIKTOK PROFILE (Background) --- */
+        #tiktok-profile {
+            display: none; /* Hidden at start */
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        #p-img {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             background: #333;
-            background-image: url('https://via.placeholder.com/100'); /* Dir hna link d l-tswira dyalk */
-            background-size: cover;
+            object-fit: cover;
             margin-bottom: 15px;
+            border: 2px solid #222;
         }
-
-        .username-container { display: flex; align-items: center; gap: 5px; }
-        .username { font-size: 20px; font-weight: bold; }
+        .user-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
+        #p-user { font-size: 22px; font-weight: bold; }
         
-        /* Verified Badge (Hidden at start) */
-        .verified-badge {
-            width: 18px;
-            height: 18px;
+        .blue-badge {
+            width: 20px;
+            height: 20px;
             background: #20d5ec;
             border-radius: 50%;
-            display: none; /* Hidden */
+            display: none; /* Hidden until success */
             justify-content: center;
             align-items: center;
-            font-size: 10px;
+            font-size: 11px;
             color: black;
-            font-weight: bold;
+            animation: popBadge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        @keyframes popBadge { from { transform: scale(0); } to { transform: scale(1); } }
 
-        .stats { display: flex; gap: 20px; margin: 20px 0; }
-        .stat-item { text-align: center; }
-        .stat-val { font-weight: bold; display: block; }
-        .stat-label { font-size: 12px; color: #888; }
+        .stats { display: flex; gap: 25px; margin: 20px 0; }
+        .stat-item span { display: block; }
+        .stat-val { font-weight: bold; font-size: 18px; }
+        .stat-lbl { color: #888; font-size: 13px; }
 
-        .bio { font-size: 14px; color: #ccc; margin-bottom: 20px; }
-
-        /* --- 2. Verification Tool Overlay --- */
-        .overlay {
+        /* --- 3. LOADING WINDOW (The "Leading") --- */
+        #loading-overlay {
+            display: none;
             position: absolute;
-            width: 400px;
-            background: rgba(20, 20, 20, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 380px;
+            background: rgba(15, 15, 15, 0.98);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 15px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            z-index: 10;
+            box-shadow: 0 0 40px rgba(0,0,0,0.9);
+            z-index: 50;
         }
-
-        .window-header { position: absolute; top: 10px; left: 15px; font-size: 11px; color: #555; }
-
         .spinner {
             width: 50px;
             height: 50px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top: 4px solid #fe2c55;
+            border: 4px solid #222;
+            border-top: 4px solid #20d5ec;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
         }
-
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        .success-icon {
-            width: 50px;
-            height: 50px;
-            background: #2ecc71;
-            border-radius: 50%;
-            display: none;
-            margin: 20px auto;
-            line-height: 50px;
-            font-size: 25px;
-        }
-
-        #status-text { margin-bottom: 10px; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <div class="tiktok-profile" id="profile">
-        <div class="profile-pic"></div>
-        <div class="username-container">
-            <span class="username">@user_name</span>
-            <div class="verified-badge" id="blue-check">✓</div>
-        </div>
-        
-        <div class="stats">
-            <div class="stat-item"><span class="stat-val">150</span><span class="stat-label">Following</span></div>
-            <div class="stat-item"><span class="stat-val">14K</span><span class="stat-label">Followers</span></div>
-            <div class="stat-item"><span class="stat-val">250K</span><span class="stat-label">Likes</span></div>
-        </div>
-        <div class="bio">No bio yet.</div>
+    <div id="setup-form">
+        <h2>Account Setup</h2>
+        <input type="text" id="in-user" placeholder="Username (e.g. @rex_edit)">
+        <input type="text" id="in-followers" placeholder="Followers (e.g. 14.5K)">
+        <input type="text" id="in-img" placeholder="Profile Image URL">
+        <button class="btn-start" onclick="startVerification()">Verify Account</button>
     </div>
 
-    <div class="overlay" id="tool-window">
-        <div class="window-header">Venix Verification Tool</div>
-        <div id="loader-content">
-            <h3 id="status-text">Processing @user_name...</h3>
-            <div class="spinner"></div>
-            <p id="percent">0%</p>
+    <div id="tiktok-profile">
+        <img id="p-img" src="" alt="">
+        <div class="user-row">
+            <span id="p-user">@username</span>
+            <div class="blue-badge" id="v-badge">✓</div>
         </div>
+        <div class="stats">
+            <div class="stat-item"><span class="stat-val" id="p-follow">0</span><span class="stat-lbl">Following</span></div>
+            <div class="stat-item"><span class="stat-val" id="p-followers">0</span><span class="stat-lbl">Followers</span></div>
+            <div class="stat-item"><span class="stat-val">1.2M</span><span class="stat-lbl">Likes</span></div>
+        </div>
+    </div>
 
-        <div id="success-content" style="display: none;">
-            <div class="success-icon">✓</div>
-            <h3>Account Verified!</h3>
-        </div>
+    <div id="loading-overlay">
+        <h3 id="load-msg">Initializing Verification...</h3>
+        <div class="spinner"></div>
+        <p id="percent">0%</p>
     </div>
 
     <script>
-        const percentEl = document.getElementById('percent');
-        const blueCheck = document.getElementById('blue-check');
-        const toolWindow = document.getElementById('tool-window');
-        const profile = document.getElementById('profile');
-        const loaderContent = document.getElementById('loader-content');
-        const successContent = document.getElementById('success-content');
+        function startVerification() {
+            // Get inputs
+            const user = document.getElementById('in-user').value || "@user";
+            const followers = document.getElementById('in-followers').value || "0";
+            const imgUrl = document.getElementById('in-img').value || "https://www.w3schools.com/howto/img_avatar.png";
 
-        let count = 0;
+            // Set profile data
+            document.getElementById('p-user').innerText = user;
+            document.getElementById('p-followers').innerText = followers;
+            document.getElementById('p-img').src = imgUrl;
 
-        // Animation d'enregistrement
-        const interval = setInterval(() => {
-            count += Math.floor(Math.random() * 5) + 2;
-            if (count >= 100) {
-                count = 100;
-                clearInterval(interval);
-                completeProcess();
-            }
-            percentEl.innerText = count + "%";
-        }, 100);
+            // Transition: Hide form, Show Profile (blurred)
+            document.getElementById('setup-form').style.display = 'none';
+            const profile = document.getElementById('tiktok-profile');
+            profile.style.display = 'flex';
+            profile.style.filter = 'blur(5px)';
 
-        function completeProcess() {
-            // 1. Hide loader
-            loaderContent.style.display = 'none';
-            // 2. Show Success
-            successContent.style.display = 'block';
-            successContent.querySelector('.success-icon').style.display = 'block';
-            
-            // 3. Ba3d 1.5 thanya, t-hayed l-window w tle3 l-verif f l-profile
-            setTimeout(() => {
-                toolWindow.style.display = 'none'; // Window t-mchi
-                blueCheck.style.display = 'flex'; // Blue badge tle3
-                profile.style.filter = 'none';
-            }, 2000);
+            // Show Loading Overlay
+            const overlay = document.getElementById('loading-overlay');
+            overlay.style.display = 'block';
+
+            // Animation Logic
+            let count = 0;
+            const percentEl = document.getElementById('percent');
+            const loadMsg = document.getElementById('load-msg');
+
+            const interval = setInterval(() => {
+                count += Math.floor(Math.random() * 6) + 1;
+                
+                if(count > 40) loadMsg.innerText = "Checking authenticity...";
+                if(count > 80) loadMsg.innerText = "Injecting Blue Badge...";
+
+                if (count >= 100) {
+                    count = 100;
+                    clearInterval(interval);
+                    
+                    // Final Success
+                    setTimeout(() => {
+                        overlay.style.display = 'none'; // Window gone
+                        profile.style.filter = 'none'; // Unblur
+                        document.getElementById('v-badge').style.display = 'flex'; // Badge ON
+                    }, 800);
+                }
+                percentEl.innerText = count + "%";
+            }, 120);
         }
-
-        // Blur background f-lowel
-        profile.style.filter = 'blur(3px)';
     </script>
 </body>
 </html>
