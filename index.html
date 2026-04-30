@@ -3,191 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Profile Mockup</title>
+    <title>TikTok Profile Official Clone</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --tt-pink: #FE2C55; --tt-blue: #20D5EC; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sofia Pro', sans-serif, Arial; }
-        body { background-color: #000; color: white; display: flex; justify-content: center; overflow: hidden; height: 100vh; }
+        :root {
+            --tt-black: #010101;
+            --tt-grey: #16171a;
+            --tt-text-grey: #8a8b91;
+            --tt-pink: #fe2c55;
+            --tt-blue: #20d5ec;
+        }
 
-        /* --- TIKTOK UI LAYOUT --- */
-        .phone-screen {
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { background-color: #000; color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+
+        /* --- TIKTOK PROFILE UI --- */
+        .tiktok-app {
             width: 100%;
-            max-width: 400px;
-            height: 100vh;
+            max-width: 414px; /* iPhone size */
+            background-color: var(--tt-black);
+            min-height: 100vh;
+            position: relative;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
-        /* Top Bar */
-        .top-nav {
-            display: flex; justify-content: space-between; padding: 15px 20px;
-            font-size: 20px; align-items: center;
-        }
+        /* Status Bar Mockup */
+        .status-bar { padding: 12px 25px; display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
 
-        /* Profile Header */
-        .profile-header { text-align: center; margin-top: 10px; }
-        .avatar-container { position: relative; display: inline-block; }
-        .avatar {
-            width: 96px; height: 96px; border-radius: 50%;
-            border: 1px solid #333; object-fit: cover;
-        }
-        .add-icon {
-            position: absolute; bottom: 0; right: 0;
-            background: #00f2ea; color: white; border-radius: 50%;
-            width: 24px; height: 24px; display: flex; justify-content: center;
-            align-items: center; border: 2px solid #000; font-size: 14px;
-        }
+        /* Header Nav */
+        .header-nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; }
+        .header-nav i { font-size: 22px; }
 
-        .name-row { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 12px; }
-        .display-name { font-size: 18px; font-weight: 700; }
-        .user-tag { font-size: 14px; color: #fff; font-weight: 500; margin-top: 4px; display: block; }
+        /* Profile Info */
+        .profile-content { display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
         
-        /* Verified Badge (Hidden) */
-        .verified-badge {
-            color: var(--tt-blue); font-size: 16px; display: none;
-            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .avatar-box { position: relative; width: 105px; height: 105px; margin-bottom: 12px; }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 0.5px solid #333; }
+        .add-blue { position: absolute; bottom: 2px; right: 2px; background: #00f2ea; width: 26px; height: 26px; border-radius: 50%; border: 2.5px solid #000; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; }
 
-        /* Stats */
-        .stats-bar { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
-        .stat-item { text-align: center; }
-        .stat-num { font-weight: 700; font-size: 17px; display: block; }
-        .stat-label { color: #86878b; font-size: 13px; }
+        .user-info { text-align: center; }
+        .display-name { font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .user-handle { font-size: 14px; font-weight: 500; margin-top: 6px; display: block; }
+        
+        /* THE VERIFIED BADGE */
+        .verified-icon { color: var(--tt-blue); font-size: 16px; display: none; animation: checkPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        .bio { font-size: 14px; padding: 0 40px; line-height: 1.4; color: #fff; margin-bottom: 15px; }
-        .edit-btn {
-            background: #2f2f2f; padding: 8px 16px; border-radius: 4px;
-            font-weight: 600; display: inline-block; font-size: 14px;
-        }
+        .stats-row { display: flex; gap: 30px; margin: 22px 0; }
+        .stat-col { text-align: center; }
+        .stat-num { font-size: 18px; font-weight: 700; display: block; }
+        .stat-txt { font-size: 13px; color: var(--tt-text-grey); margin-top: 2px; }
 
-        /* --- THE VERIFY FORM (BOTTOM) --- */
-        .verify-panel {
-            position: absolute; bottom: 80px; width: 90%; left: 5%;
-            background: #1a1a1a; padding: 20px; border-radius: 12px;
-            border: 1px solid #333; text-align: center; z-index: 10;
-        }
-        .verify-panel input {
-            width: 100%; background: #000; border: 1px solid #444;
-            padding: 12px; color: white; border-radius: 6px; margin-bottom: 10px; outline: none;
-        }
-        .v-btn {
-            background: var(--tt-pink); color: white; width: 100%;
-            padding: 12px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer;
-        }
+        .action-buttons { display: flex; gap: 8px; margin-bottom: 15px; }
+        .btn-edit { background: #252525; padding: 8px 20px; border-radius: 4px; font-weight: 600; font-size: 15px; }
 
-        /* --- LOADING OVERLAY --- */
-        .overlay {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 100;
-            flex-direction: column; justify-content: center; align-items: center;
-        }
-        .spinner {
-            width: 40px; height: 40px; border: 3px solid #333;
-            border-top: 3px solid var(--tt-blue); border-radius: 50%;
-            animation: spin 1s linear infinite; margin-bottom: 15px;
-        }
+        .bio-text { font-size: 14px; text-align: center; padding: 0 45px; line-height: 1.4; margin-bottom: 20px; }
 
-        /* Nav Bottom Bar Mockup */
-        .bottom-nav {
-            position: absolute; bottom: 0; width: 100%; height: 60px;
-            border-top: 0.5px solid #333; display: flex; justify-content: space-around;
-            align-items: center; font-size: 10px; background: #000;
-        }
-        .nav-item { text-align: center; color: #86878b; }
+        /* Feed Tabs */
+        .tabs { display: flex; border-top: 0.5px solid #222; padding: 12px 0; justify-content: space-around; width: 100%; color: var(--tt-text-grey); }
+        .active-tab { color: white; border-bottom: 2px solid white; padding-bottom: 10px; margin-bottom: -12px; }
+
+        /* --- CONTROL PANEL (BOTTOM) --- */
+        .control-panel { background: #111; width: 100%; max-width: 414px; padding: 25px; border-radius: 20px 20px 0 0; border-top: 1px solid #333; margin-top: auto; }
+        .control-panel input { width: 100%; background: #000; border: 1px solid #333; padding: 14px; border-radius: 8px; color: white; margin-bottom: 12px; outline: none; }
+        .verify-now-btn { background: var(--tt-pink); width: 100%; padding: 15px; border: none; border-radius: 8px; color: white; font-weight: 700; cursor: pointer; font-size: 16px; }
+
+        /* --- OVERLAY --- */
+        .loading-screen { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; }
+        .loader { width: 45px; height: 45px; border: 4px solid #222; border-top: 4px solid var(--tt-blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 15px; }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+        @keyframes checkPop { from { transform: scale(0); } to { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <div class="phone-screen">
-        <div class="top-nav">
+    <div class="tiktok-app">
+        <div class="status-bar">
+            <span>10:24</span>
+            <div style="display:flex; gap: 5px;">
+                <i class="fas fa-plane"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-three-quarters" style="color: #fce100;"></i>
+            </div>
+        </div>
+
+        <div class="header-nav">
             <i class="fas fa-user-plus"></i>
-            <span style="font-weight: 600; font-size: 16px;">Profile</span>
+            <span style="font-weight: 700;">Profile</span>
             <i class="fas fa-bars"></i>
         </div>
 
-        <div class="profile-header">
-            <div class="avatar-container">
-                <img src="https://via.placeholder.com/150" class="avatar" id="profile-img">
-                <div class="add-icon"><i class="fas fa-plus"></i></div>
+        <div class="profile-content">
+            <div class="avatar-box">
+                <img src="https://via.placeholder.com/150" class="avatar-img" id="p-img">
+                <div class="add-blue"><i class="fas fa-plus"></i></div>
             </div>
             
-            <div class="name-row">
-                <span class="display-name" id="display-name">Jessica</span>
-                <i class="fas fa-check-circle verified-badge" id="v-check"></i>
-                <div class="edit-btn">Edit</div>
-            </div>
-            <span class="user-tag" id="user-tag">@snaptrickspro</span>
-
-            <div class="stats-bar">
-                <div class="stat-item"><span class="stat-num">26</span><span class="stat-label">Following</span></div>
-                <div class="stat-item"><span class="stat-num">2</span><span class="stat-label">Followers</span></div>
-                <div class="stat-item"><span class="stat-num">14</span><span class="stat-label">Likes</span></div>
+            <div class="user-info">
+                <div class="display-name">
+                    <span id="p-name">Jessica</span>
+                    <i class="fas fa-check-circle verified-icon" id="v-icon"></i>
+                </div>
+                <span class="user-handle" id="p-handle">@snaptrickspro</span>
             </div>
 
-            <div class="bio">Expert tutorials for Snapchat tips and security<br>Follow for more!</div>
+            <div class="stats-row">
+                <div class="stat-col"><span class="stat-num">26</span><span class="stat-txt">Following</span></div>
+                <div class="stat-col"><span class="stat-num">2</span><span class="stat-txt">Followers</span></div>
+                <div class="stat-col"><span class="stat-num">14</span><span class="stat-txt">Likes</span></div>
+            </div>
+
+            <div class="action-buttons">
+                <div class="btn-edit">Edit</div>
+            </div>
+
+            <div class="bio-text">Expert tutorials for Snapchat tips and security. Follow for more!</div>
         </div>
 
-        <div class="verify-panel" id="v-panel">
-            <input type="text" id="name-input" placeholder="Enter Name (e.g. Jessica)">
-            <input type="text" id="user-input" placeholder="Enter Username (e.g. @snaptrickspro)">
-            <button class="v-btn" onclick="startProcess()">Verify Profile</button>
+        <div class="tabs">
+            <i class="fas fa-grip-lines active-tab"></i>
+            <i class="fas fa-lock"></i>
+            <i class="fas fa-retweet"></i>
+            <i class="fas fa-bookmark"></i>
+            <i class="far fa-heart"></i>
         </div>
 
-        <div class="overlay" id="loading">
-            <div class="spinner"></div>
-            <p id="status">Connecting...</p>
-            <p id="percent" style="font-size: 24px; font-weight: bold; margin-top: 10px;">0%</p>
+        <div class="control-panel" id="ctrl">
+            <input type="text" id="in-name" placeholder="Name (Jessica)">
+            <input type="text" id="in-handle" placeholder="Username (@user)">
+            <button class="verify-now-btn" onclick="triggerVerify()">Verify Official Account</button>
         </div>
 
-        <div class="bottom-nav">
-            <div class="nav-item"><i class="fas fa-home" style="font-size: 20px;"></i><br>Home</div>
-            <div class="nav-item"><i class="fas fa-users" style="font-size: 20px;"></i><br>Friends</div>
-            <div class="nav-item"><i class="fas fa-plus-square" style="font-size: 30px; color: white;"></i></div>
-            <div class="nav-item"><i class="fas fa-comment-dots" style="font-size: 20px;"></i><br>Inbox</div>
-            <div class="nav-item" style="color: white;"><i class="fas fa-user" style="font-size: 20px;"></i><br>Profile</div>
+        <div class="loading-screen" id="loader-screen">
+            <div class="loader"></div>
+            <p id="l-status" style="color: #eee; font-size: 14px;">Connecting to Servers...</p>
+            <p id="l-percent" style="font-size: 32px; font-weight: 800; margin-top: 10px;">0%</p>
         </div>
     </div>
 
     <script>
-        function startProcess() {
-            const name = document.getElementById('name-input').value;
-            const user = document.getElementById('user-input').value;
+        function triggerVerify() {
+            const name = document.getElementById('in-name').value || "Jessica";
+            const handle = document.getElementById('in-handle').value || "@snaptrickspro";
 
-            if(!name || !user) return alert("Kteb smya w username!");
+            // Set Data
+            document.getElementById('p-name').innerText = name;
+            document.getElementById('p-handle').innerText = handle.startsWith('@') ? handle : '@' + handle;
 
-            // Update UI
-            document.getElementById('display-name').innerText = name;
-            document.getElementById('user-tag').innerText = user.startsWith('@') ? user : '@' + user;
+            // Show Loading
+            const screen = document.getElementById('loader-screen');
+            screen.style.display = 'flex';
 
-            // Show Overlay
-            const overlay = document.getElementById('loading');
-            overlay.style.display = 'flex';
+            let progress = 0;
+            const pText = document.getElementById('l-percent');
+            const sText = document.getElementById('l-status');
 
-            let p = 0;
-            const pText = document.getElementById('percent');
-            const sText = document.getElementById('status');
-
-            const int = setInterval(() => {
-                p += Math.floor(Math.random() * 5) + 2;
-                if(p > 40) sText.innerText = "Verifying Identity...";
-                if(p > 80) sText.innerText = "Adding TikTok Badge...";
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 4) + 1;
                 
-                if(p >= 100) {
-                    p = 100;
-                    clearInterval(int);
+                if(progress > 30) sText.innerText = "Analyzing User ID...";
+                if(progress > 65) sText.innerText = "Applying Verified Badge...";
+                if(progress > 90) sText.innerText = "Finalizing...";
+
+                if(progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
                     setTimeout(() => {
-                        overlay.style.display = 'none';
-                        document.getElementById('v-panel').style.display = 'none';
-                        document.getElementById('v-check').style.display = 'inline-block';
-                    }, 800);
+                        screen.style.display = 'none';
+                        document.getElementById('ctrl').style.display = 'none';
+                        document.getElementById('v-icon').style.display = 'inline-block';
+                    }, 1000);
                 }
-                pText.innerText = p + "%";
-            }, 100);
+                pText.innerText = progress + "%";
+            }, 80);
         }
     </script>
 </body>
