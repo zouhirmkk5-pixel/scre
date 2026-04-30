@@ -3,184 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Verification Simulator</title>
+    <title>TikTok Verification Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #000; color: white; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        :root {
+            --tt-pink: #FE2C55;
+            --tt-cyan: #25F4EE;
+            --tt-black: #121212;
+            --tt-dark-grey: #1f1f1f;
+        }
 
-        /* --- 1. SETUP FORM (Initial Screen) --- */
-        #setup-form {
-            background: #111;
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            width: 350px;
-            z-index: 100;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sofia Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
+        
+        body { background-color: #000; color: white; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+
+        /* --- STAGE 1: PROFESSIONAL INPUT PAGE --- */
+        #input-page {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
             text-align: center;
+            animation: fadeIn 0.5s ease;
         }
-        #setup-form h2 { margin-bottom: 20px; font-size: 18px; color: #fe2c55; }
+
+        .tt-logo { font-size: 50px; margin-bottom: 20px; }
+        
+        .input-group {
+            background: var(--tt-dark-grey);
+            border-radius: 4px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .input-group:focus-within { border: 1px solid #888; }
+
+        .input-group i { color: #888; margin-right: 10px; }
+
         input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background: #222;
-            color: white;
-            outline: none;
-        }
-        .btn-start {
-            width: 100%;
-            padding: 12px;
-            background: #fe2c55;
+            background: transparent;
             border: none;
             color: white;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
+            width: 100%;
+            font-size: 16px;
+            outline: none;
         }
 
-        /* --- 2. TIKTOK PROFILE (Background) --- */
-        #tiktok-profile {
-            display: none; /* Hidden at start */
+        .verify-btn {
+            background-color: var(--tt-pink);
+            color: white;
             width: 100%;
-            max-width: 450px;
-            text-align: center;
+            padding: 14px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .verify-btn:active { opacity: 0.8; }
+
+        /* --- STAGE 2: TIKTOK PROFILE --- */
+        #profile-page {
+            display: none;
+            width: 100%;
+            max-height: 100vh;
             flex-direction: column;
             align-items: center;
+            padding-top: 60px;
         }
-        #p-img {
+
+        .p-avatar {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: #333;
             object-fit: cover;
             margin-bottom: 15px;
-            border: 2px solid #222;
         }
-        .user-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
-        #p-user { font-size: 22px; font-weight: bold; }
-        
-        .blue-badge {
-            width: 20px;
-            height: 20px;
-            background: #20d5ec;
-            border-radius: 50%;
-            display: none; /* Hidden until success */
-            justify-content: center;
+
+        .p-username {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
             align-items: center;
-            font-size: 11px;
-            color: black;
-            animation: popBadge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            gap: 5px;
         }
-        @keyframes popBadge { from { transform: scale(0); } to { transform: scale(1); } }
 
-        .stats { display: flex; gap: 25px; margin: 20px 0; }
-        .stat-item span { display: block; }
-        .stat-val { font-weight: bold; font-size: 18px; }
-        .stat-lbl { color: #888; font-size: 13px; }
+        .verified-check {
+            color: #20D5EC;
+            font-size: 18px;
+            display: none; /* Hidden at start */
+            animation: popCheck 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-        /* --- 3. LOADING WINDOW (The "Leading") --- */
-        #loading-overlay {
+        .p-stats {
+            display: flex;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .stat { text-align: center; }
+        .stat-count { font-weight: bold; font-size: 18px; display: block; }
+        .stat-label { color: #86878b; font-size: 13px; }
+
+        /* --- STAGE 3: OVERLAY TOOL --- */
+        #tool-overlay {
             display: none;
             position: absolute;
-            width: 380px;
-            background: rgba(15, 15, 15, 0.98);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 30px;
+            width: 340px;
+            background: rgba(28, 28, 28, 0.98);
+            border-radius: 12px;
+            padding: 25px;
             text-align: center;
-            box-shadow: 0 0 40px rgba(0,0,0,0.9);
-            z-index: 50;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 0.5px solid rgba(255,255,255,0.1);
+            z-index: 99;
         }
+
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #222;
-            border-top: 4px solid #20d5ec;
+            width: 45px;
+            height: 45px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--tt-cyan);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
             margin: 20px auto;
         }
+
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes popCheck { from { transform: scale(0); } to { transform: scale(1.2); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
     </style>
 </head>
 <body>
 
-    <div id="setup-form">
-        <h2>Account Setup</h2>
-        <input type="text" id="in-user" placeholder="Username (e.g. @rex_edit)">
-        <input type="text" id="in-followers" placeholder="Followers (e.g. 14.5K)">
-        <input type="text" id="in-img" placeholder="Profile Image URL">
-        <button class="btn-start" onclick="startVerification()">Verify Account</button>
+    <div id="input-page">
+        <div class="tt-logo">
+            <i class="fab fa-tiktok"></i>
+        </div>
+        <h2 style="margin-bottom: 30px; font-weight: 600;">Verification Tool</h2>
+        
+        <div class="input-group">
+            <i class="fas fa-at"></i>
+            <input type="text" id="target-user" placeholder="Enter username">
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-users"></i>
+            <input type="text" id="target-followers" placeholder="Followers (e.g. 50K)">
+        </div>
+
+        <button class="verify-btn" onclick="runProcess()">Verify</button>
     </div>
 
-    <div id="tiktok-profile">
-        <img id="p-img" src="" alt="">
-        <div class="user-row">
-            <span id="p-user">@username</span>
-            <div class="blue-badge" id="v-badge">✓</div>
+    <div id="profile-page">
+        <img src="https://www.w3schools.com/howto/img_avatar.png" class="p-avatar" id="final-img">
+        <div class="p-username">
+            <span id="final-user">@username</span>
+            <i class="fas fa-check-circle verified-check" id="badge"></i>
         </div>
-        <div class="stats">
-            <div class="stat-item"><span class="stat-val" id="p-follow">0</span><span class="stat-lbl">Following</span></div>
-            <div class="stat-item"><span class="stat-val" id="p-followers">0</span><span class="stat-lbl">Followers</span></div>
-            <div class="stat-item"><span class="stat-val">1.2M</span><span class="stat-lbl">Likes</span></div>
+        <div class="p-stats">
+            <div class="stat"><span class="stat-count">124</span><span class="stat-label">Following</span></div>
+            <div class="stat"><span class="stat-count" id="final-followers">0</span><span class="stat-label">Followers</span></div>
+            <div class="stat"><span class="stat-count">1.5M</span><span class="stat-label">Likes</span></div>
         </div>
+        <div style="background: #2f2f2f; padding: 10px 50px; border-radius: 4px; font-weight: 600;">Edit profile</div>
     </div>
 
-    <div id="loading-overlay">
-        <h3 id="load-msg">Initializing Verification...</h3>
+    <div id="tool-overlay">
+        <p style="font-size: 14px; color: #ccc;" id="status-msg">Connecting to TikTok API...</p>
         <div class="spinner"></div>
-        <p id="percent">0%</p>
+        <p id="percent" style="font-weight: bold; font-size: 20px;">0%</p>
     </div>
 
     <script>
-        function startVerification() {
-            // Get inputs
-            const user = document.getElementById('in-user').value || "@user";
-            const followers = document.getElementById('in-followers').value || "0";
-            const imgUrl = document.getElementById('in-img').value || "https://www.w3schools.com/howto/img_avatar.png";
+        function runProcess() {
+            const user = document.getElementById('target-user').value || "@user";
+            const followers = document.getElementById('target-followers').value || "10.5K";
 
-            // Set profile data
-            document.getElementById('p-user').innerText = user;
-            document.getElementById('p-followers').innerText = followers;
-            document.getElementById('p-img').src = imgUrl;
+            // Set profile
+            document.getElementById('final-user').innerText = user.startsWith('@') ? user : '@' + user;
+            document.getElementById('final-followers').innerText = followers;
 
-            // Transition: Hide form, Show Profile (blurred)
-            document.getElementById('setup-form').style.display = 'none';
-            const profile = document.getElementById('tiktok-profile');
-            profile.style.display = 'flex';
-            profile.style.filter = 'blur(5px)';
+            // Transition
+            document.getElementById('input-page').style.display = 'none';
+            const profilePage = document.getElementById('profile-page');
+            profilePage.style.display = 'flex';
+            profilePage.style.filter = 'blur(8px)';
 
-            // Show Loading Overlay
-            const overlay = document.getElementById('loading-overlay');
+            const overlay = document.getElementById('tool-overlay');
             overlay.style.display = 'block';
 
-            // Animation Logic
-            let count = 0;
+            let progress = 0;
             const percentEl = document.getElementById('percent');
-            const loadMsg = document.getElementById('load-msg');
+            const statusMsg = document.getElementById('status-msg');
 
-            const interval = setInterval(() => {
-                count += Math.floor(Math.random() * 6) + 1;
+            const timer = setInterval(() => {
+                progress += Math.floor(Math.random() * 5) + 1;
                 
-                if(count > 40) loadMsg.innerText = "Checking authenticity...";
-                if(count > 80) loadMsg.innerText = "Injecting Blue Badge...";
+                if(progress > 30) statusMsg.innerText = "Analyzing account...";
+                if(progress > 70) statusMsg.innerText = "Bypassing security...";
+                if(progress > 90) statusMsg.innerText = "Finalizing badge...";
 
-                if (count >= 100) {
-                    count = 100;
-                    clearInterval(interval);
+                if(progress >= 100) {
+                    progress = 100;
+                    clearInterval(timer);
                     
-                    // Final Success
                     setTimeout(() => {
-                        overlay.style.display = 'none'; // Window gone
-                        profile.style.filter = 'none'; // Unblur
-                        document.getElementById('v-badge').style.display = 'flex'; // Badge ON
-                    }, 800);
+                        overlay.style.display = 'none';
+                        profilePage.style.filter = 'none';
+                        document.getElementById('badge').style.display = 'inline-block';
+                    }, 1000);
                 }
-                percentEl.innerText = count + "%";
-            }, 120);
+                percentEl.innerText = progress + "%";
+            }, 100);
         }
     </script>
 </body>
