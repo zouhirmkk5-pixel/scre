@@ -3,225 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Verification Tool</title>
+    <title>TikTok Profile Mockup</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --tt-pink: #FE2C55;
-            --tt-cyan: #25F4EE;
-            --tt-black: #121212;
-            --tt-dark-grey: #1f1f1f;
-        }
+        :root { --tt-pink: #FE2C55; --tt-blue: #20D5EC; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sofia Pro', sans-serif, Arial; }
+        body { background-color: #000; color: white; display: flex; justify-content: center; overflow: hidden; height: 100vh; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Sofia Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
-        
-        body { background-color: #000; color: white; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-
-        /* --- STAGE 1: PROFESSIONAL INPUT PAGE --- */
-        #input-page {
+        /* --- TIKTOK UI LAYOUT --- */
+        .phone-screen {
             width: 100%;
             max-width: 400px;
-            padding: 20px;
-            text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .tt-logo { font-size: 50px; margin-bottom: 20px; }
-        
-        .input-group {
-            background: var(--tt-dark-grey);
-            border-radius: 4px;
-            padding: 12px 15px;
+            height: 100vh;
             display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            border: 1px solid transparent;
-            transition: 0.3s;
-        }
-
-        .input-group:focus-within { border: 1px solid #888; }
-
-        .input-group i { color: #888; margin-right: 10px; }
-
-        input {
-            background: transparent;
-            border: none;
-            color: white;
-            width: 100%;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .verify-btn {
-            background-color: var(--tt-pink);
-            color: white;
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: opacity 0.2s;
-        }
-
-        .verify-btn:active { opacity: 0.8; }
-
-        /* --- STAGE 2: TIKTOK PROFILE --- */
-        #profile-page {
-            display: none;
-            width: 100%;
-            max-height: 100vh;
             flex-direction: column;
-            align-items: center;
-            padding-top: 60px;
+            position: relative;
         }
 
-        .p-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 15px;
+        /* Top Bar */
+        .top-nav {
+            display: flex; justify-content: space-between; padding: 15px 20px;
+            font-size: 20px; align-items: center;
         }
 
-        .p-username {
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        /* Profile Header */
+        .profile-header { text-align: center; margin-top: 10px; }
+        .avatar-container { position: relative; display: inline-block; }
+        .avatar {
+            width: 96px; height: 96px; border-radius: 50%;
+            border: 1px solid #333; object-fit: cover;
+        }
+        .add-icon {
+            position: absolute; bottom: 0; right: 0;
+            background: #00f2ea; color: white; border-radius: 50%;
+            width: 24px; height: 24px; display: flex; justify-content: center;
+            align-items: center; border: 2px solid #000; font-size: 14px;
         }
 
-        .verified-check {
-            color: #20D5EC;
-            font-size: 18px;
-            display: none; /* Hidden at start */
-            animation: popCheck 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .name-row { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 12px; }
+        .display-name { font-size: 18px; font-weight: 700; }
+        .user-tag { font-size: 14px; color: #fff; font-weight: 500; margin-top: 4px; display: block; }
+        
+        /* Verified Badge (Hidden) */
+        .verified-badge {
+            color: var(--tt-blue); font-size: 16px; display: none;
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .p-stats {
-            display: flex;
-            gap: 25px;
-            margin: 25px 0;
-        }
-
-        .stat { text-align: center; }
-        .stat-count { font-weight: bold; font-size: 18px; display: block; }
+        /* Stats */
+        .stats-bar { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .stat-item { text-align: center; }
+        .stat-num { font-weight: 700; font-size: 17px; display: block; }
         .stat-label { color: #86878b; font-size: 13px; }
 
-        /* --- STAGE 3: OVERLAY TOOL --- */
-        #tool-overlay {
-            display: none;
-            position: absolute;
-            width: 340px;
-            background: rgba(28, 28, 28, 0.98);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 0.5px solid rgba(255,255,255,0.1);
-            z-index: 99;
+        .bio { font-size: 14px; padding: 0 40px; line-height: 1.4; color: #fff; margin-bottom: 15px; }
+        .edit-btn {
+            background: #2f2f2f; padding: 8px 16px; border-radius: 4px;
+            font-weight: 600; display: inline-block; font-size: 14px;
         }
 
-        .spinner {
-            width: 45px;
-            height: 45px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top: 3px solid var(--tt-cyan);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 20px auto;
+        /* --- THE VERIFY FORM (BOTTOM) --- */
+        .verify-panel {
+            position: absolute; bottom: 80px; width: 90%; left: 5%;
+            background: #1a1a1a; padding: 20px; border-radius: 12px;
+            border: 1px solid #333; text-align: center; z-index: 10;
         }
+        .verify-panel input {
+            width: 100%; background: #000; border: 1px solid #444;
+            padding: 12px; color: white; border-radius: 6px; margin-bottom: 10px; outline: none;
+        }
+        .v-btn {
+            background: var(--tt-pink); color: white; width: 100%;
+            padding: 12px; border-radius: 6px; border: none; font-weight: 700; cursor: pointer;
+        }
+
+        /* --- LOADING OVERLAY --- */
+        .overlay {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 100;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+        .spinner {
+            width: 40px; height: 40px; border: 3px solid #333;
+            border-top: 3px solid var(--tt-blue); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+
+        /* Nav Bottom Bar Mockup */
+        .bottom-nav {
+            position: absolute; bottom: 0; width: 100%; height: 60px;
+            border-top: 0.5px solid #333; display: flex; justify-content: space-around;
+            align-items: center; font-size: 10px; background: #000;
+        }
+        .nav-item { text-align: center; color: #86878b; }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes popCheck { from { transform: scale(0); } to { transform: scale(1.2); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
     </style>
 </head>
 <body>
 
-    <div id="input-page">
-        <div class="tt-logo">
-            <i class="fab fa-tiktok"></i>
-        </div>
-        <h2 style="margin-bottom: 30px; font-weight: 600;">Verification Tool</h2>
-        
-        <div class="input-group">
-            <i class="fas fa-at"></i>
-            <input type="text" id="target-user" placeholder="Enter username">
+    <div class="phone-screen">
+        <div class="top-nav">
+            <i class="fas fa-user-plus"></i>
+            <span style="font-weight: 600; font-size: 16px;">Profile</span>
+            <i class="fas fa-bars"></i>
         </div>
 
-        <div class="input-group">
-            <i class="fas fa-users"></i>
-            <input type="text" id="target-followers" placeholder="Followers (e.g. 50K)">
+        <div class="profile-header">
+            <div class="avatar-container">
+                <img src="https://via.placeholder.com/150" class="avatar" id="profile-img">
+                <div class="add-icon"><i class="fas fa-plus"></i></div>
+            </div>
+            
+            <div class="name-row">
+                <span class="display-name" id="display-name">Jessica</span>
+                <i class="fas fa-check-circle verified-badge" id="v-check"></i>
+                <div class="edit-btn">Edit</div>
+            </div>
+            <span class="user-tag" id="user-tag">@snaptrickspro</span>
+
+            <div class="stats-bar">
+                <div class="stat-item"><span class="stat-num">26</span><span class="stat-label">Following</span></div>
+                <div class="stat-item"><span class="stat-num">2</span><span class="stat-label">Followers</span></div>
+                <div class="stat-item"><span class="stat-num">14</span><span class="stat-label">Likes</span></div>
+            </div>
+
+            <div class="bio">Expert tutorials for Snapchat tips and security<br>Follow for more!</div>
         </div>
 
-        <button class="verify-btn" onclick="runProcess()">Verify</button>
-    </div>
-
-    <div id="profile-page">
-        <img src="https://www.w3schools.com/howto/img_avatar.png" class="p-avatar" id="final-img">
-        <div class="p-username">
-            <span id="final-user">@username</span>
-            <i class="fas fa-check-circle verified-check" id="badge"></i>
+        <div class="verify-panel" id="v-panel">
+            <input type="text" id="name-input" placeholder="Enter Name (e.g. Jessica)">
+            <input type="text" id="user-input" placeholder="Enter Username (e.g. @snaptrickspro)">
+            <button class="v-btn" onclick="startProcess()">Verify Profile</button>
         </div>
-        <div class="p-stats">
-            <div class="stat"><span class="stat-count">124</span><span class="stat-label">Following</span></div>
-            <div class="stat"><span class="stat-count" id="final-followers">0</span><span class="stat-label">Followers</span></div>
-            <div class="stat"><span class="stat-count">1.5M</span><span class="stat-label">Likes</span></div>
-        </div>
-        <div style="background: #2f2f2f; padding: 10px 50px; border-radius: 4px; font-weight: 600;">Edit profile</div>
-    </div>
 
-    <div id="tool-overlay">
-        <p style="font-size: 14px; color: #ccc;" id="status-msg">Connecting to TikTok API...</p>
-        <div class="spinner"></div>
-        <p id="percent" style="font-weight: bold; font-size: 20px;">0%</p>
+        <div class="overlay" id="loading">
+            <div class="spinner"></div>
+            <p id="status">Connecting...</p>
+            <p id="percent" style="font-size: 24px; font-weight: bold; margin-top: 10px;">0%</p>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item"><i class="fas fa-home" style="font-size: 20px;"></i><br>Home</div>
+            <div class="nav-item"><i class="fas fa-users" style="font-size: 20px;"></i><br>Friends</div>
+            <div class="nav-item"><i class="fas fa-plus-square" style="font-size: 30px; color: white;"></i></div>
+            <div class="nav-item"><i class="fas fa-comment-dots" style="font-size: 20px;"></i><br>Inbox</div>
+            <div class="nav-item" style="color: white;"><i class="fas fa-user" style="font-size: 20px;"></i><br>Profile</div>
+        </div>
     </div>
 
     <script>
-        function runProcess() {
-            const user = document.getElementById('target-user').value || "@user";
-            const followers = document.getElementById('target-followers').value || "10.5K";
+        function startProcess() {
+            const name = document.getElementById('name-input').value;
+            const user = document.getElementById('user-input').value;
 
-            // Set profile
-            document.getElementById('final-user').innerText = user.startsWith('@') ? user : '@' + user;
-            document.getElementById('final-followers').innerText = followers;
+            if(!name || !user) return alert("Kteb smya w username!");
 
-            // Transition
-            document.getElementById('input-page').style.display = 'none';
-            const profilePage = document.getElementById('profile-page');
-            profilePage.style.display = 'flex';
-            profilePage.style.filter = 'blur(8px)';
+            // Update UI
+            document.getElementById('display-name').innerText = name;
+            document.getElementById('user-tag').innerText = user.startsWith('@') ? user : '@' + user;
 
-            const overlay = document.getElementById('tool-overlay');
-            overlay.style.display = 'block';
+            // Show Overlay
+            const overlay = document.getElementById('loading');
+            overlay.style.display = 'flex';
 
-            let progress = 0;
-            const percentEl = document.getElementById('percent');
-            const statusMsg = document.getElementById('status-msg');
+            let p = 0;
+            const pText = document.getElementById('percent');
+            const sText = document.getElementById('status');
 
-            const timer = setInterval(() => {
-                progress += Math.floor(Math.random() * 5) + 1;
+            const int = setInterval(() => {
+                p += Math.floor(Math.random() * 5) + 2;
+                if(p > 40) sText.innerText = "Verifying Identity...";
+                if(p > 80) sText.innerText = "Adding TikTok Badge...";
                 
-                if(progress > 30) statusMsg.innerText = "Analyzing account...";
-                if(progress > 70) statusMsg.innerText = "Bypassing security...";
-                if(progress > 90) statusMsg.innerText = "Finalizing badge...";
-
-                if(progress >= 100) {
-                    progress = 100;
-                    clearInterval(timer);
-                    
+                if(p >= 100) {
+                    p = 100;
+                    clearInterval(int);
                     setTimeout(() => {
                         overlay.style.display = 'none';
-                        profilePage.style.filter = 'none';
-                        document.getElementById('badge').style.display = 'inline-block';
-                    }, 1000);
+                        document.getElementById('v-panel').style.display = 'none';
+                        document.getElementById('v-check').style.display = 'inline-block';
+                    }, 800);
                 }
-                percentEl.innerText = progress + "%";
+                pText.innerText = p + "%";
             }, 100);
         }
     </script>
