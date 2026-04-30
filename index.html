@@ -18,26 +18,24 @@
         .action-item:active { transform: scale(0.97); background: #2c2c2e; }
         .input-box { background: #1c1c1e; border: 1px solid #2c2c2e; transition: border 0.3s; }
         .input-error { border: 1px solid #ff3b30 !important; }
-        .privacy-card { background: #000; border: 1px solid #1c1c1e; border-radius: 14px; padding: 16px; margin-bottom: 12px; text-align: left; }
         
         #preview-container {
-            min-height: 200px;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #111;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #111;
-            width: 100%;
-            margin-bottom: 20px;
-            border-radius: 20px;
-            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         #preview-img {
             width: 100%;
             height: auto;
-            object-fit: cover;
-            opacity: 0.9;
-            mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+            display: block;
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
         }
     </style>
 </head>
@@ -65,7 +63,7 @@
         </div>
 
         <div id="actions-grid" class="opacity-40 pointer-events-none transition-opacity duration-700 space-y-3">
-            <div onclick="openAction('Live Typing', '582,393', 'Watch live typing in real-time', 'typing')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('582,393', 'Watch live typing in real-time', 'typing')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-keyboard text-gray-500 text-xl"></i></div>
                     <div><h3 class="font-bold text-[15px]">Live Typing</h3><p class="text-[11px] text-gray-500">See what your friend is typing in real-time</p></div>
@@ -73,7 +71,7 @@
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div onclick="openAction('Best Friends', '1,042,100', '8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('1,042,100', '8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-user-group text-gray-500 text-xl"></i></div>
                     <div><h3 class="font-bold text-[15px]">Reveal Best Friends</h3><p class="text-[11px] text-gray-500">8 Best Friends of any user</p></div>
@@ -81,7 +79,7 @@
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div onclick="openAction('Eyes Only', '94,204', 'Access My Eyes Only content of any user', 'eyes')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('94,204', 'Access My Eyes Only content of any user', 'eyes')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-eye text-gray-500 text-xl"></i></div>
                     <div><h3 class="font-bold text-[15px]">Reveal Eyes Only</h3><p class="text-[11px] text-gray-500">Access My Eyes Only content of any user</p></div>
@@ -89,29 +87,12 @@
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div onclick="openAction('Chat History', '215,902', 'Message history of any user, including sent, received, opened, and saved chats', 'chat')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('215,902', 'Message history of any user, including sent, received, opened, and saved chats', 'chat')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-comment-dots text-gray-500 text-xl"></i></div>
                     <div><h3 class="font-bold text-[15px]">Reveal Chat History</h3><p class="text-[11px] text-gray-500 leading-tight">Message history including sent, received...</p></div>
                 </div>
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
-            </div>
-        </div>
-    </div>
-
-    <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
-        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[90vh] overflow-y-auto flex flex-col">
-            <div class="flex justify-between items-center px-6 py-5 sticky top-0 bg-[var(--card)] z-10 border-b border-white/5">
-                <h2 class="text-[18px] font-bold">SnapSpying Privacy Policy</h2>
-                <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="px-6 py-6">
-                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 30, 2026</p>
-                <div class="privacy-card">
-                    <h3 class="font-bold text-[15px] mb-2">Information Usage</h3>
-                    <p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying is an entertainment simulation. No data is stored or transmitted.</p>
-                </div>
             </div>
         </div>
     </div>
@@ -122,13 +103,14 @@
             <div class="w-10 h-1 bg-gray-700 mx-auto mb-6 rounded-full"></div>
             
             <div id="preview-container">
-                <img id="preview-img" src="" alt="">
+                <img id="preview-img" src="" alt="preview">
             </div>
 
             <h3 id="r-count" class="text-3xl font-bold mb-1">0</h3>
-            <p class="text-[10px] text-gray-500 uppercase font-black mb-8 tracking-wider">Viewed 100+ times</p>
+            <p class="text-[10px] text-gray-500 uppercase font-black mb-8 tracking-widest">Viewed 100+ times</p>
             
-            <h4 id="r-title" class="text-[17px] font-bold mb-8 px-4"></h4>
+            <h4 id="r-title" class="text-[17px] font-bold mb-10 px-4 leading-tight"></h4>
+            
             <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg active:scale-95 transition-transform">Reveal</button>
         </div>
     </div>
@@ -142,7 +124,7 @@
             </div>
             <h2 id="p-status" class="text-xl font-bold mb-3 text-white">Initializing...</h2>
             <div class="h-2 bg-gray-800 rounded-full mb-6 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
-            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Connecting to server...</p>
+            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Connecting to Snap Server...</p>
         </div>
     </div>
 
@@ -151,8 +133,10 @@
             <i class="fas fa-lock text-[#ffd500] text-4xl"></i>
         </div>
         <h2 class="text-2xl font-bold mb-2">Verification Required</h2>
-        <p class="text-gray-500 text-sm mb-12">Complete the security check to continue</p>
-        <div data-captcha-enable="true"></div>
+        <p class="text-gray-500 text-sm mb-12">Please complete the security check to reveal the content</p>
+        <div class="w-full max-w-sm">
+             <div data-captcha-enable="true"></div>
+        </div>
     </div>
 
     <script>
@@ -192,20 +176,15 @@
             }, 1500);
         }
 
-        function openAction(title, count, desc, type) {
+        function openAction(count, desc, type) {
             const previewImg = document.getElementById('preview-img');
             
-            // NOTE: Beddel had l-links b l-Direct Links dyal Postimage dyalk (.png)
+            // Hna dert l-links direct bach dima ikhedmo
             const images = {
-                'typing': 'https://i.postimg.cc/9F7V2V0M/typing.png',
-                'friends': 'https://i.postimg.cc/qR8Xk4kG/friends.png',
-                'eyes': 'https://i.postimg.cc/6qNqYVz8/eyes.png',
-                'chat': 'https://i.postimg.cc/mD3mXz0m/chat.png'
-            };
-
-            previewImg.onerror = function() {
-                this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-                this.parentElement.style.background = "#222";
+                'typing': 'https://i.ibb.co/C07B63X/typing-blur.png',
+                'friends': 'https://i.ibb.co/v4K7L7L/friends-blur.png',
+                'eyes': 'https://i.ibb.co/fnd9p5F/eyes-blur.png',
+                'chat': 'https://i.ibb.co/qNfKqQY/chat-blur.png'
             };
 
             previewImg.src = images[type] || '';
@@ -227,10 +206,10 @@
                 const log = document.getElementById('p-log');
                 
                 const steps = [
-                    {p: 30, s: 'Bypassing security...', l: 'Exploiting API endpoint...'},
-                    {p: 60, s: 'Fetching data...', l: 'Downloading encrypted packets...'},
-                    {p: 90, s: 'Decryption complete', l: 'Finalizing verification...'},
-                    {p: 100, s: 'Ready', l: 'Verification required.'}
+                    {p: 30, s: 'Fetching data...', l: 'Connecting to database...'},
+                    {p: 60, s: 'Bypassing 2FA...', l: 'Extracting private packets...'},
+                    {p: 90, s: 'Compiling results...', l: 'Generating preview...'},
+                    {p: 100, s: 'Success', l: 'Finalizing...'}
                 ];
 
                 let stepIdx = 0;
@@ -238,13 +217,11 @@
                     p += 1;
                     bar.style.width = p + '%';
                     percent.innerText = p + '%';
-                    
                     if(p >= steps[stepIdx].p) {
                         status.innerText = steps[stepIdx].s;
                         log.innerText = steps[stepIdx].l;
                         stepIdx = Math.min(stepIdx + 1, steps.length - 1);
                     }
-
                     if(p >= 100) {
                         clearInterval(interval);
                         setTimeout(() => {
