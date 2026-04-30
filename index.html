@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Screen Demo</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --accent-color: #007aff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Phone Mockup Container */
+        .phone-container {
+            width: 300px;
+            height: 600px;
+            background: #111;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            position: relative;
+            border: 4px solid #333;
+        }
+
+        /* Screen Content */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Settings Style */
+        .header {
+            padding: 40px 20px 10px;
+            font-weight: 600;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .settings-item {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px; width: 22px;
+            left: 3px; bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: #34c759; }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* The Privacy Overlay Effect */
+        .privacy-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                rgba(0,0,0,0.9) 0px,
+                rgba(0,0,0,0.9) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        #privacy-toggle:checked ~ .privacy-overlay {
+            opacity: 1;
+        }
+
+        /* Visual Preview (The iPhone Image in video) */
+        .preview-box {
+            margin: 20px;
+            height: 200px;
+            background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-inner-preview {
+            width: 80px;
+            height: 160px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="phone-container">
+    <div class="screen">
+        <div class="header">Display & Brightness</div>
+        
+        <div class="preview-box">
+            <div class="phone-inner-preview"></div>
+            <div class="privacy-overlay" id="overlay-effect"></div>
+        </div>
+
+        <div class="settings-item">
+            <span>Privacy Screen <small style="color:gray; font-size: 10px;">BETA</small></span>
+            <label class="switch">
+                <input type="checkbox" id="privacy-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div style="padding: 10px 20px; font-size: 12px; color: #666;">
+            Keep your screen private by limiting the side visibility. Content is clear from the front.
+        </div>
+    </div>
+</div>
+
+<script>
+    const toggle = document.getElementById('privacy-toggle');
+    const overlay = document.getElementById('overlay-effect');
+
+    toggle.addEventListener('change', function() {
+        if(this.checked) {
+            overlay.style.opacity = '1';
+        } else {
+            overlay.style.opacity = '0';
+        }
+    });
+</script>
+
+</body>
+</html>
