@@ -3,285 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Official Profile Clone</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>TikTok Official Profile</title>
     <style>
-        :root {
-            --tt-black: #000000;
-            --tt-dark-grey: #121212;
-            --tt-text-grey: #8a8b91;
-            --tt-pink: #fe2c55;
-            --tt-blue: #20d5ec;
-        }
+        /* Importer des polices qui ressemblent à TikTok Sans */
+        @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif; }
         
-        body { background-color: #1a1a1a; color: white; display: flex; justify-content: center; min-height: 100vh; overflow: hidden; }
+        body { background-color: #121212; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
 
-        /* iPhone Mockup Container */
-        .iphone-frame {
-            width: 390px; /* iPhone 13/14 size */
-            height: 844px;
-            background: var(--tt-black);
+        /* iPhone Frame Precise */
+        .app-container {
+            width: 393px; /* Exact iPhone 14 Pro width */
+            height: 852px;
+            background: #000;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Status Bar (Exact time/icons from your screen) */
+        /* Status Bar Mockup (Precise Icons) */
         .status-bar {
-            padding: 14px 25px 5px;
+            height: 44px;
+            padding: 0 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 600;
         }
-        .status-icons { display: flex; gap: 5px; align-items: center; }
 
-        /* Top Navigation */
-        .top-nav {
+        /* Header Nav */
+        .header {
             display: flex;
             justify-content: space-between;
             padding: 10px 20px;
             align-items: center;
         }
-        .top-nav i { font-size: 22px; }
+        .header svg { width: 24px; height: 24px; fill: white; }
 
         /* Profile Section */
-        .profile-main {
+        .profile-area {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 15px;
+            margin-top: 10px;
         }
 
-        .avatar-wrap {
+        .avatar-container {
             position: relative;
-            margin-bottom: 12px;
-        }
-        .avatar-img {
             width: 100px;
             height: 100px;
+            margin-bottom: 12px;
+        }
+        .avatar {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             object-fit: cover;
             border: 0.5px solid #333;
         }
-        .add-btn-blue {
+        .blue-plus {
             position: absolute;
             bottom: 2px;
             right: 2px;
             background: #00f2ea;
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             border: 2px solid #000;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             color: white;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: bold;
         }
 
-        .user-names { text-align: center; }
-        .d-name { 
-            font-size: 18px; 
-            font-weight: 700; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 4px; 
-        }
-        .u-handle { font-size: 14px; font-weight: 500; color: #fff; margin-top: 4px; display: block; }
+        .name-container { display: flex; align-items: center; gap: 4px; margin-top: 5px; }
+        .display-name { font-size: 18px; font-weight: 700; color: #fff; }
+        .username { font-size: 14px; font-weight: 500; margin-top: 5px; }
         
-        /* THE BADGE */
-        .verified-badge { color: var(--tt-blue); font-size: 16px; display: none; }
-
-        /* Stats Section */
-        .stats-grid {
-            display: flex;
-            gap: 35px;
-            margin: 20px 0;
+        /* THE VERIFIED BADGE (Exact TikTok Blue) */
+        .verified-badge {
+            width: 16px;
+            height: 16px;
+            background: #20d5ec;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-size: 10px;
+            font-weight: bold;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
         }
-        .stat-box { text-align: center; }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 32px;
+            margin: 22px 0;
+        }
+        .stat-item { text-align: center; }
         .stat-val { font-size: 17px; font-weight: 700; display: block; }
-        .stat-lbl { font-size: 12px; color: var(--tt-text-grey); }
+        .stat-label { font-size: 13px; color: #86878b; margin-top: 2px; }
 
-        .bio-box { font-size: 14px; text-align: center; padding: 0 40px; color: #fff; margin-bottom: 20px; line-height: 1.4; }
+        /* Buttons */
+        .edit-row { display: flex; gap: 6px; }
+        .btn-black {
+            background: #252525;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+        }
 
-        /* Tabs Selection */
-        .tabs-row {
+        .bio-text {
+            font-size: 14px;
+            text-align: center;
+            padding: 15px 40px;
+            line-height: 1.4;
+            color: white;
+        }
+
+        /* Icons Tray */
+        .icons-tray {
             display: flex;
             width: 100%;
             justify-content: space-around;
             border-top: 0.5px solid #222;
             padding: 12px 0;
-            color: var(--tt-text-grey);
+            margin-top: 10px;
         }
-        .tab-active { color: white; border-bottom: 2px solid white; padding-bottom: 10px; margin-bottom: -12px; }
+        .icons-tray svg { width: 22px; height: 22px; fill: #86878b; }
+        .active-icon svg { fill: white; border-bottom: 2px solid white; padding-bottom: 30px; margin-bottom: -15px; }
 
-        /* Placeholder Content */
-        .empty-content {
-            margin-top: 60px;
-            text-align: center;
-        }
-        .empty-content i { font-size: 60px; color: #333; margin-bottom: 15px; display: block; }
-        .create-btn {
-            background: var(--tt-pink);
-            color: white;
-            padding: 12px 60px;
-            border-radius: 4px;
-            border: none;
-            font-weight: 700;
-            margin-top: 20px;
-        }
-
-        /* Form Overlay (Initial View) */
-        .setup-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 100;
+        /* Feed Area */
+        .feed-placeholder {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
-            padding: 40px;
-        }
-        .setup-overlay input {
-            background: #222;
-            border: 1px solid #444;
-            padding: 15px;
-            color: white;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            outline: none;
-        }
-
-        /* Leading Overlay (The "Tool") */
-        .loading-tool {
-            display: none;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 320px;
-            background: rgba(20, 20, 20, 0.98);
-            border-radius: 12px;
-            padding: 25px;
             text-align: center;
-            z-index: 200;
-            border: 0.5px solid #333;
+            padding-bottom: 100px;
         }
-        .spinner-tt {
-            width: 40px; height: 40px;
-            border: 3px solid #333;
-            border-top: 3px solid var(--tt-blue);
+        .circle-icon {
+            width: 70px; height: 70px;
+            border: 2px solid #252525;
             border-radius: 50%;
-            animation: rotate 0.8s linear infinite;
-            margin: 0 auto 15px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 15px;
         }
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .create-pink {
+            background: #fe2c55;
+            color: white;
+            padding: 10px 60px;
+            border-radius: 2px;
+            font-weight: 700;
+            font-size: 15px;
+            margin-top: 20px;
+            border: none;
+        }
 
-        /* Bottom Tab Bar */
-        .bottom-bar {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 85px;
-            background: #000;
-            border-top: 0.5px solid #222;
-            display: flex;
-            justify-content: space-around;
-            padding-top: 10px;
-            color: var(--tt-text-grey);
-            font-size: 10px;
+        /* --- THE TRIGGER PANEL --- */
+        .bottom-setup {
+            background: #121212;
+            padding: 20px;
+            border-top: 1px solid #333;
+            z-index: 100;
         }
-        .b-item { text-align: center; }
-        .b-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .bottom-setup input {
+            width: 100%; background: #222; border: 0.5px solid #444;
+            padding: 12px; color: white; border-radius: 4px; margin-bottom: 10px; outline: none;
+        }
+
+        /* --- LOADING OVERLAY --- */
+        .loading-ov {
+            display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.9);
+            z-index: 500; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .loader-ring {
+            width: 45px; height: 45px; border: 3px solid #333;
+            border-top: 3px solid #20d5ec; border-radius: 50%;
+            animation: spin 0.8s linear infinite; margin-bottom: 15px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="iphone-frame">
-        <div class="setup-overlay" id="setup">
-            <h2 style="margin-bottom: 30px;">Profile Setup</h2>
-            <input type="text" id="in-name" placeholder="Display Name (Jessica)">
-            <input type="text" id="in-user" placeholder="Username (@snaptrickspro)">
-            <button class="create-btn" style="width: 100%;" onclick="startVerification()">Verify Account</button>
-        </div>
-
-        <div class="loading-tool" id="tool">
-            <p id="t-msg" style="font-size: 14px; margin-bottom: 10px;">Connecting to API...</p>
-            <div class="spinner-tt"></div>
-            <p id="t-pct" style="font-size: 24px; font-weight: 800;">0%</p>
-        </div>
-
+    <div class="app-container">
         <div class="status-bar">
             <span>10:24</span>
-            <div class="status-icons">
-                <i class="fas fa-plane"></i>
-                <i class="fas fa-wifi"></i>
-                <i class="fas fa-battery-three-quarters" style="color: #fce100;"></i>
+            <div style="display: flex; gap: 5px;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="white"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.97 4.25c-.31.17-.69.17-1 0L3.53 17.38c-.32-.17-.53-.5-.53-.88V7.5c0-.38.21-.71.53-.88l7.97-4.25c.31-.17.69-.17 1 0l7.97 4.25c.32.17.53.5.53.88v9z"/></svg>
+                <span style="color: #fce100;">88%</span>
             </div>
         </div>
 
-        <div class="top-nav">
-            <i class="fas fa-user-plus"></i>
-            <span style="font-weight: 700; font-size: 16px;">Profile</span>
-            <i class="fas fa-bars"></i>
+        <div class="header">
+            <svg viewBox="0 0 48 48"><path d="M34 12l-2.82 2.82L39.34 22H8v4h31.34l-8.16 8.16L34 37l13-13-13-13z"/></svg>
+            <span style="font-weight: 700;">Profile</span>
+            <svg viewBox="0 0 48 48"><path d="M6 36h36v-4H6v4zm0-10h36v-4H6v4zm0-14v4h36v-4H6z"/></svg>
         </div>
 
-        <div class="profile-main">
-            <div class="avatar-wrap">
-                <img src="https://via.placeholder.com/150" class="avatar-img">
-                <div class="add-btn-blue"><i class="fas fa-plus"></i></div>
+        <div class="profile-area">
+            <div class="avatar-container">
+                <img src="https://via.placeholder.com/150" class="avatar">
+                <div class="blue-plus">+</div>
             </div>
-            <div class="user-names">
-                <div class="d-name">
-                    <span id="p-name">Jessica</span>
-                    <i class="fas fa-check-circle verified-badge" id="v-check"></i>
-                </div>
-                <span class="u-handle" id="p-handle">@snaptrickspro</span>
+            <div class="name-container">
+                <span class="display-name" id="p-name">Jessica</span>
+                <div class="verified-badge" id="v-check">✓</div>
+            </div>
+            <span class="username" id="p-handle">@snaptrickspro</span>
+
+            <div class="stats-bar">
+                <div class="stat-item"><span class="stat-val">26</span><span class="stat-label">Following</span></div>
+                <div class="stat-item"><span class="stat-num">2</span><span class="stat-label">Followers</span></div>
+                <div class="stat-item"><span class="stat-num">14</span><span class="stat-label">Likes</span></div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box"><span class="stat-val">26</span><span class="stat-lbl">Following</span></div>
-                <div class="stat-box"><span class="stat-val">2</span><span class="stat-lbl">Followers</span></div>
-                <div class="stat-box"><span class="stat-val">14</span><span class="stat-lbl">Likes</span></div>
+            <div class="edit-row">
+                <div class="btn-black">Edit profile</div>
+                <div class="btn-black">Add friends</div>
             </div>
 
-            <div class="bio-box">
-                Expert tutorials for Snapchat tips and security.<br>Follow for more!
-            </div>
-
-            <div style="background: #252525; padding: 8px 18px; border-radius: 4px; font-weight: 600; font-size: 14px;">Edit</div>
+            <div class="bio-text">Expert tutorials for Snapchat tips and security.<br>Follow for more!</div>
         </div>
 
-        <div class="tabs-row">
-            <i class="fas fa-grip-lines tab-active"></i>
-            <i class="fas fa-lock"></i>
-            <i class="fas fa-retweet"></i>
-            <i class="fas fa-bookmark"></i>
-            <i class="far fa-heart"></i>
+        <div class="icons-tray">
+            <div class="active-icon"><svg viewBox="0 0 48 48"><path d="M6 10h36v4H6zm0 10h36v4H6zm0 10h36v4H6z"/></svg></div>
+            <div><svg viewBox="0 0 48 48"><path d="M36 16H12v20h24V16zm-12 5l8 10H16l8-10z"/></svg></div>
+            <div><svg viewBox="0 0 48 48"><path d="M34 6H14c-2.21 0-3.99 1.79-3.99 4L10 42l14-6 14 6V10c0-2.21-1.79-4-4-4z"/></svg></div>
         </div>
 
-        <div class="empty-content">
-            <i class="far fa-user-circle"></i>
-            <h3 style="font-size: 16px; margin-bottom: 8px;">Create your AI Self</h3>
-            <p style="font-size: 13px; color: var(--tt-text-grey);">Videos your AI Self is cast in will appear here.</p>
-            <button class="create-btn">Create</button>
+        <div class="feed-placeholder">
+            <div class="circle-icon">
+                <svg viewBox="0 0 48 48" style="width: 40px; fill: #333;"><path d="M24 4C12.95 4 4 12.95 4 24s8.95 20 20 20 20-8.95 20-20S35.05 4 24 4zm0 36c-8.82 0-16-7.18-16-16S15.18 8 24 8s16 7.18 16 16-7.18 16-16 16z"/></svg>
+            </div>
+            <p style="font-weight: 700; font-size: 16px;">Create your AI Self</p>
+            <p style="font-size: 13px; color: #86878b; margin-top: 8px;">Videos your AI Self is cast in will appear here.</p>
+            <button class="create-pink">Create</button>
         </div>
 
-        <div class="bottom-bar">
-            <div class="b-item"><i class="fas fa-home"></i>Home</div>
-            <div class="b-item"><i class="fas fa-users"></i>Friends</div>
-            <div class="b-item"><i class="fas fa-plus-square" style="font-size: 32px; color: white; margin-top: -5px;"></i></div>
-            <div class="b-item"><i class="fas fa-comment-dots"></i>Inbox</div>
-            <div class="b-item" style="color: white;"><i class="fas fa-user"></i>Profile</div>
+        <div class="bottom-setup" id="setup">
+            <input type="text" id="in-name" placeholder="Name (Jessica)">
+            <input type="text" id="in-user" placeholder="Username (@user)">
+            <button class="create-pink" style="width: 100%; margin:0;" onclick="start()">Verify Official Account</button>
+        </div>
+
+        <div class="loading-ov" id="loader">
+            <div class="loader-ring"></div>
+            <p id="l-pct" style="font-size: 28px; font-weight: 900;">0%</p>
         </div>
     </div>
 
     <script>
-        function startVerification() {
+        function start() {
             const name = document.getElementById('in-name').value || "Jessica";
             const user = document.getElementById('in-user').value || "@snaptrickspro";
 
@@ -289,28 +271,21 @@
             document.getElementById('p-handle').innerText = user.startsWith('@') ? user : '@' + user;
 
             document.getElementById('setup').style.display = 'none';
-            document.getElementById('tool').style.display = 'block';
+            document.getElementById('loader').style.display = 'flex';
 
-            let pct = 0;
-            const pctText = document.getElementById('t-pct');
-            const msgText = document.getElementById('t-msg');
-
-            const timer = setInterval(() => {
-                pct += Math.floor(Math.random() * 5) + 1;
-                
-                if(pct > 30) msgText.innerText = "Searching Account Database...";
-                if(pct > 70) msgText.innerText = "Applying Verified Badge...";
-
-                if(pct >= 100) {
-                    pct = 100;
-                    clearInterval(timer);
+            let p = 0;
+            const t = setInterval(() => {
+                p += Math.floor(Math.random() * 5) + 2;
+                if(p >= 100) {
+                    p = 100;
+                    clearInterval(t);
                     setTimeout(() => {
-                        document.getElementById('tool').style.display = 'none';
-                        document.getElementById('v-check').style.display = 'inline-block';
-                    }, 1000);
+                        document.getElementById('loader').style.display = 'none';
+                        document.getElementById('v-check').style.display = 'flex';
+                    }, 800);
                 }
-                pctText.innerText = pct + "%";
-            }, 80);
+                document.getElementById('l-pct').innerText = p + "%";
+            }, 100);
         }
     </script>
 </body>
