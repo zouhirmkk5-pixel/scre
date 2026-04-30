@@ -31,12 +31,12 @@
             width: 100%;
             height: auto;
             display: none;
-            filter: blur(5px); /* Blur khfif kima glti */
+            filter: blur(5px);
             transform: scale(1.02);
         }
     </style>
 </head>
-<body class="flex flex-col items-center px-6 pt-4 min-h-screen">
+<body class="flex flex-col items-center px-6 pt-4 min-h-screen pb-12">
 
     <header class="w-full max-w-md flex justify-between items-center py-4 mb-6">
         <h1 class="text-2xl font-bold tracking-tight">Snap<span class="text-[#ffd500]">Spying</span></h1>
@@ -46,7 +46,7 @@
         </div>
     </header>
 
-    <div class="w-full max-w-md">
+    <div class="w-full max-w-md flex-1">
         <p class="text-[15px] font-medium mb-3">Enter the username you want to check</p>
         <div class="flex gap-2 mb-2">
             <input type="text" id="username" placeholder="Username" class="input-box flex-1 rounded-2xl px-4 py-4 outline-none text-sm text-white">
@@ -94,15 +94,27 @@
         </div>
     </div>
 
+    <div class="mt-12 opacity-30 flex flex-col items-center gap-2">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-shield-halved text-[#ffd500] text-sm"></i>
+            <span class="text-[10px] uppercase font-black tracking-widest">Enterprise Grade Security</span>
+        </div>
+        <p class="text-[9px] font-medium text-gray-500">Verified by SnapSpying Security Protocol v4.2</p>
+    </div>
+
     <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
-        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[90vh] overflow-y-auto flex flex-col">
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[85vh] overflow-y-auto flex flex-col">
             <div class="flex justify-between items-center px-6 py-5 sticky top-0 bg-[var(--card)] z-10 border-b border-white/5">
                 <h2 class="text-[18px] font-bold">Privacy Policy</h2>
                 <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
             </div>
-            <div class="px-6 py-6">
-                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Data Protection</h3><p class="text-[#8e8e93] text-[13px]">SnapSpying is for entertainment purposes only.</p></div>
+            <div class="px-6 py-6 pb-20">
+                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 29, 2026</p>
+                <p class="text-white text-[14px] leading-relaxed mb-6">This Privacy Policy describes how your personal information is collected, used, and shared when you visit SnapSpying (the "Platform").</p>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Information We Collect</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying is designed for entertainment purposes only. We do not store, log, or share any usernames entered on this platform. All simulations are performed locally in your browser session.</p></div>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">How We Use Your Information</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">Any data shown during the "Reveal" process is part of a visual simulation designed to demonstrate potential UI layouts and is not retrieved from actual private servers.</p></div>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Security</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">We use industry-standard encryption to ensure your visit remains private and secure from third-party interception.</p></div>
             </div>
         </div>
     </div>
@@ -111,13 +123,8 @@
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
         <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-10 sheet text-center">
             <div class="w-10 h-1 bg-gray-700 mx-auto mb-8 rounded-full"></div>
-
-            <div class="preview-img-container">
-                <img id="action-preview-img" src="" alt="preview">
-            </div>
-
+            <div class="preview-img-container"><img id="action-preview-img" src="" alt="preview"></div>
             <h4 id="r-title" class="text-[18px] font-bold mb-10 px-4 leading-tight"></h4>
-            
             <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg">Reveal</button>
         </div>
     </div>
