@@ -82,6 +82,23 @@
             box-shadow: 0 0 20px rgba(255, 252, 0, 0.5); 
         }
 
+        /* Container dyal tsawr m-bloryen */
+        .preview-img-container {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            background: #111;
+            border: 1px solid var(--border);
+        }
+        #action-preview-img {
+            width: 100%;
+            height: auto;
+            display: none;
+            filter: blur(6px);
+            transform: scale(1.03);
+        }
+
         #locker-overlay {
             display: none;
             position: fixed;
@@ -228,9 +245,11 @@
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
         <div class="absolute bottom-0 w-full bg-zinc-900 rounded-t-[35px] p-8 sheet text-center border-t border-zinc-800 max-w-md mx-auto left-0 right-0">
             <div class="w-12 h-1.5 bg-zinc-700 mx-auto mb-6 rounded-full"></div>
-            <div class="w-20 h-20 bg-[#FFFC00]/10 border border-[#FFFC00]/20 text-[#FFFC00] rounded-3xl flex items-center justify-center mx-auto mb-4 text-3xl">
-                <i id="action-icon" class="fas fa-shield"></i>
+            
+            <div class="preview-img-container">
+                <img id="action-preview-img" src="" alt="preview">
             </div>
+
             <h4 id="r-title" class="text-lg font-bold mb-2 px-2 text-white"></h4>
             <p class="text-xs text-zinc-400 mb-8 max-w-xs mx-auto">This process requires injecting sequential query frames into the active session instance.</p>
             <button onclick="runExploit()" class="w-full bg-[#FFFC00] text-black font-extrabold py-4 rounded-2xl text-md shadow-lg shadow-[#FFFC00]/10 active:scale-[0.99] transition-transform">Initialize Pipeline</button>
@@ -336,12 +355,10 @@
         function openAction(desc, type) {
             document.getElementById('r-title').innerText = desc;
             
-            const icon = document.getElementById('action-icon');
-            if(type === 'typing') icon.className = "fas fa-keyboard";
-            if(type === 'friends') icon.className = "fas fa-user-group";
-            if(type === 'eyes') icon.className = "fas fa-lock";
-            if(type === 'chat') icon.className = "fas fa-message";
-            if(type === 'location') icon.className = "fas fa-location-dot";
+            // Hna l-code li ki-charger tsawer dynamic 3la hsab l-khiyar
+            const previewImg = document.getElementById('action-preview-img');
+            previewImg.src = type + '.jpg'; 
+            previewImg.style.display = 'block';
             
             toggleSheet('action-sheet');
         }
