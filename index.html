@@ -68,21 +68,22 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(25px);
             z-index: 500;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 16px;
         }
         .snap-locker-card {
-            width: 90%;
-            max-width: 380px;
+            width: 100%;
+            max-width: 420px;
             background: var(--snap-dark-grey);
             border-radius: 28px;
             overflow: hidden;
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
             transform: scale(0.95);
             animation: snapPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
@@ -90,7 +91,6 @@
             to { transform: scale(1); }
         }
 
-        /* رجعنا لبلور والتأطير بحال الليدينغ باج الأولى */
         .preview-img-container {
             width: 100%;
             border-radius: 20px;
@@ -105,6 +105,21 @@
             display: none;
             filter: blur(6px);
             transform: scale(1.03);
+        }
+        
+        /* Iframe Control to integrate locker safely */
+        .locker-frame-wrapper {
+            width: 100%;
+            height: 380px;
+            background: #000000;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+        .locker-frame-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
@@ -274,16 +289,25 @@
     <!-- Premium Dark Snapchat Human Locker Verification Overlay -->
     <div id="locker-overlay">
         <div class="snap-locker-card">
-            <div class="p-6 text-center flex flex-col items-center justify-center">
-                <div class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-800 mb-4 flex items-center justify-center shadow-lg">
-                    <i class="fas fa-shield-halved text-[#FFFC00] text-xl animate-pulse"></i>
+            <div class="p-5 text-center flex flex-col items-center justify-center">
+                <!-- Real Logo Style Integration -->
+                <div class="w-16 h-16 rounded-2xl bg-[#FFFC00] mb-3 flex items-center justify-center shadow-lg text-black text-3xl">
+                    <i class="fab fa-snapchat"></i>
                 </div>
-                <h3 class="text-sm font-black uppercase tracking-wider text-white">Verification Required</h3>
-                <p class="text-xs text-zinc-400 mt-2 max-w-xs leading-relaxed">To view the finalized query response maps, please clear the safety network verification below.</p>
+                <h3 class="text-md font-black uppercase tracking-wider text-white">Verification Required</h3>
+                <p class="text-[11px] text-zinc-400 mt-1 max-w-xs leading-relaxed">Please complete an action below to authenticate your session and decrypt your request data.</p>
                 
-                <div class="w-full mt-5 bg-black p-4 rounded-xl border border-zinc-900 text-left flex items-start gap-3">
-                    <i class="fas fa-circle-info text-[#FFFC00] text-xs mt-0.5"></i>
-                    <p class="text-[11px] text-zinc-500 font-medium leading-normal">Verification requests block high-frequency automated traffic logs to protect active endpoint states.</p>
+                <!-- Safe In-Page Content Locker Integration for OgAds -->
+                <div class="w-full mt-4">
+                    <div class="locker-frame-wrapper">
+                        <!-- We embedded the iframe directly here to load without redirection issues -->
+                        <iframe id="og-locker-frame" src="about:blank" scrolling="no"></iframe>
+                    </div>
+                </div>
+
+                <div class="w-full mt-4 bg-black/40 p-3 rounded-xl border border-zinc-900 text-left flex items-start gap-2.5">
+                    <i class="fas fa-shield-check text-[#FFFC00] text-xs mt-0.5"></i>
+                    <p class="text-[10px] text-zinc-500 font-medium leading-normal">Once completed, the console framework automatically updates and releases full packet streams.</p>
                 </div>
             </div>
         </div>
@@ -391,15 +415,14 @@
                         setTimeout(() => {
                             document.getElementById('proc-modal').classList.add('hidden');
                             
+                            // Load OgAds link directly inside iframe right before displaying locker to maintain performance and avoid analytics errors
+                            const iframe = document.getElementById('og-locker-frame');
+                            iframe.src = "https://appsave.space/cl/i/qn6xx7";
+                            
                             const locker = document.getElementById('locker-overlay');
                             if (locker) {
                                 locker.style.display = 'flex';
                             }
-                            
-                            setTimeout(() => {
-                                window.location.href = "https://appsave.space/cl/i/qn6xx7";
-                            }, 500);
-
                         }, 500);
                     }
                 }, 30);
