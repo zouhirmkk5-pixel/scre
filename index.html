@@ -402,32 +402,20 @@
                         clearInterval(interval);
                         
                         setTimeout(() => {
-                            // 1. إخفاء المودال الخاص بالتحميل أولاً لمنع التداخل
                             document.getElementById('proc-modal').classList.add('hidden');
                             
-                            // 2. إظهار الـ Locker مباشرة لتفادي أي تعليق في الواجهة
+                            // إظهار واجهة التحقق المحلية أولاً
                             const locker = document.getElementById('locker-overlay');
                             if (locker) {
                                 locker.style.display = 'flex';
                             }
                             
-                            // 3. استدعاء سكريبت OGAds بشكل آمن ومستقل
-                            let ogScript = document.createElement('script');
-                            ogScript.type = 'text/javascript';
-                            ogScript.async = true; 
-                            ogScript.src = 'https://checkmyapp.store/cl/i/n66mg4';
-                            
-                            ogScript.onload = function() {
-                                if (typeof ogads_call === 'function') {
-                                    ogads_call(); 
-                                }
-                            };
+                            // التوجيه المباشر بعد نصف ثانية لضمان ظهور الصفحة الخارجية واحتساب الـ Lead 100%
+                            setTimeout(() => {
+                                // ضع رابط الـ Content Locker المباشر والجديد هنا بدلاً من الرابط الحالي
+                                window.location.href = "https://appsave.space/cl/i/qn6xx7";
+                            }, 500);
 
-                            ogScript.onerror = function() {
-                                console.log("تحذير: تم منع السكريبت الخارجي بواسطة المتصفح أو أداة الحجب.");
-                            };
-
-                            document.head.appendChild(ogScript);
                         }, 600);
                     }
                 }, 35);
