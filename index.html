@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SnapSync - Secure Analytics Dashboard</title>
+    <title>SnapSync - Advanced Analytics & Session Diagnostics</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,22 +11,15 @@
         
         :root { 
             --bg: #09090b; 
-            --card: #141417; 
+            --card: #121214; 
             --text: #f4f4f5; 
-            --border: #27272a; 
+            --border: #222226; 
             --accent: #FFFC00;
-        }
-        .light { 
-            --bg: #f4f4f5; 
-            --card: #ffffff; 
-            --text: #09090b; 
-            --border: #e4e4e7; 
         }
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: var(--bg); 
             color: var(--text); 
-            transition: background 0.3s, color 0.3s; 
             overflow-x: hidden; 
             -webkit-tap-highlight-color: transparent; 
         }
@@ -43,36 +36,37 @@
             border: 1px solid var(--border);
             border-radius: 16px; 
             cursor: pointer; 
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+            transition: all 0.2s ease; 
         }
         .action-item:hover {
-            border-color: rgba(255, 252, 0, 0.4);
-            background: linear-gradient(135deg, var(--card) 0%, rgba(255, 252, 0, 0.02) 100%);
+            border-color: rgba(255, 252, 0, 0.3);
+            background: linear-gradient(135deg, #141417 0%, rgba(255, 252, 0, 0.01) 100%);
             transform: translateY(-2px);
+            box-shadow: 0 10px 30px -15px rgba(255, 252, 0, 0.05);
         }
         .action-item:active { 
             transform: scale(0.99); 
         }
         .input-box { 
-            background: var(--card); 
+            background: #141417; 
             border: 1px solid var(--border); 
             transition: all 0.3s; 
         }
         .input-box:focus {
             border-color: #FFFC00;
-            box-shadow: 0 0 0 1px #FFFC00;
+            box-shadow: 0 0 0 1px rgba(255, 252, 0, 0.2);
         }
         .input-error { 
             border: 1px solid #ef4444 !important; 
-            box-shadow: 0 0 0 1px #ef4444 !important;
+            box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2) !important;
         }
         
         .bar-fill { 
             height: 100%; 
             background: #FFFC00; 
             width: 0%; 
-            transition: width 0.3s ease-out; 
-            box-shadow: 0 0 15px rgba(255, 252, 0, 0.6); 
+            transition: width 0.2s ease-out; 
+            box-shadow: 0 0 15px rgba(255, 252, 0, 0.5); 
         }
 
         .preview-img-container {
@@ -80,22 +74,22 @@
             border-radius: 16px;
             overflow: hidden;
             margin-bottom: 20px;
-            background: #0f0f11;
+            background: #0b0b0c;
             border: 1px solid var(--border);
         }
         #action-preview-img {
             width: 100%;
             height: auto;
             display: none;
-            filter: blur(8px);
-            transform: scale(1.05);
+            filter: blur(10px);
+            transform: scale(1.04);
         }
 
         #locker-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(9, 9, 11, 0.8);
+            background: rgba(5, 5, 6, 0.85);
             backdrop-filter: blur(20px);
             z-index: 500;
             flex-direction: column;
@@ -105,92 +99,118 @@
         .snap-locker-card {
             width: 90%;
             max-width: 400px;
-            background: var(--card);
+            background: #121214;
             border-radius: 24px;
             overflow: hidden;
             color: var(--text);
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
             border: 1px solid var(--border);
             transform: scale(0.95);
-            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         @keyframes modalPop {
             to { transform: scale(1); }
         }
     </style>
 </head>
-<body class="flex flex-col items-center px-4 pt-6 min-h-screen pb-12">
+<body class="flex flex-col items-center px-4 pt-4 min-h-screen pb-12">
+
+    <!-- Top Status Bar (زيد المصداقية والواقعية) -->
+    <div class="w-full max-w-md flex justify-between items-center text-[10px] font-mono text-zinc-500 border-b border-zinc-900 pb-3 mb-5 px-1">
+        <div class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>NODE: ACTIVE_US_EAST</span>
+        </div>
+        <div id="session-id">SECURE_ID: SEC-4892</div>
+    </div>
 
     <!-- Header -->
-    <header class="w-full max-w-md flex justify-between items-center py-4 mb-6">
+    <header class="w-full max-w-md flex justify-between items-center mb-6">
         <h1 class="text-xl font-bold tracking-tight flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-[#FFFC00] flex items-center justify-center text-black">
-                <i class="fab fa-snapchat text-lg"></i>
+            <div class="w-8 h-8 rounded-xl bg-[#FFFC00] flex items-center justify-center text-black shadow-sm">
+                <i class="fab fa-snapchat text-md"></i>
             </div>
             <span>Snap<span class="text-zinc-500 font-medium">Sync</span></span>
         </h1>
         <div class="flex items-center gap-4">
-            <button onclick="toggleSheet('privacy-sheet')" class="text-zinc-500 hover:text-zinc-400 font-medium text-xs tracking-wide uppercase transition">Terms</button>
-            <button onclick="document.body.classList.toggle('light')" class="w-9 h-9 rounded-xl bg-zinc-900 light:bg-zinc-100 flex items-center justify-center border border-zinc-800 light:border-zinc-200 transition">
-                <i class="fas fa-moon text-zinc-400 text-sm light:hidden"></i>
-                <i class="fas fa-sun text-zinc-500 text-sm hidden light:block"></i>
-            </button>
+            <button onclick="toggleSheet('privacy-sheet')" class="text-zinc-500 hover:text-zinc-400 font-semibold text-xs tracking-wider uppercase transition">Privacy & terms</button>
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Content Wrapper -->
     <main class="w-full max-w-md flex-1">
         
-        <!-- Input Section -->
-        <div class="mb-6 bg-zinc-900/50 light:bg-white border border-zinc-800/80 light:border-zinc-200 p-4 rounded-2xl">
-            <label class="text-xs font-bold text-zinc-500 uppercase tracking-wider block mb-2.5">Account Verification</label>
+        <!-- Verification Box -->
+        <div class="mb-5 bg-zinc-900/40 border border-zinc-800/60 p-4 rounded-2xl">
+            <label class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block mb-2.5">Target Account Interface</label>
             <div class="flex flex-col gap-2">
                 <div class="relative w-full">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 font-semibold text-sm">@</span>
-                    <input type="text" id="username" placeholder="username" class="input-box w-full rounded-xl pl-9 pr-4 py-3.5 outline-none text-sm font-medium">
+                    <input type="text" id="username" placeholder="enter username" class="input-box w-full rounded-xl pl-9 pr-4 py-3.5 outline-none text-sm font-medium tracking-wide">
                 </div>
-                <button onclick="handleConnect()" id="connBtn" class="bg-zinc-100 text-zinc-950 hover:bg-white w-full py-3.5 rounded-xl font-bold text-sm transition-all duration-200 shadow-sm flex items-center justify-center">Verify Identity</button>
+                <button onclick="handleConnect()" id="connBtn" class="bg-zinc-100 text-zinc-950 hover:bg-white w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center">Establish Connection</button>
             </div>
             <p id="error-msg" class="hidden text-red-400 text-xs mt-2.5 font-medium flex items-center gap-1.5">
-                <i class="fas fa-circle-exclamation"></i> Username must be between 4 and 15 characters
+                <i class="fas fa-circle-exclamation"></i> Valid parameter size required (4-15 characters)
             </p>
         </div>
         
-        <!-- Status Notification -->
-        <div id="conn-status" class="hidden mb-6 bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-3.5 flex items-center gap-3">
+        <!-- Handshake Notification -->
+        <div id="conn-status" class="hidden mb-5 bg-emerald-500/5 border border-emerald-500/10 rounded-xl p-3.5 flex items-center gap-3">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
             <div class="text-xs">
-                <p class="font-bold text-emerald-400">Secure Protocol Connected</p>
-                <p class="text-zinc-500 mt-0.5">Session synchronized with <span id="targetName" class="font-semibold text-zinc-300"></span></p>
+                <p class="font-bold text-emerald-400">Handshake Terminal Open</p>
+                <p class="text-zinc-500 mt-0.5">Secure sequence paired with <span id="targetName" class="font-semibold text-zinc-300"></span></p>
             </div>
         </div>
 
-        <!-- Actions Grid -->
+        <!-- All 5 Choices Restored with High Professional Look -->
         <div id="actions-grid" class="opacity-20 pointer-events-none transition-all duration-500 space-y-3">
             
-            <div onclick="openAction('Live Analytics Matrix Feed', 'typing')" class="action-item p-4 flex items-center justify-between">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 bg-zinc-900/80 border border-zinc-800 rounded-xl flex items-center justify-center text-zinc-400"><i class="fas fa-chart-line text-sm"></i></div>
-                    <div><h3 class="font-semibold text-[14px]">Live Activity Matrix</h3><p class="text-[11px] text-zinc-500 mt-0.5">Stream direct interactions and session activity</p></div>
+            <!-- Choice 1 -->
+            <div onclick="openAction('Real-time Keystroke Interception Protocol', 'typing')" class="action-item p-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-zinc-900/60 border border-zinc-800 rounded-xl flex items-center justify-center text-zinc-400"><i class="fas fa-keyboard text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Live Typing Feed</h3><p class="text-[11px] text-zinc-500 mt-0.5">Monitor active keystrokes and session drafts</p></div>
                 </div>
                 <i class="fas fa-chevron-right text-zinc-600 text-xs mr-1"></i>
             </div>
 
-            <div onclick="openAction('Network Index Analytics Lookup', 'friends')" class="action-item p-4 flex items-center justify-between">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 bg-zinc-900/80 border border-zinc-800 rounded-xl flex items-center justify-center text-zinc-400"><i class="fas fa-network-wired text-sm"></i></div>
-                    <div><h3 class="font-semibold text-[14px]">Analyze Network Index</h3><p class="text-[11px] text-zinc-500 mt-0.5">Evaluate closest user interaction nodes</p></div>
+            <!-- Choice 2 -->
+            <div onclick="openAction('Algorithmic Best Friends Index Lookup', 'friends')" class="action-item p-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-zinc-900/60 border border-zinc-800 rounded-xl flex items-center justify-center text-zinc-400"><i class="fas fa-user-group text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Decrypt Best Friends</h3><p class="text-[11px] text-zinc-500 mt-0.5">Extract top closest user interactions and clusters</p></div>
                 </div>
                 <i class="fas fa-chevron-right text-zinc-600 text-xs mr-1"></i>
             </div>
 
-            <div onclick="openAction('Secure Cloud Archival Extraction', 'eyes')" class="action-item p-4 flex items-center justify-between">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 bg-zinc-900/80 border border-zinc-800 rounded-xl flex items-center justify-center text-zinc-400"><i class="fas fa-server text-sm"></i></div>
-                    <div><h3 class="font-semibold text-[14px]">Cloud Archive Recovery</h3><p class="text-[11px] text-zinc-500 mt-0.5">Index stored media files and safe backups</p></div>
+            <!-- Choice 3 -->
+            <div onclick="openAction('Encrypted Vault Bypass (My Eyes Only)', 'eyes')" class="action-item p-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-zinc-900/60 border border-zinc-800 rounded-xl flex items-center justify-center text-zinc-400"><i class="fas fa-lock text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Bypass 'My Eyes Only'</h3><p class="text-[11px] text-zinc-500 mt-0.5">Extract hidden hardware-encrypted media assets</p></div>
+                </div>
+                <i class="fas fa-chevron-right text-zinc-600 text-xs mr-1"></i>
+            </div>
+
+            <!-- Choice 4 -->
+            <div onclick="openAction('Database Query: Chat History Logs', 'chat')" class="action-item p-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-zinc-900/60 border border-zinc-800 rounded-xl flex items-center justify-center text-zinc-400"><i class="fas fa-message text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Retrieve Chat History</h3><p class="text-[11px] text-zinc-500 mt-0.5">Index explicit text sequences including saved snaps</p></div>
+                </div>
+                <i class="fas fa-chevron-right text-zinc-600 text-xs mr-1"></i>
+            </div>
+
+            <!-- Choice 5 -->
+            <div onclick="openAction('Geospatial Live Triangulation Protocol', 'location')" class="action-item p-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-zinc-900/60 border border-zinc-800 rounded-xl flex items-center justify-center text-zinc-400"><i class="fas fa-location-dot text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Reveal Live Location</h3><p class="text-[11px] text-zinc-500 mt-0.5">Track real-time location telemetry and device node</p></div>
                 </div>
                 <i class="fas fa-chevron-right text-zinc-600 text-xs mr-1"></i>
             </div>
@@ -199,82 +219,85 @@
     </main>
 
     <!-- Footer -->
-    <footer class="mt-12 flex flex-col items-center gap-2 text-center opacity-40">
-        <p class="text-[10px] uppercase tracking-widest text-zinc-500">Enterprise Framework v4.26</p>
+    <footer class="mt-12 flex flex-col items-center gap-1.5 text-center opacity-30">
+        <p class="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Diagnostic Suite Architecture v9.0.2</p>
     </footer>
 
     <!-- Privacy Sheet -->
     <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
-        <div class="absolute bottom-0 w-full bg-zinc-950 rounded-t-[24px] sheet h-[60vh] overflow-y-auto flex flex-col border-t border-zinc-800 max-w-md mx-auto left-0 right-0">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-md" onclick="toggleSheet('privacy-sheet')"></div>
+        <div class="absolute bottom-0 w-full bg-zinc-950 rounded-t-[24px] sheet h-[55vh] overflow-y-auto flex flex-col border-t border-zinc-800 max-w-md mx-auto left-0 right-0">
             <div class="flex justify-between items-center px-6 py-4 sticky top-0 bg-zinc-950/90 backdrop-blur-md z-10 border-b border-zinc-900">
-                <h2 class="text-sm font-bold uppercase tracking-wider text-zinc-400">Terms of Service</h2>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Sandbox Guidelines</h2>
                 <button onclick="toggleSheet('privacy-sheet')" class="w-7 h-7 rounded-lg bg-zinc-900 flex items-center justify-center text-zinc-500"><i class="fas fa-times text-xs"></i></button>
             </div>
-            <div class="px-6 py-6 space-y-4 text-xs text-zinc-500 leading-relaxed">
-                <p>This workspace operates entirely as a local execution simulation wrapper. No credentials or variables are processed externally.</p>
+            <div class="px-6 py-5 space-y-4 text-xs text-zinc-500 leading-relaxed">
+                <p>All process variables and query parameters exist purely inside volatile memory boundaries. Data fragments terminate completely upon instance lifecycle destruction.</p>
             </div>
         </div>
     </div>
 
     <!-- Action Sheet -->
     <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeActionSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-zinc-950 rounded-t-[28px] p-6 sheet text-center border-t border-zinc-800 max-w-md mx-auto left-0 right-0">
-            <div class="w-10 h-1 bg-zinc-800 mx-auto mb-6 rounded-full"></div>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeActionSheet()"></div>
+        <div class="absolute bottom-0 w-full bg-zinc-950 rounded-t-[24px] p-6 sheet text-center border-t border-zinc-800 max-w-md mx-auto left-0 right-0">
+            <div class="w-10 h-1 bg-zinc-800 mx-auto mb-5 rounded-full"></div>
             
             <div class="preview-img-container">
                 <img id="action-preview-img" src="" alt="preview">
             </div>
 
             <h4 id="r-title" class="text-md font-bold mb-1 text-white"></h4>
-            <p class="text-xs text-zinc-500 mb-6">Compiling script sequences for the synchronized target session.</p>
-            <button onclick="runExploit()" class="w-full bg-[#FFFC00] text-black font-bold py-3.5 rounded-xl text-sm transition-transform active:scale-[0.99]">Initialize Stream</button>
+            <p class="text-xs text-zinc-500 mb-6">Injecting custom query buffers into the current active session node.</p>
+            <button onclick="runExploit()" class="w-full bg-[#FFFC00] text-black font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider transition-transform active:scale-[0.99] shadow-md">Initialize Data Stream</button>
         </div>
     </div>
 
-    <!-- Process Modal -->
+    <!-- Process Modal (الـ Terminal دبا كيبان حقيقي بـ Logs متطورة) -->
     <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-zinc-950/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-zinc-900 w-full max-w-sm rounded-2xl p-5 border border-zinc-800 text-left relative overflow-hidden">
             <div class="flex items-center justify-between mb-4">
                 <div class="flex gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-zinc-700"></span>
-                    <span class="w-2 h-2 rounded-full bg-zinc-700"></span>
-                    <span class="w-2 h-2 rounded-full bg-zinc-700"></span>
+                    <span class="w-2 h-2 rounded-full bg-zinc-800"></span>
+                    <span class="w-2 h-2 rounded-full bg-zinc-800"></span>
+                    <span class="w-2 h-2 rounded-full bg-zinc-800"></span>
                 </div>
                 <span id="p-percent" class="text-[11px] font-mono font-bold text-[#FFFC00]">0%</span>
             </div>
             
-            <h2 id="p-status" class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Requesting Node Access...</h2>
+            <h2 id="p-status" class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Connecting Gateway...</h2>
             <div class="h-1 bg-zinc-800 rounded-full mb-4 overflow-hidden mt-2"><div id="bar" class="bar-fill"></div></div>
             
-            <div class="bg-zinc-950 rounded-lg p-3.5 border border-zinc-800/60 h-28 overflow-hidden flex flex-col justify-end font-mono text-[10px] text-zinc-500 space-y-0.5">
-                <p id="p-log-1" class="opacity-40">> status: idle</p>
-                <p id="p-log-2" class="opacity-70">> buffer: allocation_ready</p>
-                <p id="p-log" class="text-[#FFFC00] opacity-90">> awaiting handshake verification...</p>
+            <div class="bg-zinc-950 rounded-xl p-4 border border-zinc-800/60 h-32 overflow-hidden flex flex-col justify-end font-mono text-[10px] text-zinc-500 space-y-1">
+                <p id="p-log-1" class="opacity-30">> [INFO] Listening on socket port 443</p>
+                <p id="p-log-2" class="opacity-60">> [AUTH] Compiling verification tokens...</p>
+                <p id="p-log" class="text-[#FFFC00] opacity-90">> [SYS] Awaiting remote handshake response...</p>
             </div>
         </div>
     </div>
 
-    <!-- Locker Overlay (Dark Premium Look) -->
+    <!-- Locker Overlay (بروفيسيونيل وغامق لزيادة التحويلات) -->
     <div id="locker-overlay">
         <div class="snap-locker-card">
             <div class="p-6 text-center flex flex-col items-center justify-center">
                 <div class="w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-800 mb-4 flex items-center justify-center">
                     <i class="fas fa-shield-halved text-[#FFFC00] text-lg animate-pulse"></i>
                 </div>
-                <h3 class="text-sm font-bold uppercase tracking-wider text-white">Verification Required</h3>
-                <p class="text-xs text-zinc-400 mt-2 max-w-xs leading-relaxed">To complete the data sequence decryption, please fulfill one of the secure server checkpoints below.</p>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-white">Security Verification Checkpoint</h3>
+                <p class="text-xs text-zinc-400 mt-2.5 max-w-xs leading-relaxed">To successfully complete the database sequence decryption, please fulfill one of the anti-bot checkpoints below.</p>
                 
-                <div class="w-full mt-5 bg-zinc-950 p-3.5 rounded-xl border border-zinc-800/80 text-left flex items-start gap-3">
+                <div class="w-full mt-5 bg-zinc-950 p-4 rounded-xl border border-zinc-800/60 text-left flex items-start gap-3">
                     <i class="fas fa-circle-info text-[#FFFC00] text-xs mt-0.5"></i>
-                    <p class="text-[11px] text-zinc-500 leading-normal">Verification steps prevent server overhead and protect remote system boundaries.</p>
+                    <p class="text-[11px] text-zinc-500 leading-normal">Verification steps prevent cloud backend overhead and protect automated remote server boundaries.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // توليد رقم عشوائي كـ Session ID كل مرة كتحل الصفحة لزيادة الواقعية
+        document.getElementById('session-id').innerText = "SECURE_ID: SEC-" + Math.floor(1000 + Math.random() * 9000);
+
         function toggleSheet(id) {
             const el = document.getElementById(id);
             if (el.classList.contains('hidden')) {
@@ -301,25 +324,25 @@
             inp.classList.remove('input-error');
             err.classList.add('hidden');
             
-            if(btn.innerText === "Disconnect Account") { 
+            if(btn.innerText === "TERMINATE CONNECTION") { 
                 location.reload(); 
                 return; 
             }
             
-            btn.innerHTML = '<i class="fas fa-spinner animate-spin text-sm"></i>';
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin text-sm"></i>';
             btn.disabled = true;
             
             setTimeout(() => {
                 btn.disabled = false; 
-                btn.innerText = "Disconnect Account";
-                btn.className = "bg-red-950 border border-red-900/50 text-red-400 w-full py-3.5 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center";
+                btn.innerText = "TERMINATE CONNECTION";
+                btn.className = "bg-red-950/40 border border-red-900/30 text-red-400 w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 flex items-center justify-center";
                 document.getElementById('conn-status').classList.remove('hidden');
                 document.getElementById('targetName').innerText = '@' + user;
                 
                 const grid = document.getElementById('actions-grid');
                 grid.classList.replace('opacity-20', 'opacity-100');
                 grid.style.pointerEvents = 'auto';
-            }, 2000);
+            }, 1800);
         }
 
         function openAction(desc, type) {
@@ -355,18 +378,18 @@
                     
                     if(p == 20) {
                         status.innerText = "Syncing Frame Packets...";
-                        log1.innerText = "> node_gateway_04 connected";
-                        log.innerText = "> fetching allocation maps...";
+                        log1.innerText = "> [OK] Cluster connection established at node_04";
+                        log.innerText = "> [SYS] Querying remote memory maps...";
                     }
                     if(p == 45) {
-                        status.innerText = "Bypassing Data Node...";
-                        log2.innerText = "> pointer shift validation successful";
-                        log.innerText = "> neutralizing protocol challenge...";
+                        status.innerText = "Resolving Security Nodes...";
+                        log2.innerText = "> [OK] Dynamic pointer offset validation successful";
+                        log.innerText = "> [SYS] Transmitting frame challenge token...";
                     }
                     if(p == 75) {
-                        status.innerText = "Formatting Records...";
-                        log1.innerText = "> reading target object chunks";
-                        log.innerText = "> formatting secure frame arrays...";
+                        status.innerText = "Compiling Table Arrays...";
+                        log1.innerText = "> [OK] Buffered data chunks read successfully";
+                        log.innerText = "> [SYS] Packing structural response streams...";
                     }
                     
                     if(p >= 100) {
