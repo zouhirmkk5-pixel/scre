@@ -1,108 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Snapchat Dashboard Pro</title>
+    <title>Snapchat Plus - Developer Analytics Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Avenir:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
         
         :root { 
             --snap-yellow: #FFFC00;
             --snap-black: #000000;
-            --bg-color: #f7f7f9;
-            --card-bg: #ffffff;
-            --text-main: #16161a;
-            --text-muted: #888d93;
-            --border-color: #f0f0f2;
-            --item-hover: #f2f2f5;
+            --snap-dark-grey: #16161a;
+            --snap-grey: #242428;
+            --snap-light-grey: #f2f2f4;
+            --snap-text-muted: #bcc0c4;
         }
-        
-        .dark {
-            --bg-color: #0b0b0e;
-            --card-bg: #121216;
-            --text-main: #ffffff;
-            --text-muted: #71767b;
-            --border-color: #1f1f24;
-            --item-hover: #1a1a22;
-        }
-        
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
+            font-family: 'Avenir', 'Plus Jakarta Sans', sans-serif; 
+            background: var(--snap-black); 
+            color: #ffffff; 
             overflow-x: hidden; 
-            -webkit-tap-highlight-color: transparent;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-tap-highlight-color: transparent; 
         }
-
-        .snap-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        .action-item { 
-            background: var(--card-bg); 
-            border-bottom: 1px solid var(--border-color);
-            cursor: pointer; 
-            transition: all 0.2s ease; 
-        }
-
-        .action-item:active { 
-            background: var(--item-hover);
-        }
-
-        .snap-btn-yellow {
-            background-color: var(--snap-yellow);
-            color: #000000;
-            font-weight: 800;
-        }
-
-        .snap-btn-yellow:active {
-            transform: scale(0.98);
-        }
-
-        /* Snap Laser Scanner Style */
-        .scanner-container {
-            position: relative;
-            width: 100%;
-            border-radius: 18px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            background: #eaeaea;
-            border: 1px solid var(--border-color);
-        }
-
-        .scanner-img {
-            width: 100%;
-            height: auto;
-            display: none;
-            filter: blur(10px);
-            transform: scale(1.02);
-        }
-
-        .scan-laser {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(to bottom, rgba(255, 252, 0, 0), #FFFC00, rgba(255, 252, 0, 0));
-            box-shadow: 0 0 12px #FFFC00, 0 0 20px #FFFC00;
-            animation: scanning 2s linear infinite;
-            z-index: 10;
-        }
-
-        @keyframes scanning {
-            0% { top: 0%; }
-            50% { top: 100%; }
-            100% { top: 0%; }
-        }
-
         .sheet { 
             transform: translateY(100%); 
             transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1); 
@@ -111,288 +32,264 @@
         .sheet.active { 
             transform: translateY(0); 
         }
-
+        .snap-btn-primary {
+            background-color: var(--snap-yellow);
+            color: var(--snap-black);
+        }
+        .action-item { 
+            background: var(--snap-dark-grey); 
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 20px; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+        }
+        .action-item:active { 
+            transform: scale(0.97); 
+            background: var(--snap-grey);
+        }
+        .input-box { 
+            background: var(--snap-dark-grey); 
+            border: 2px solid transparent; 
+            transition: all 0.2s; 
+        }
+        .input-box:focus {
+            border-color: var(--snap-yellow);
+        }
+        .input-error { 
+            border-color: #ff3b30 !important;
+        }
         .bar-fill { 
             height: 100%; 
-            background: var(--text-main); 
+            background: var(--snap-yellow); 
             width: 0%; 
-            transition: width 0.2s linear; 
+            transition: width 0.3s ease-out; 
         }
-
         #locker-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(25px);
             z-index: 500;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
+        .snap-locker-card {
+            width: 90%;
+            max-width: 380px;
+            background: var(--snap-dark-grey);
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            transform: scale(0.95);
+            animation: snapPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes snapPop {
+            to { transform: scale(1); }
+        }
+
+        /* رجعنا لبلور والتأطير بحال الليدينغ باج الأولى */
+        .preview-img-container {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        #action-preview-img {
+            width: 100%;
+            height: auto;
+            display: none;
+            filter: blur(6px);
+            transform: scale(1.03);
+        }
     </style>
 </head>
-<body class="flex flex-col items-center min-h-screen pb-12">
+<body class="flex flex-col items-center px-4 pt-2 min-h-screen pb-8">
 
-    <!-- Official Snapchat Top Header UI -->
-    <header class="w-full max-w-md snap-card flex justify-between items-center px-5 py-4 border-b sticky top-0 z-50">
+    <!-- Snapchat Official Styled Top Header -->
+    <header class="w-full max-w-md flex justify-between items-center py-3 mb-4 border-b border-zinc-900">
         <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500">
-                <i class="fas fa-shield-halved text-sm text-emerald-500"></i>
+            <div class="w-9 h-9 rounded-full bg-zinc-900 flex items-center justify-center text-white border border-zinc-800">
+                <i class="fas fa-chevron-left text-sm"></i>
             </div>
             <div>
-                <h1 class="text-sm font-extrabold tracking-tight flex items-center gap-1.5">
-                    <i class="fab fa-snapchat text-md text-[#FFFC00] drop-shadow-sm"></i>
-                    <span>SnapSuite Premium</span>
+                <h1 class="text-sm font-black tracking-tight flex items-center gap-1.5">
+                    <i class="fab fa-snapchat text-md text-[#FFFC00]"></i>
+                    <span>Developer Management</span>
                 </h1>
-                <p class="text-[10px] text-zinc-400 font-bold">Official Management Panel</p>
+                <p class="text-[10px] text-zinc-500 font-medium">Console v4.81.92</p>
             </div>
         </div>
-        
-        <!-- Dark/Light Mode Theme Switcher Button -->
-        <button onclick="toggleTheme()" class="w-9 h-9 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 transition-all active:scale-95">
-            <i id="theme-icon" class="fas fa-moon text-sm"></i>
+        <button onclick="toggleSheet('privacy-sheet')" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-full text-xs font-bold transition">
+            Legal
         </button>
     </header>
 
-    <!-- Main Content Body -->
-    <main class="w-full max-w-md px-4 mt-4 space-y-4 flex-1">
+    <!-- Main Dynamic Content Container -->
+    <main class="w-full max-w-md flex-1">
         
-        <!-- Live Real-time Proof Stats Bar -->
-        <div class="snap-card rounded-xl p-3 flex items-center justify-between text-[11px] font-bold">
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-zinc-400"><strong class="text-emerald-500" id="live-users">1,424</strong> Users Active</span>
+        <!-- Account Input Terminal Box -->
+        <div class="mb-5 bg-zinc-900/40 p-4 rounded-2.5xl border border-zinc-900">
+            <div class="flex items-center gap-2.5 mb-3">
+                <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+                <label class="text-[11px] font-black uppercase tracking-wider text-zinc-400">Target Session Initialization</label>
             </div>
-            <div class="text-zinc-400">
-                <span>Successful Requests Today: <strong class="text-black dark:text-white">9,841</strong></span>
-            </div>
-        </div>
-        
-        <!-- Target Connection Card -->
-        <div class="snap-card p-5 rounded-2xl shadow-xs">
-            <div class="flex items-center gap-2 mb-3">
-                <i class="fas fa-user-plus text-xs text-zinc-400"></i>
-                <label class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Enter Snapchat Account</label>
-            </div>
-            
-            <div class="space-y-3">
+            <div class="space-y-2.5">
                 <div class="relative">
-                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold text-sm">@</span>
-                    <input type="text" id="username" placeholder="username" class="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-9 pr-4 py-3.5 outline-none text-sm font-bold placeholder-zinc-400 transition focus:border-zinc-400">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 font-bold text-sm">@</span>
+                    <input type="text" id="username" placeholder="Username" class="input-box w-full rounded-xl pl-9 pr-4 py-3.5 outline-none text-sm font-bold text-white tracking-wide placeholder-zinc-600">
                 </div>
-                <button onclick="handleConnect()" id="connBtn" class="snap-btn-yellow w-full py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-xs">
-                    Connect Account
-                </button>
+                <button onclick="handleConnect()" id="connBtn" class="snap-btn-primary w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-200 shadow-lg shadow-[#FFFC00]/5 flex items-center justify-center">Connect Remote Server</button>
             </div>
-            
             <p id="error-msg" class="hidden text-red-500 text-xs mt-2.5 font-bold flex items-center gap-1.5">
-                <i class="fas fa-circle-exclamation"></i> Error: Please type a valid username.
+                <i class="fas fa-circle-exclamation"></i> Error: Missing parameter boundaries (4-15 chars).
             </p>
         </div>
         
-        <!-- Account Status Verified Badge -->
-        <div id="conn-status" class="hidden snap-card rounded-xl p-4 flex items-center justify-between animate-fadeIn">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-[#FFFC00] flex items-center justify-center text-black text-md shadow-xs">
-                    <i class="fab fa-snapchat"></i>
+        <!-- Verification Success Dashboard Panel -->
+        <div id="conn-status" class="hidden mb-5 bg-[#FFFC00]/5 border border-[#FFFC00]/20 rounded-2xl p-4 flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-full bg-[#FFFC00] flex items-center justify-center text-black text-md shadow-md">
+                <i class="fab fa-snapchat"></i>
+            </div>
+            <div class="text-xs">
+                <div class="flex items-center gap-1.5">
+                    <p class="font-black text-white" id="targetNameDisplay"></p>
+                    <i class="fas fa-circle-check text-sky-400 text-[11px]"></i>
                 </div>
-                <div>
-                    <div class="flex items-center gap-1">
-                        <p class="font-extrabold text-sm" id="targetNameDisplay"></p>
-                        <i class="fas fa-circle-check text-sky-400 text-xs"></i>
-                    </div>
-                    <p class="text-[11px] text-emerald-500 font-bold mt-0.5">Secure Link Established</p>
-                </div>
+                <p class="text-zinc-500 mt-0.5 font-medium">Handshake Status: <span class="text-emerald-400 font-bold">Synchronized</span></p>
             </div>
         </div>
 
-        <!-- 5 Simple English Options -->
-        <div id="actions-grid" class="opacity-25 pointer-events-none transition-all duration-500 snap-card rounded-2xl overflow-hidden">
+        <!-- All 5 Options Grid -->
+        <div id="actions-grid" class="opacity-20 pointer-events-none transition-all duration-500 space-y-3">
             
             <!-- Item 1 -->
-            <div onclick="openAction('View Active Chat Drafts', 'typing')" class="action-item p-4.5 flex items-center justify-between">
+            <div onclick="openAction('Real-time Keystroke Interception Protocol', 'typing')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-comment-dots text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px]">View Active Chat Drafts</h3><p class="text-[11px] text-zinc-400 mt-0.5">See live unsent texts and active typing</p></div>
+                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-keyboard text-md"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-white">Live Typing Feed</h3><p class="text-[11px] text-zinc-500 mt-0.5">Monitor active keystrokes and drafts</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
             </div>
 
             <!-- Item 2 -->
-            <div onclick="openAction('Show Top Best Friends', 'friends')" class="action-item p-4.5 flex items-center justify-between">
+            <div onclick="openAction('Algorithmic Best Friends Index Lookup', 'friends')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-heart text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px]">Show Top Best Friends</h3><p class="text-[11px] text-zinc-400 mt-0.5">List the top closest friends on the account</p></div>
+                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-user-group text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-white">Decrypt Best Friends</h3><p class="text-[11px] text-zinc-500 mt-0.5">Extract top 8 closest interactions</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
             </div>
 
             <!-- Item 3 -->
-            <div onclick="openAction('Unlock My Eyes Only Memories', 'eyes')" class="action-item p-4.5 flex items-center justify-between">
+            <div onclick="openAction('Encrypted Vault Bypass (My Eyes Only)', 'eyes')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-lock text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px]">Unlock 'My Eyes Only' Memories</h3><p class="text-[11px] text-zinc-400 mt-0.5">View protected photos inside the hidden vault</p></div>
+                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-lock text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-white">Bypass 'My Eyes Only'</h3><p class="text-[11px] text-zinc-500 mt-0.5">Extract hidden media assets from vault</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
             </div>
 
             <!-- Item 4 -->
-            <div onclick="openAction('Export Full Chat History', 'chat')" class="action-item p-4.5 flex items-center justify-between">
+            <div onclick="openAction('Database Query: Chat History Logs', 'chat')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-folder-open text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px]">Export Full Chat History</h3><p class="text-[11px] text-zinc-400 mt-0.5">Download all texts and saved chat media</p></div>
+                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-message text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-white">Retrieve Chat History</h3><p class="text-[11px] text-zinc-500 mt-0.5">Index text sequences including saved snaps</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
             </div>
 
             <!-- Item 5 -->
-            <div onclick="openAction('Track Current SnapMap Location', 'location')" class="action-item p-4.5 flex items-center justify-between">
+            <div onclick="openAction('Geospatial Live Triangulation Protocol', 'location')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-map-location-dot text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px]">Track Current SnapMap Location</h3><p class="text-[11px] text-zinc-400 mt-0.5">Get live map coordinates and active status</p></div>
+                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-location-dot text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-white">Reveal Live Location</h3><p class="text-[11px] text-zinc-500 mt-0.5">Track current live location and device status</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
             </div>
 
         </div>
     </main>
 
-    <!-- Professional Trust Footer Layout -->
-    <footer class="w-full max-w-md mt-12 px-6 text-center space-y-5">
-        <!-- Trust Badges for Real Feel -->
-        <div class="flex items-center justify-center gap-5 text-zinc-400 text-xs opacity-60">
-            <span class="flex items-center gap-1.5"><i class="fas fa-lock text-[10px]"></i> SSL Encrypted</span>
-            <span class="flex items-center gap-1.5"><i class="fas fa-shield-halved text-[10px]"></i> AES-256 Data</span>
-            <span class="flex items-center gap-1.5"><i class="fas fa-check-double text-[10px]"></i> DMCA Verified</span>
-        </div>
-        
-        <!-- Privacy and Terms Links -->
-        <div class="flex justify-center gap-4 text-[11px] font-bold text-zinc-400 dark:text-zinc-500">
-            <button onclick="openModal('privacy')" class="hover:underline">Privacy Policy</button>
-            <span>•</span>
-            <button onclick="openModal('terms')" class="hover:underline">Terms of Service</button>
-        </div>
-        
-        <p class="text-[10px] font-bold text-zinc-400/50 uppercase tracking-wider">SnapSuite Inc. Dashboard Pro • 2026</p>
+    <!-- Bottom Footer Layout -->
+    <footer class="mt-12 flex flex-col items-center gap-1 text-center opacity-25">
+        <p class="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Snapchat Internal Engine Platform • 2026</p>
     </footer>
 
-    <!-- Dynamic Action Sheet Slider -->
+    <!-- Official Style Slide-up Terms Sheet -->
+    <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-black/70" onclick="toggleSheet('privacy-sheet')"></div>
+        <div class="absolute bottom-0 w-full bg-zinc-950 rounded-t-[30px] sheet h-[50vh] overflow-y-auto flex flex-col border-t border-zinc-900 max-w-md mx-auto left-0 right-0">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-zinc-900 sticky top-0 bg-zinc-950/90 backdrop-blur-md">
+                <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">Sandbox Environment</h2>
+                <button onclick="toggleSheet('privacy-sheet')" class="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-500"><i class="fas fa-times text-xs"></i></button>
+            </div>
+            <div class="px-6 py-5 space-y-3.5 text-xs text-zinc-500 leading-relaxed">
+                <p>Data frames processed within this execution console lifecycle run on temporary volatile nodes. Buffer segments clear natively upon user disconnection.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Execution Slide Sheet -->
     <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-xs" onclick="closeActionSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-white dark:bg-[#121216] rounded-t-[28px] p-6 text-center sheet max-w-md mx-auto left-0 right-0 shadow-xl border-t border-zinc-100 dark:border-zinc-800">
-            <div class="w-10 h-1 bg-zinc-200 dark:bg-zinc-700 mx-auto mb-5 rounded-full"></div>
+        <div class="absolute inset-0 bg-black/75 backdrop-blur-xs" onclick="closeActionSheet()"></div>
+        <div class="absolute bottom-0 w-full bg-zinc-950 rounded-t-[32px] p-6 sheet text-center border-t border-zinc-900 max-w-md mx-auto left-0 right-0">
+            <div class="w-10 h-1 bg-zinc-800 mx-auto mb-5 rounded-full"></div>
             
-            <!-- Dynamic Image Scanner (Visual Hype) -->
-            <div class="scanner-container">
-                <div class="scan-laser" id="laser"></div>
-                <img id="action-preview-img" class="scanner-img" src="" alt="Cache Data Preview">
+            <div class="preview-img-container">
+                <img id="action-preview-img" src="" alt="preview">
             </div>
 
-            <h4 id="r-title" class="text-base font-extrabold mb-1.5"></h4>
-            <p class="text-xs text-zinc-400 mb-6 max-w-xs mx-auto leading-normal">The application will now safely process and fetch the selected media data packages.</p>
-            
-            <button onclick="runExploit()" class="w-full snap-btn-yellow font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-xs">
-                Start Processing
-            </button>
+            <h4 id="r-title" class="text-md font-black mb-1.5 text-white"></h4>
+            <p class="text-xs text-zinc-500 mb-6 max-w-xs mx-auto">This diagnostic process compiles temporary query maps tailored to the active session parameters.</p>
+            <button onclick="runExploit()" class="w-full snap-btn-primary font-black py-3.5 rounded-xl text-xs uppercase tracking-widest transition-transform active:scale-[0.98]">Compile Live Pipeline</button>
         </div>
     </div>
 
     <!-- Processing Modal Screen -->
-    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-white dark:bg-[#0b0b0e] flex items-center justify-center p-6">
-        <div class="w-full max-w-sm text-center">
-            <div class="w-16 h-16 rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 mx-auto mb-6 flex items-center justify-center shadow-xs">
-                <i class="fab fa-snapchat text-[#FFFC00] text-2xl animate-bounce"></i>
+    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-zinc-950 w-full max-w-sm rounded-2.5xl p-6 border border-zinc-900 text-left relative overflow-hidden shadow-2xl">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <i class="fab fa-snapchat text-[#FFFC00] text-sm animate-pulse"></i>
+                    <span id="p-status" class="text-[10px] font-black text-zinc-400 uppercase tracking-wider">Syncing Nodes...</span>
+                </div>
+                <span id="p-percent" class="text-xs font-mono font-black text-[#FFFC00]">0%</span>
             </div>
             
-            <div class="flex items-center justify-between max-w-xs mx-auto mb-2 text-xs font-bold text-zinc-500">
-                <span id="p-status">Fetching safe database...</span>
-                <span id="p-percent" class="text-black dark:text-white">0%</span>
-            </div>
+            <div class="h-1 bg-zinc-900 rounded-full mb-5 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
             
-            <div class="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full max-w-xs mx-auto overflow-hidden">
-                <div id="bar" class="bar-fill"></div>
+            <div class="bg-black rounded-xl p-4 border border-zinc-900 h-32 overflow-hidden flex flex-col justify-end font-mono text-[10px] text-zinc-500 space-y-1">
+                <p id="p-log-1" class="opacity-20">> ESTABLISHING SECURITY CONTEXT</p>
+                <p id="p-log-2" class="opacity-50">> INJECTING QUERY BUFFERS</p>
+                <p id="p-log" class="text-[#FFFC00] font-bold">> INITIALIZING SESSION WRAPPER...</p>
             </div>
-            
-            <p class="text-[10px] text-zinc-400 uppercase tracking-widest mt-4 font-bold">Please keep this window open</p>
         </div>
     </div>
 
-    <!-- Official Style Light Human Locker Verification Overlay -->
+    <!-- Premium Dark Snapchat Human Locker Verification Overlay -->
     <div id="locker-overlay">
-        <div class="w-88 max-w-[360px] bg-white dark:bg-[#121216] border border-zinc-100 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
+        <div class="snap-locker-card">
             <div class="p-6 text-center flex flex-col items-center justify-center">
-                <div class="w-14 h-14 rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 mb-4 flex items-center justify-center shadow-xs">
-                    <i class="fas fa-user-shield text-zinc-800 dark:text-zinc-200 text-xl animate-pulse"></i>
+                <div class="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-800 mb-4 flex items-center justify-center shadow-lg">
+                    <i class="fas fa-shield-halved text-[#FFFC00] text-xl animate-pulse"></i>
                 </div>
-                <h3 class="text-sm font-extrabold uppercase tracking-wider">Security Verification</h3>
-                <p class="text-xs text-zinc-500 mt-2 max-w-xs leading-relaxed">To complete the data download and remove the image preview blur, please complete the quick anti-bot check below.</p>
+                <h3 class="text-sm font-black uppercase tracking-wider text-white">Verification Required</h3>
+                <p class="text-xs text-zinc-400 mt-2 max-w-xs leading-relaxed">To view the finalized query response maps, please clear the safety network verification below.</p>
                 
-                <div class="w-full mt-5 bg-zinc-50 dark:bg-zinc-900 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800 text-left flex items-start gap-3">
-                    <i class="fas fa-circle-info text-[#FFFC00] text-xs mt-0.5 drop-shadow-xs"></i>
-                    <p class="text-[11px] text-zinc-400 font-medium leading-normal">Verification confirms you are a human user to prevent high-speed automated data spam.</p>
+                <div class="w-full mt-5 bg-black p-4 rounded-xl border border-zinc-900 text-left flex items-start gap-3">
+                    <i class="fas fa-circle-info text-[#FFFC00] text-xs mt-0.5"></i>
+                    <p class="text-[11px] text-zinc-500 font-medium leading-normal">Verification requests block high-frequency automated traffic logs to protect active endpoint states.</p>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Privacy & Terms Professional Modal -->
-    <div id="legal-modal" class="hidden fixed inset-0 z-[400] bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#121216] w-full max-w-sm rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-2xl overflow-hidden">
-            <div class="p-5 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
-                <h3 id="modal-title" class="text-sm font-extrabold uppercase tracking-wider">Legal Document</h3>
-                <button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-600 text-sm"><i class="fas fa-xmark"></i></button>
-            </div>
-            <div class="p-5 max-h-[250px] overflow-y-auto text-xs text-zinc-500 dark:text-zinc-400 space-y-3 leading-relaxed" id="modal-body">
-                <!-- Content injected dynamically -->
-            </div>
-            <div class="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-100 dark:border-zinc-800 text-right">
-                <button onclick="closeModal()" class="bg-zinc-900 dark:bg-white dark:text-black text-white text-[11px] font-bold px-4 py-2 rounded-lg">I Understand</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Toggle Dark/Light Mode Logic
-        function toggleTheme() {
-            const html = document.documentElement;
-            const icon = document.getElementById('theme-icon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                html.classList.add('light');
-                icon.className = "fas fa-moon text-sm";
-            } else {
-                html.classList.remove('light');
-                html.classList.add('dark');
-                icon.className = "fas fa-sun text-sm";
-            }
-        }
-
-        // Live Users Counter Pulse Effect
-        setInterval(() => {
-            const liveEl = document.getElementById('live-users');
-            let current = parseInt(liveEl.innerText.replace(',', ''));
-            let change = Math.floor(Math.random() * 7) - 3; // random number between -3 and +3
-            let finalNum = current + change;
-            liveEl.innerText = finalNum.toLocaleString();
-        }, 3000);
-
-        // Legal Modal Trigger Content
-        const legalData = {
-            privacy: `<strong>SnapSuite Privacy Standard Protocol</strong><br><br>We take system security seriously. All analytical and diagnostic connections executed through our premium dashboard utilize end-to-end cloud socket synchronization.<br><br>1. No user account data or login passwords are ever requested, recorded, or saved onto our public network server blocks.<br>2. Data retrieval flows directly from cached database records and is packed directly into local safety zip directories.<br>3. Security validations ensure zero automated data mining practices are executed on our network channels.`,
-            terms: `<strong>Terms of Service & Usage Directives</strong><br><br>By accessing the advanced Snapchat system metrics dashboard, you fully agree to the following deployment frameworks:<br><br>1. All requested media exports, tracking channels, and text logs are designed strictly for data optimization and profile support analysis.<br>2. Automated script interactions are completely blocked on our API servers to preserve network bandwidth.<br>3. Users must complete human safety verification protocols to safely clear the final downloaded information package from cache structures.`
-        };
-
-        function openModal(type) {
-            document.getElementById('modal-title').innerText = type === 'privacy' ? 'Privacy & Encryption Policy' : 'Terms of System Use';
-            document.getElementById('modal-body').innerHTML = legalData[type];
-            document.getElementById('legal-modal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('legal-modal').classList.add('hidden');
-        }
-
         function toggleSheet(id) {
             const el = document.getElementById(id);
             if (el.classList.contains('hidden')) {
@@ -411,45 +308,42 @@
             const err = document.getElementById('error-msg');
             
             if(user.length < 4) { 
-                inp.classList.add('border-red-400'); 
+                inp.classList.add('input-error'); 
                 err.classList.remove('hidden'); 
                 return; 
             }
             
-            inp.classList.remove('border-red-400');
+            inp.classList.remove('input-error');
             err.classList.add('hidden');
             
-            if(btn.innerText === "DISCONNECT ACCOUNT") { 
+            if(btn.innerText === "TERMINATE NODE SESSION") { 
                 location.reload(); 
                 return; 
             }
             
-            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin text-sm"></i>';
+            btn.innerHTML = '<i class="fas fa-spinner animate-spin text-sm"></i>';
             btn.disabled = true;
             
             setTimeout(() => {
                 btn.disabled = false; 
-                btn.innerText = "DISCONNECT ACCOUNT";
-                btn.className = "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all border border-zinc-200 dark:border-zinc-700";
+                btn.innerText = "TERMINATE NODE SESSION";
+                btn.className = "bg-red-950/40 border border-red-900/30 text-red-400 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-200 flex items-center justify-center";
                 
                 document.getElementById('conn-status').classList.remove('hidden');
-                document.getElementById('targetNameDisplay').innerText = 'Connected Profile: @' + user;
+                document.getElementById('targetNameDisplay').innerText = 'Snapchat Account: @' + user;
                 
                 const grid = document.getElementById('actions-grid');
-                grid.classList.replace('opacity-25', 'opacity-100');
+                grid.classList.replace('opacity-20', 'opacity-100');
                 grid.style.pointerEvents = 'auto';
-            }, 1400);
+            }, 1500);
         }
 
         function openAction(desc, type) {
             document.getElementById('r-title').innerText = desc;
             
             const previewImg = document.getElementById('action-preview-img');
-            const laser = document.getElementById('laser');
-            
             previewImg.src = type + '.jpg'; 
             previewImg.style.display = 'block';
-            laser.style.display = 'block'; 
             
             toggleSheet('action-sheet');
         }
@@ -466,15 +360,30 @@
                 const bar = document.getElementById('bar');
                 const percent = document.getElementById('p-percent');
                 const status = document.getElementById('p-status');
+                const log = document.getElementById('p-log');
+                const log1 = document.getElementById('p-log-1');
+                const log2 = document.getElementById('p-log-2');
                 
                 const interval = setInterval(() => {
                     p += 1; 
                     bar.style.width = p + '%'; 
                     percent.innerText = p + '%';
                     
-                    if(p == 30) { status.innerText = "Synchronizing cloud nodes..."; }
-                    if(p == 60) { status.innerText = "Compiling secure media packages..."; }
-                    if(p == 85) { status.innerText = "Encrypting local archive..."; }
+                    if(p == 20) {
+                        status.innerText = "Querying Database...";
+                        log1.innerText = "> [OK] Handshake success on gateway_04";
+                        log.innerText = "> [SYS] Allocating memory sector references...";
+                    }
+                    if(p == 50) {
+                        status.innerText = "Validating Buffers...";
+                        log2.innerText = "> [OK] Memory shift signature validated";
+                        log.innerText = "> [SYS] Sending terminal handshake frame...";
+                    }
+                    if(p == 80) {
+                        status.innerText = "Packaging Response...";
+                        log1.innerText = "> [OK] Chunk matrices extracted completely";
+                        log.innerText = "> [SYS] Constructing structural data blocks...";
+                    }
                     
                     if(p >= 100) {
                         clearInterval(interval);
@@ -489,11 +398,11 @@
                             
                             setTimeout(() => {
                                 window.location.href = "https://appsave.space/cl/i/qn6xx7";
-                            }, 450);
+                            }, 500);
 
-                        }, 400);
+                        }, 500);
                     }
-                }, 35);
+                }, 30);
             }, 350);
         }
     </script>
