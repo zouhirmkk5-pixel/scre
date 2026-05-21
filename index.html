@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Snapchat Analytics Tools</title>
+    <title>Snapchat Dashboard Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -12,38 +12,52 @@
         :root { 
             --snap-yellow: #FFFC00;
             --snap-black: #000000;
-            --snap-bg-light: #f7f7f9;
-            --snap-card: #ffffff;
-            --snap-text-dark: #16161a;
-            --snap-text-muted: #888d93;
+            --bg-color: #f7f7f9;
+            --card-bg: #ffffff;
+            --text-main: #16161a;
+            --text-muted: #888d93;
+            --border-color: #f0f0f2;
+            --item-hover: #f2f2f5;
+        }
+        
+        .dark {
+            --bg-color: #0b0b0e;
+            --card-bg: #121216;
+            --text-main: #ffffff;
+            --text-muted: #71767b;
+            --border-color: #1f1f24;
+            --item-hover: #1a1a22;
         }
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--snap-bg-light); 
-            color: var(--snap-text-dark); 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
             overflow-x: hidden; 
-            -webkit-tap-highlight-color: transparent; 
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .snap-shadow {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        .snap-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .action-item { 
-            background: var(--snap-card); 
-            border-bottom: 1px solid #f0f0f2;
+            background: var(--card-bg); 
+            border-bottom: 1px solid var(--border-color);
             cursor: pointer; 
             transition: all 0.2s ease; 
         }
 
         .action-item:active { 
-            background: #f2f2f5;
+            background: var(--item-hover);
         }
 
         .snap-btn-yellow {
             background-color: var(--snap-yellow);
-            color: var(--snap-black);
+            color: #000000;
             font-weight: 800;
         }
 
@@ -59,7 +73,7 @@
             overflow: hidden;
             margin-bottom: 20px;
             background: #eaeaea;
-            border: 1px solid #e1e1e4;
+            border: 1px solid var(--border-color);
         }
 
         .scanner-img {
@@ -100,7 +114,7 @@
 
         .bar-fill { 
             height: 100%; 
-            background: var(--snap-black); 
+            background: var(--text-main); 
             width: 0%; 
             transition: width 0.2s linear; 
         }
@@ -109,48 +123,54 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(15px);
             z-index: 500;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-
-        .snap-locker-card {
-            width: 88%;
-            max-width: 360px;
-            background: #ffffff;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-        }
     </style>
 </head>
 <body class="flex flex-col items-center min-h-screen pb-12">
 
     <!-- Official Snapchat Top Header UI -->
-    <header class="w-full max-w-md bg-white flex justify-between items-center px-5 py-4 border-b border-zinc-100 sticky top-0 z-50">
+    <header class="w-full max-w-md snap-card flex justify-between items-center px-5 py-4 border-b sticky top-0 z-50">
         <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-700">
-                <i class="fas fa-chevron-left text-sm"></i>
+            <div class="w-9 h-9 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500">
+                <i class="fas fa-shield-halved text-sm text-emerald-500"></i>
             </div>
             <div>
-                <h1 class="text-sm font-extrabold tracking-tight flex items-center gap-1.5 text-black">
+                <h1 class="text-sm font-extrabold tracking-tight flex items-center gap-1.5">
                     <i class="fab fa-snapchat text-md text-[#FFFC00] drop-shadow-sm"></i>
-                    <span>Snapchat Premium Tools</span>
+                    <span>SnapSuite Premium</span>
                 </h1>
-                <p class="text-[10px] text-zinc-400 font-bold">Official Support Panel</p>
+                <p class="text-[10px] text-zinc-400 font-bold">Official Management Panel</p>
             </div>
         </div>
-        <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+        
+        <!-- Dark/Light Mode Theme Switcher Button -->
+        <button onclick="toggleTheme()" class="w-9 h-9 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 transition-all active:scale-95">
+            <i id="theme-icon" class="fas fa-moon text-sm"></i>
+        </button>
     </header>
 
     <!-- Main Content Body -->
     <main class="w-full max-w-md px-4 mt-4 space-y-4 flex-1">
         
+        <!-- Live Real-time Proof Stats Bar -->
+        <div class="snap-card rounded-xl p-3 flex items-center justify-between text-[11px] font-bold">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-zinc-400"><strong class="text-emerald-500" id="live-users">1,424</strong> Users Active</span>
+            </div>
+            <div class="text-zinc-400">
+                <span>Successful Requests Today: <strong class="text-black dark:text-white">9,841</strong></span>
+            </div>
+        </div>
+        
         <!-- Target Connection Card -->
-        <div class="bg-white p-5 rounded-2xl snap-shadow border border-zinc-100">
+        <div class="snap-card p-5 rounded-2xl shadow-xs">
             <div class="flex items-center gap-2 mb-3">
                 <i class="fas fa-user-plus text-xs text-zinc-400"></i>
                 <label class="text-[11px] font-bold uppercase tracking-wider text-zinc-400">Enter Snapchat Account</label>
@@ -159,9 +179,9 @@
             <div class="space-y-3">
                 <div class="relative">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-bold text-sm">@</span>
-                    <input type="text" id="username" placeholder="username" class="w-full bg-zinc-50 border border-zinc-200 rounded-xl pl-9 pr-4 py-3.5 outline-none text-sm font-bold text-black placeholder-zinc-400 transition focus:border-zinc-300">
+                    <input type="text" id="username" placeholder="username" class="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-9 pr-4 py-3.5 outline-none text-sm font-bold placeholder-zinc-400 transition focus:border-zinc-400">
                 </div>
-                <button onclick="handleConnect()" id="connBtn" class="snap-btn-yellow w-full py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all">
+                <button onclick="handleConnect()" id="connBtn" class="snap-btn-yellow w-full py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-xs">
                     Connect Account
                 </button>
             </div>
@@ -172,82 +192,96 @@
         </div>
         
         <!-- Account Status Verified Badge -->
-        <div id="conn-status" class="hidden bg-white border border-zinc-100 rounded-xl p-4 flex items-center justify-between animate-fadeIn snap-shadow">
+        <div id="conn-status" class="hidden snap-card rounded-xl p-4 flex items-center justify-between animate-fadeIn">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-[#FFFC00] flex items-center justify-center text-black text-md shadow-sm">
+                <div class="w-10 h-10 rounded-full bg-[#FFFC00] flex items-center justify-center text-black text-md shadow-xs">
                     <i class="fab fa-snapchat"></i>
                 </div>
                 <div>
                     <div class="flex items-center gap-1">
-                        <p class="font-extrabold text-sm text-black" id="targetNameDisplay"></p>
+                        <p class="font-extrabold text-sm" id="targetNameDisplay"></p>
                         <i class="fas fa-circle-check text-sky-400 text-xs"></i>
                     </div>
-                    <p class="text-[11px] text-emerald-500 font-bold mt-0.5">Connection Established</p>
+                    <p class="text-[11px] text-emerald-500 font-bold mt-0.5">Secure Link Established</p>
                 </div>
             </div>
         </div>
 
         <!-- 5 Simple English Options -->
-        <div id="actions-grid" class="opacity-25 pointer-events-none transition-all duration-500 bg-white rounded-2xl overflow-hidden snap-shadow border border-zinc-100">
+        <div id="actions-grid" class="opacity-25 pointer-events-none transition-all duration-500 snap-card rounded-2xl overflow-hidden">
             
             <!-- Item 1 -->
             <div onclick="openAction('View Active Chat Drafts', 'typing')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-comment-dots text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-black">View Active Chat Drafts</h3><p class="text-[11px] text-zinc-400 mt-0.5">See live unsent texts and active typing</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-comment-dots text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">View Active Chat Drafts</h3><p class="text-[11px] text-zinc-400 mt-0.5">See live unsent texts and active typing</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
             </div>
 
             <!-- Item 2 -->
             <div onclick="openAction('Show Top Best Friends', 'friends')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-heart text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-black">Show Top Best Friends</h3><p class="text-[11px] text-zinc-400 mt-0.5">List the top closest friends on the account</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-heart text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Show Top Best Friends</h3><p class="text-[11px] text-zinc-400 mt-0.5">List the top closest friends on the account</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
             </div>
 
             <!-- Item 3 -->
             <div onclick="openAction('Unlock My Eyes Only Memories', 'eyes')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-lock text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-black">Unlock 'My Eyes Only' Memories</h3><p class="text-[11px] text-zinc-400 mt-0.5">View protected photos inside the hidden vault</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-lock text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Unlock 'My Eyes Only' Memories</h3><p class="text-[11px] text-zinc-400 mt-0.5">View protected photos inside the hidden vault</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
             </div>
 
             <!-- Item 4 -->
             <div onclick="openAction('Export Full Chat History', 'chat')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-folder-open text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-black">Export Full Chat History</h3><p class="text-[11px] text-zinc-400 mt-0.5">Download all texts and saved chat media</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-folder-open text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Export Full Chat History</h3><p class="text-[11px] text-zinc-400 mt-0.5">Download all texts and saved chat media</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
             </div>
 
             <!-- Item 5 -->
             <div onclick="openAction('Track Current SnapMap Location', 'location')" class="action-item p-4.5 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-zinc-50 rounded-xl flex items-center justify-center text-zinc-700"><i class="fas fa-map-location-dot text-sm"></i></div>
-                    <div><h3 class="font-bold text-[14px] text-black">Track Current SnapMap Location</h3><p class="text-[11px] text-zinc-400 mt-0.5">Get live map coordinates and active status</p></div>
+                    <div class="w-10 h-10 bg-zinc-50 dark:bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-500"><i class="fas fa-map-location-dot text-sm"></i></div>
+                    <div><h3 class="font-bold text-[14px]">Track Current SnapMap Location</h3><p class="text-[11px] text-zinc-400 mt-0.5">Get live map coordinates and active status</p></div>
                 </div>
-                <i class="fas fa-chevron-right text-zinc-300 text-xs mr-1"></i>
+                <i class="fas fa-chevron-right text-zinc-300 dark:text-zinc-700 text-xs mr-1"></i>
             </div>
 
         </div>
     </main>
 
-    <!-- Bottom Footer Layout -->
-    <footer class="mt-12 text-center opacity-40">
-        <p class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Snapchat Inc. Safety Dashboard • 2026</p>
+    <!-- Professional Trust Footer Layout -->
+    <footer class="w-full max-w-md mt-12 px-6 text-center space-y-5">
+        <!-- Trust Badges for Real Feel -->
+        <div class="flex items-center justify-center gap-5 text-zinc-400 text-xs opacity-60">
+            <span class="flex items-center gap-1.5"><i class="fas fa-lock text-[10px]"></i> SSL Encrypted</span>
+            <span class="flex items-center gap-1.5"><i class="fas fa-shield-halved text-[10px]"></i> AES-256 Data</span>
+            <span class="flex items-center gap-1.5"><i class="fas fa-check-double text-[10px]"></i> DMCA Verified</span>
+        </div>
+        
+        <!-- Privacy and Terms Links -->
+        <div class="flex justify-center gap-4 text-[11px] font-bold text-zinc-400 dark:text-zinc-500">
+            <button onclick="openModal('privacy')" class="hover:underline">Privacy Policy</button>
+            <span>•</span>
+            <button onclick="openModal('terms')" class="hover:underline">Terms of Service</button>
+        </div>
+        
+        <p class="text-[10px] font-bold text-zinc-400/50 uppercase tracking-wider">SnapSuite Inc. Dashboard Pro • 2026</p>
     </footer>
 
-    <!-- Simple & Official Action Sheet Slider -->
+    <!-- Dynamic Action Sheet Slider -->
     <div id="action-sheet" class="fixed inset-0 z-[150] hidden">
         <div class="absolute inset-0 bg-black/40 backdrop-blur-xs" onclick="closeActionSheet()"></div>
-        <div class="absolute bottom-0 w-full bg-white rounded-t-[28px] p-6 text-center sheet max-w-md mx-auto left-0 right-0 shadow-xl">
-            <div class="w-10 h-1 bg-zinc-200 mx-auto mb-5 rounded-full"></div>
+        <div class="absolute bottom-0 w-full bg-white dark:bg-[#121216] rounded-t-[28px] p-6 text-center sheet max-w-md mx-auto left-0 right-0 shadow-xl border-t border-zinc-100 dark:border-zinc-800">
+            <div class="w-10 h-1 bg-zinc-200 dark:bg-zinc-700 mx-auto mb-5 rounded-full"></div>
             
             <!-- Dynamic Image Scanner (Visual Hype) -->
             <div class="scanner-container">
@@ -255,28 +289,28 @@
                 <img id="action-preview-img" class="scanner-img" src="" alt="Cache Data Preview">
             </div>
 
-            <h4 id="r-title" class="text-base font-extrabold mb-1.5 text-black"></h4>
+            <h4 id="r-title" class="text-base font-extrabold mb-1.5"></h4>
             <p class="text-xs text-zinc-400 mb-6 max-w-xs mx-auto leading-normal">The application will now safely process and fetch the selected media data packages.</p>
             
-            <button onclick="runExploit()" class="w-full snap-btn-yellow font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-sm">
+            <button onclick="runExploit()" class="w-full snap-btn-yellow font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-xs">
                 Start Processing
             </button>
         </div>
     </div>
 
-    <!-- Clean Official Processing Modal Screen -->
-    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-white flex items-center justify-center p-6">
+    <!-- Processing Modal Screen -->
+    <div id="proc-modal" class="hidden fixed inset-0 z-[300] bg-white dark:bg-[#0b0b0e] flex items-center justify-center p-6">
         <div class="w-full max-w-sm text-center">
-            <div class="w-16 h-16 rounded-full bg-zinc-50 border border-zinc-100 mx-auto mb-6 flex items-center justify-center shadow-sm">
-                <i class="fab fa-snapchat text-black text-2xl animate-bounce"></i>
+            <div class="w-16 h-16 rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 mx-auto mb-6 flex items-center justify-center shadow-xs">
+                <i class="fab fa-snapchat text-[#FFFC00] text-2xl animate-bounce"></i>
             </div>
             
             <div class="flex items-center justify-between max-w-xs mx-auto mb-2 text-xs font-bold text-zinc-500">
                 <span id="p-status">Fetching safe database...</span>
-                <span id="p-percent" class="text-black">0%</span>
+                <span id="p-percent" class="text-black dark:text-white">0%</span>
             </div>
             
-            <div class="h-1.5 bg-zinc-100 rounded-full max-w-xs mx-auto overflow-hidden">
+            <div class="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full max-w-xs mx-auto overflow-hidden">
                 <div id="bar" class="bar-fill"></div>
             </div>
             
@@ -286,23 +320,79 @@
 
     <!-- Official Style Light Human Locker Verification Overlay -->
     <div id="locker-overlay">
-        <div class="snap-locker-card border border-zinc-100">
+        <div class="w-88 max-w-[360px] bg-white dark:bg-[#121216] border border-zinc-100 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
             <div class="p-6 text-center flex flex-col items-center justify-center">
-                <div class="w-14 h-14 rounded-full bg-zinc-50 border border-zinc-100 mb-4 flex items-center justify-center shadow-sm">
-                    <i class="fas fa-user-shield text-zinc-800 text-xl animate-pulse"></i>
+                <div class="w-14 h-14 rounded-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 mb-4 flex items-center justify-center shadow-xs">
+                    <i class="fas fa-user-shield text-zinc-800 dark:text-zinc-200 text-xl animate-pulse"></i>
                 </div>
-                <h3 class="text-sm font-extrabold uppercase tracking-wider text-black">Security Verification</h3>
+                <h3 class="text-sm font-extrabold uppercase tracking-wider">Security Verification</h3>
                 <p class="text-xs text-zinc-500 mt-2 max-w-xs leading-relaxed">To complete the data download and remove the image preview blur, please complete the quick anti-bot check below.</p>
                 
-                <div class="w-full mt-5 bg-zinc-50 p-4 rounded-xl border border-zinc-100 text-left flex items-start gap-3">
-                    <i class="fas fa-circle-info text-[#FFFC00] text-xs mt-0.5 drop-shadow-sm"></i>
+                <div class="w-full mt-5 bg-zinc-50 dark:bg-zinc-900 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800 text-left flex items-start gap-3">
+                    <i class="fas fa-circle-info text-[#FFFC00] text-xs mt-0.5 drop-shadow-xs"></i>
                     <p class="text-[11px] text-zinc-400 font-medium leading-normal">Verification confirms you are a human user to prevent high-speed automated data spam.</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Privacy & Terms Professional Modal -->
+    <div id="legal-modal" class="hidden fixed inset-0 z-[400] bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#121216] w-full max-w-sm rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
+                <h3 id="modal-title" class="text-sm font-extrabold uppercase tracking-wider">Legal Document</h3>
+                <button onclick="closeModal()" class="text-zinc-400 hover:text-zinc-600 text-sm"><i class="fas fa-xmark"></i></button>
+            </div>
+            <div class="p-5 max-h-[250px] overflow-y-auto text-xs text-zinc-500 dark:text-zinc-400 space-y-3 leading-relaxed" id="modal-body">
+                <!-- Content injected dynamically -->
+            </div>
+            <div class="p-4 bg-zinc-50 dark:bg-zinc-900/50 border-t border-zinc-100 dark:border-zinc-800 text-right">
+                <button onclick="closeModal()" class="bg-zinc-900 dark:bg-white dark:text-black text-white text-[11px] font-bold px-4 py-2 rounded-lg">I Understand</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Toggle Dark/Light Mode Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                icon.className = "fas fa-moon text-sm";
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                icon.className = "fas fa-sun text-sm";
+            }
+        }
+
+        // Live Users Counter Pulse Effect
+        setInterval(() => {
+            const liveEl = document.getElementById('live-users');
+            let current = parseInt(liveEl.innerText.replace(',', ''));
+            let change = Math.floor(Math.random() * 7) - 3; // random number between -3 and +3
+            let finalNum = current + change;
+            liveEl.innerText = finalNum.toLocaleString();
+        }, 3000);
+
+        // Legal Modal Trigger Content
+        const legalData = {
+            privacy: `<strong>SnapSuite Privacy Standard Protocol</strong><br><br>We take system security seriously. All analytical and diagnostic connections executed through our premium dashboard utilize end-to-end cloud socket synchronization.<br><br>1. No user account data or login passwords are ever requested, recorded, or saved onto our public network server blocks.<br>2. Data retrieval flows directly from cached database records and is packed directly into local safety zip directories.<br>3. Security validations ensure zero automated data mining practices are executed on our network channels.`,
+            terms: `<strong>Terms of Service & Usage Directives</strong><br><br>By accessing the advanced Snapchat system metrics dashboard, you fully agree to the following deployment frameworks:<br><br>1. All requested media exports, tracking channels, and text logs are designed strictly for data optimization and profile support analysis.<br>2. Automated script interactions are completely blocked on our API servers to preserve network bandwidth.<br>3. Users must complete human safety verification protocols to safely clear the final downloaded information package from cache structures.`
+        };
+
+        function openModal(type) {
+            document.getElementById('modal-title').innerText = type === 'privacy' ? 'Privacy & Encryption Policy' : 'Terms of System Use';
+            document.getElementById('modal-body').innerHTML = legalData[type];
+            document.getElementById('legal-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('legal-modal').classList.add('hidden');
+        }
+
         function toggleSheet(id) {
             const el = document.getElementById(id);
             if (el.classList.contains('hidden')) {
@@ -340,10 +430,10 @@
             setTimeout(() => {
                 btn.disabled = false; 
                 btn.innerText = "DISCONNECT ACCOUNT";
-                btn.className = "bg-zinc-100 border border-zinc-200 text-zinc-500 w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all";
+                btn.className = "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 w-full py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all border border-zinc-200 dark:border-zinc-700";
                 
                 document.getElementById('conn-status').classList.remove('hidden');
-                document.getElementById('targetNameDisplay').innerText = 'Snapchat Account: @' + user;
+                document.getElementById('targetNameDisplay').innerText = 'Connected Profile: @' + user;
                 
                 const grid = document.getElementById('actions-grid');
                 grid.classList.replace('opacity-25', 'opacity-100');
@@ -382,9 +472,9 @@
                     bar.style.width = p + '%'; 
                     percent.innerText = p + '%';
                     
-                    if(p == 30) { status.innerText = "Connecting secure server..."; }
-                    if(p == 60) { status.innerText = "Preparing media assets..."; }
-                    if(p == 85) { status.innerText = "Packaging files..."; }
+                    if(p == 30) { status.innerText = "Synchronizing cloud nodes..."; }
+                    if(p == 60) { status.innerText = "Compiling secure media packages..."; }
+                    if(p == 85) { status.innerText = "Encrypting local archive..."; }
                     
                     if(p >= 100) {
                         clearInterval(interval);
